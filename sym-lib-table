@@ -1,4 +1,4 @@
 (sym_lib_table
-  (version 7)
-  (lib (name "FE_UFPR_4_0")(type "KiCad")(uri "${KIPRJMOD}/FE_UFPR_4_0.kicad_sym")(options "")(descr "FE_UFPR v4.0 project symbol library (single source of truth)"))
+	(version 7)
+	(lib (name "FE_UFPR_4_0")(type "KiCad")(uri "${KIPRJMOD}/FE_UFPR_4_0.kicad_sym")(options "")(descr "FE_UFPR v4.0 project symbol library (single source of truth)"))
 )
