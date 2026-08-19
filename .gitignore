@@ -13,3 +13,7 @@ fp-info-cache
 /production/
 /exports/
 *.zip
+
+# MCP snapshot checkpoints (duplicate git history)
+/snapshots/
+/logs/
