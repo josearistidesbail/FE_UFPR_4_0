@@ -1,0 +1,23 @@
+(kicad_sch
+	(version 20260101)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid 6122f736-6394-4bae-b029-e45115f73353)
+	(paper "A3")
+
+  (title_block
+    (title "FE_UFPR 4.0 - Vehicle I/O: CAN transceiver, cockpit switches, shutdown interlock")
+    (date "2026-08-18")
+    (rev "4.0")
+    (company "Formula UFPR - FSAE")
+    (comment 1 "LAUNCHXL-F28379D <-> Infineon PrimeSTACK 6PS04512E43W39693 interface")
+    (comment 2 "Emrax 208 / Renishaw RM44AC / LEM LA 100-P")
+    (comment 3 "See CLAUDE.md + REDESIGN_PLAN.md in project dir")
+  )
+	(lib_symbols)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

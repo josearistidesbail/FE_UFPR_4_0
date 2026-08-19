@@ -1,0 +1,297 @@
+{
+  "board": {
+    "3dviewports": [],
+    "ipc2581": {
+      "dist": "",
+      "distpn": "",
+      "internal_id": "",
+      "mfg": "",
+      "mpn": ""
+    },
+    "layer_pairs": [],
+    "layer_presets": [],
+    "viewports": [],
+    "design_settings": {
+      "track_widths": [
+        0.0,
+        0.25,
+        0.3,
+        0.4,
+        0.5,
+        0.8,
+        1.2,
+        2.0
+      ],
+      "via_dimensions": [
+        {
+          "diameter": 0.0,
+          "drill": 0.0
+        },
+        {
+          "diameter": 0.6,
+          "drill": 0.3
+        },
+        {
+          "diameter": 0.8,
+          "drill": 0.4
+        },
+        {
+          "diameter": 1.0,
+          "drill": 0.5
+        }
+      ],
+      "diff_pair_dimensions": [
+        {
+          "gap": 0.0,
+          "via_gap": 0.0,
+          "width": 0.0
+        },
+        {
+          "gap": 0.25,
+          "via_gap": 0.25,
+          "width": 0.2
+        }
+      ]
+    }
+  },
+  "boards": [],
+  "component_class_settings": {
+    "assignments": [],
+    "meta": {
+      "version": 0
+    },
+    "sheet_component_classes": {
+      "enabled": false
+    }
+  },
+  "cvpcb": {
+    "equivalence_files": []
+  },
+  "libraries": {
+    "pinned_footprint_libs": [],
+    "pinned_symbol_libs": []
+  },
+  "meta": {
+    "filename": "FE_UFPR_4_0.kicad_pro",
+    "version": 3
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "bus_width": 12,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "tuning_profile": "",
+        "wire_width": 6,
+        "name": "Default",
+        "track_width": 0.25,
+        "clearance": 0.2,
+        "via_diameter": 0.6,
+        "via_drill": 0.3,
+        "priority": 2147483647
+      },
+      {
+        "bus_width": 12,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgba(72, 168, 72, 1.000)",
+        "tuning_profile": "",
+        "wire_width": 6,
+        "name": "Analog",
+        "track_width": 0.3,
+        "clearance": 0.3,
+        "via_diameter": 0.6,
+        "via_drill": 0.3,
+        "priority": 10
+      },
+      {
+        "bus_width": 12,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgba(224, 128, 32, 1.000)",
+        "tuning_profile": "",
+        "wire_width": 6,
+        "name": "Gate",
+        "track_width": 0.4,
+        "clearance": 0.25,
+        "via_diameter": 0.8,
+        "via_drill": 0.4,
+        "priority": 20
+      },
+      {
+        "bus_width": 12,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgba(200, 40, 40, 1.000)",
+        "tuning_profile": "",
+        "wire_width": 6,
+        "name": "Power_1A",
+        "track_width": 0.5,
+        "clearance": 0.25,
+        "via_diameter": 0.8,
+        "via_drill": 0.4,
+        "priority": 30
+      },
+      {
+        "bus_width": 12,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "diff_pair_width": 0.2,
+        "line_style": 0,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgba(160, 16, 16, 1.000)",
+        "tuning_profile": "",
+        "wire_width": 6,
+        "name": "Power_3A",
+        "track_width": 1.2,
+        "clearance": 0.3,
+        "via_diameter": 1.0,
+        "via_drill": 0.5,
+        "priority": 40
+      }
+    ],
+    "meta": {
+      "version": 5
+    },
+    "net_colors": null,
+    "netclass_assignments": null,
+    "netclass_patterns": [
+      {
+        "netclass": "Power_3A",
+        "pattern": "+24V_IN"
+      },
+      {
+        "netclass": "Power_3A",
+        "pattern": "GND"
+      },
+      {
+        "netclass": "Power_1A",
+        "pattern": "+12V"
+      },
+      {
+        "netclass": "Power_1A",
+        "pattern": "+5V"
+      },
+      {
+        "netclass": "Power_1A",
+        "pattern": "+3V3"
+      },
+      {
+        "netclass": "Power_1A",
+        "pattern": "+15V_ISO"
+      },
+      {
+        "netclass": "Power_1A",
+        "pattern": "-15V_ISO"
+      },
+      {
+        "netclass": "Gate",
+        "pattern": "PWM_*_15V"
+      },
+      {
+        "netclass": "Gate",
+        "pattern": "DRV_EN*"
+      },
+      {
+        "netclass": "Analog",
+        "pattern": "ISNS_*"
+      },
+      {
+        "netclass": "Analog",
+        "pattern": "ENC_*"
+      },
+      {
+        "netclass": "Analog",
+        "pattern": "VBUS_*"
+      },
+      {
+        "netclass": "Analog",
+        "pattern": "NTC_*"
+      },
+      {
+        "netclass": "Analog",
+        "pattern": "*_ADC"
+      }
+    ]
+  },
+  "pcbnew": {
+    "last_paths": {
+      "idf": "",
+      "netlist": "",
+      "plot": "",
+      "specctra_dsn": "",
+      "vrml": ""
+    },
+    "page_layout_descr_file": ""
+  },
+  "schematic": {
+    "bus_aliases": {},
+    "legacy_lib_dir": "",
+    "legacy_lib_list": [],
+    "top_level_sheets": []
+  },
+  "sheets": [
+    [
+      "0cde0ae3-e31e-4592-8212-8a072a248a80",
+      "Root"
+    ],
+    [
+      "6442f421-491d-4bfb-bee7-d0b4e843a827",
+      "power"
+    ],
+    [
+      "038facd0-2e0a-4162-b97c-b9ad4ef94eba",
+      "gate_drive"
+    ],
+    [
+      "a2165381-2d77-4319-9e8d-4618439f276e",
+      "module_status"
+    ],
+    [
+      "4d347022-ba2f-49b9-8797-79ffc1b609ae",
+      "current_sense"
+    ],
+    [
+      "c87dd457-99fd-4c81-82bb-75763b6537d2",
+      "encoder"
+    ],
+    [
+      "c47f591f-0e93-45b1-b2eb-749c98db50f7",
+      "launchpad"
+    ],
+    [
+      "1dbda7e8-fea8-4374-8822-c8926fcae792",
+      "vehicle_io"
+    ]
+  ],
+  "text_variables": {},
+  "tuning_profiles": {
+    "meta": {
+      "version": 0
+    },
+    "tuning_profiles_impedance_geometric": []
+  }
+}

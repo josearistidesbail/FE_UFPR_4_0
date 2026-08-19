@@ -1,0 +1,15 @@
+# KiCad local / generated state
+*.kicad_prl
+*.kicad_pro.lck
+~*.lck
+*-backups/
+_autosave-*
+*.bak
+*-bak
+fp-info-cache
+
+# Fabrication / export outputs (regenerated in S12)
+/gerbers/
+/production/
+/exports/
+*.zip
