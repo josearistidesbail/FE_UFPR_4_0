@@ -47,9 +47,11 @@ S1 Foundation ─► S2 Architecture ─► S3 Power ─► S4 Gate drive ─►
 
 ---
 
-## S2 — System architecture: power tree, grounding, floorplan, mechanical
+## S2 — System architecture: power tree, grounding, floorplan, mechanical  ✅ **DONE (2026-08-25)**
 
 **Objective:** Freeze board-level architecture on paper before any circuit capture. Deliverable = architecture section in project docs + root sheet with labeled sheet pins.
+
+**Outcome:** all four decisions made and logged (CLAUDE.md Decision log 2026-08-25); deliverable = `ARCHITECTURE.md` + root sheet with 40 nets / 80 sheet pins, stubs and labels, matching hierarchical labels pre-declared in every sub-sheet. ERC = exactly the empty-sub-sheet noise (160 `label_dangling`, 0 warnings — sheet boxes were re-gridded to 1.27 mm to kill 80 off-grid warnings). **Deviations:** PrimeSTACK drawing is myInfineon-gated → mounting pattern logged as *pending user measurement* with an adapter-plate decoupling plan (exit criteria allow this). Windfall: SPRUI77 fetched (now in `datasheets/`) — GPIO131 confirmed on header J6-58, bench items #10/#11 downgraded to verifications.
 
 **Prerequisites:** S1 ✅. Fetch: **PrimeSTACK 6PS04512E43W39693 mechanical drawing** (top-face dimensions + usable mounting points — the board mounts on top of the inverter). LaunchPad bench item #10/#11 helpful but not blocking.
 
@@ -231,9 +233,9 @@ Everything below is marked "assumed" in the firmware docs but is load-bearing fo
 8. Supply voltage rating + measured current.
 9. Output bias/amplitude at the connector, unloaded AND loaded — S7's gain math uses these numbers.
 
-**Setup C — LaunchPad:**
-10. JP1/JP2/JP4/JP5 audit: which config isolates USB power from the headers; does USB-only power back-feed 3V3/5V?
-11. GPIO131 continuity from the F28379D pin to a BoosterPack header pin.
+**Setup C — LaunchPad** *(downgraded to verifications by S2 — SPRUI77 documents both; see `datasheets/`)*:
+10. Verify no back-feed with the S2 jumper config (JP1/JP2/JP3 out, JP4/JP5 in, JP6 out): USB-only plug-in must not raise the header 3V3/5V pins.
+11. Continuity sanity check: GPIO131 → header J6 pin 58 (SPRUI77 Table 4 says it's routed; confirm on the physical board).
 
 **Setup D — LEM sensors (if in hand):**
 12. Model label photo; supply current at zero primary; zero-current output; aperture fit on the actual motor cables.

@@ -15,6 +15,105 @@
     (comment 3 "See CLAUDE.md + REDESIGN_PLAN.md in project dir")
   )
 	(lib_symbols)
+	(hierarchical_label "ISNS_A_RAW"
+		(shape input)
+		(at 40.64 40.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4ddf0a4d-b63f-4ffa-a4f4-ea85945f8ce2")
+	)
+	(hierarchical_label "ISNS_B_RAW"
+		(shape input)
+		(at 40.64 48.26 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "9017a8b4-9c99-4363-80c4-8c4addbe9604")
+	)
+	(hierarchical_label "ISNS_C_RAW"
+		(shape input)
+		(at 40.64 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6cc33b61-adf1-4f77-8b74-dabea586b51d")
+	)
+	(hierarchical_label "ISNS_RTN"
+		(shape bidirectional)
+		(at 40.64 71.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3d7c7c87-66e6-4021-a1eb-283c0e9b0d28")
+	)
+	(hierarchical_label "ISNS_A_ADC"
+		(shape output)
+		(at 384.81 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "21117bf0-1d38-4cc4-95a2-6323e38feeb9")
+	)
+	(hierarchical_label "ISNS_B_ADC"
+		(shape output)
+		(at 384.81 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fc9e6f0f-cf95-4b07-8f71-837cc5295571")
+	)
+	(hierarchical_label "ISNS_C_ADC"
+		(shape output)
+		(at 384.81 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9e46380e-091b-45a6-a608-23bbe71f30fe")
+	)
+	(hierarchical_label "ISNS_REF_A_ADC"
+		(shape output)
+		(at 384.81 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "785e65e7-5507-43b9-90a2-b0f53ff6056e")
+	)
+	(hierarchical_label "ISNS_REF_B_ADC"
+		(shape output)
+		(at 384.81 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3ad92ba2-bc42-4315-952c-8733f4ea023d")
+	)
 	(sheet_instances
 		(path "/"
 			(page "1")

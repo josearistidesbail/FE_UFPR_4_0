@@ -15,6 +15,237 @@
     (comment 3 "See CLAUDE.md + REDESIGN_PLAN.md in project dir")
   )
 	(lib_symbols)
+	(hierarchical_label "PWM_UH_3V3"
+		(shape input)
+		(at 40.64 40.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "443cf064-e634-40ef-8e3c-35495202eb69")
+	)
+	(hierarchical_label "PWM_UL_3V3"
+		(shape input)
+		(at 40.64 48.26 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "403fdf6b-49a8-42b9-8435-8c1405659e6a")
+	)
+	(hierarchical_label "PWM_VH_3V3"
+		(shape input)
+		(at 40.64 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c888f1a7-103b-405e-9a04-1ee1997ce8ad")
+	)
+	(hierarchical_label "PWM_VL_3V3"
+		(shape input)
+		(at 40.64 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0b2d6505-be54-4805-a60d-ffd8357630b5")
+	)
+	(hierarchical_label "PWM_WH_3V3"
+		(shape input)
+		(at 40.64 71.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "edd14df7-f11f-40a7-aaff-d7eb8e5002b4")
+	)
+	(hierarchical_label "PWM_WL_3V3"
+		(shape input)
+		(at 40.64 78.74 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "fc82b6ef-80da-4142-a6da-0b73890c2bee")
+	)
+	(hierarchical_label "DRV_EN_3V3"
+		(shape input)
+		(at 40.64 93.98 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d7f48ced-fcec-4c95-8aef-655f9c50907d")
+	)
+	(hierarchical_label "DRV_EN_AUX_3V3"
+		(shape input)
+		(at 40.64 101.6 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cb754c74-3e01-4bd7-97a0-5ef60abd0e20")
+	)
+	(hierarchical_label "FLT_OC_A_15V"
+		(shape output)
+		(at 384.81 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "392afceb-e27b-477e-80b4-54e486492654")
+	)
+	(hierarchical_label "FLT_OC_B_15V"
+		(shape output)
+		(at 384.81 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "54e71aef-5af8-4fec-9b3a-0642dcd73f6a")
+	)
+	(hierarchical_label "FLT_OC_C_15V"
+		(shape output)
+		(at 384.81 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "66eff4fc-d7db-4de1-816c-3a160cb2fad4")
+	)
+	(hierarchical_label "FLT_OT_15V"
+		(shape output)
+		(at 384.81 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e6a0f011-213b-41b7-8a9c-44ed88722c7e")
+	)
+	(hierarchical_label "FLT_OV_15V"
+		(shape output)
+		(at 384.81 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "68a276c7-af9f-49d2-abd6-83f0e6f3bee1")
+	)
+	(hierarchical_label "VBUS_SNS_RAW"
+		(shape output)
+		(at 384.81 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "14655b87-7ecb-4514-ac81-aabef3740c87")
+	)
+	(hierarchical_label "VBUS_RTN"
+		(shape bidirectional)
+		(at 384.81 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "20d91508-1c39-4a16-a3b0-9a5bdcdec63a")
+	)
+	(hierarchical_label "NTC_1_RAW"
+		(shape output)
+		(at 384.81 109.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "db19972e-5510-460e-8a78-ccaac8a6fa1a")
+	)
+	(hierarchical_label "NTC_2_RAW"
+		(shape output)
+		(at 384.81 116.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bf63f788-d69e-4c75-8ae7-ac504f0fe314")
+	)
+	(hierarchical_label "ISNS_A_RAW"
+		(shape output)
+		(at 384.81 132.08 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5f68c0dc-6d36-46d9-9a5b-89decd53542a")
+	)
+	(hierarchical_label "ISNS_B_RAW"
+		(shape output)
+		(at 384.81 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "eb263b56-8b82-4047-a9a5-81fe1aa1908d")
+	)
+	(hierarchical_label "ISNS_C_RAW"
+		(shape output)
+		(at 384.81 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "eb1146df-867c-465d-9016-ddc19395504d")
+	)
+	(hierarchical_label "ISNS_RTN"
+		(shape bidirectional)
+		(at 384.81 154.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e416323b-2123-42b1-9b44-cbf60c94669a")
+	)
 	(sheet_instances
 		(path "/"
 			(page "1")

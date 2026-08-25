@@ -15,6 +15,303 @@
     (comment 3 "See CLAUDE.md + REDESIGN_PLAN.md in project dir")
   )
 	(lib_symbols)
+	(hierarchical_label "FLT_OC_A_3V3"
+		(shape input)
+		(at 40.64 40.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0e70fc18-0868-4c3e-8e75-636f99c0b378")
+	)
+	(hierarchical_label "FLT_OC_B_3V3"
+		(shape input)
+		(at 40.64 48.26 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8a1c6c4c-7051-4928-8cff-485faabbbb3f")
+	)
+	(hierarchical_label "FLT_OC_C_3V3"
+		(shape input)
+		(at 40.64 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "bf9ef2cc-b701-4cb3-b086-e31d91e1cad7")
+	)
+	(hierarchical_label "FLT_OT_3V3"
+		(shape input)
+		(at 40.64 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "6fead8ab-80f7-4c40-95bf-0826a0632731")
+	)
+	(hierarchical_label "FLT_OV_3V3"
+		(shape input)
+		(at 40.64 71.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "33eb058b-1abc-45fc-8047-5a24d67f864a")
+	)
+	(hierarchical_label "ISNS_A_ADC"
+		(shape input)
+		(at 40.64 86.36 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "15eb1405-e40b-4b6b-a24c-45519671e069")
+	)
+	(hierarchical_label "ISNS_B_ADC"
+		(shape input)
+		(at 40.64 93.98 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a479a92f-6f2a-42a4-8926-4d5f1d5f0ac8")
+	)
+	(hierarchical_label "ISNS_C_ADC"
+		(shape input)
+		(at 40.64 101.6 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "663f8e8e-3b6b-4ab1-8c9e-cc655230af75")
+	)
+	(hierarchical_label "ISNS_REF_A_ADC"
+		(shape input)
+		(at 40.64 109.22 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "91a6166b-d0ab-4deb-a691-b087a9d11693")
+	)
+	(hierarchical_label "ISNS_REF_B_ADC"
+		(shape input)
+		(at 40.64 116.84 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ee0e762b-c2aa-49e1-a7e8-faa922839a14")
+	)
+	(hierarchical_label "VBUS_ADC"
+		(shape input)
+		(at 40.64 132.08 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "bf314091-c130-4f7e-ab8f-ae210b073f2f")
+	)
+	(hierarchical_label "NTC_1_ADC"
+		(shape input)
+		(at 40.64 139.7 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "9b5cc370-95ac-4579-98fe-557dbee3c818")
+	)
+	(hierarchical_label "NTC_2_ADC"
+		(shape input)
+		(at 40.64 147.32 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "217903b6-2e47-4ef7-922f-f2efa03579b7")
+	)
+	(hierarchical_label "ENC_SIN_ADC"
+		(shape input)
+		(at 40.64 162.56 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "9fa66c90-858b-463f-afe8-f0d2f5f5f606")
+	)
+	(hierarchical_label "ENC_COS_ADC"
+		(shape input)
+		(at 40.64 170.18 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "041446c5-647f-43e9-bff8-2d32fbb21707")
+	)
+	(hierarchical_label "CAN_RX_3V3"
+		(shape input)
+		(at 40.64 185.42 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "42865163-97c3-4323-8d36-0d73af332e00")
+	)
+	(hierarchical_label "SW_MAIN_3V3"
+		(shape input)
+		(at 40.64 200.66 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "638b8c22-8343-476c-9d34-1d776e01a9df")
+	)
+	(hierarchical_label "SW_START_3V3"
+		(shape input)
+		(at 40.64 208.28 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8106fc25-1c23-476c-8ba4-42a5da4265b6")
+	)
+	(hierarchical_label "PWM_UH_3V3"
+		(shape output)
+		(at 384.81 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4b013833-3f49-4cc1-bca9-54f5ce5c5a3f")
+	)
+	(hierarchical_label "PWM_UL_3V3"
+		(shape output)
+		(at 384.81 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fa09d5b0-01d1-4f63-9e67-69ba7652eb6b")
+	)
+	(hierarchical_label "PWM_VH_3V3"
+		(shape output)
+		(at 384.81 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d45f656a-1895-4a74-a60c-f95d50d0bc3d")
+	)
+	(hierarchical_label "PWM_VL_3V3"
+		(shape output)
+		(at 384.81 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f99d42e9-e5fc-4dc5-9f49-2ba1aa367e62")
+	)
+	(hierarchical_label "PWM_WH_3V3"
+		(shape output)
+		(at 384.81 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "99eaca00-0509-48de-ba49-78bcb6224592")
+	)
+	(hierarchical_label "PWM_WL_3V3"
+		(shape output)
+		(at 384.81 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "98189831-8143-45d1-9267-7869ebe25631")
+	)
+	(hierarchical_label "DRV_EN_3V3"
+		(shape output)
+		(at 384.81 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ba6a2318-0fbd-4de5-84bf-23c80aa96a6b")
+	)
+	(hierarchical_label "DRV_EN_AUX_3V3"
+		(shape output)
+		(at 384.81 101.6 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "de1073de-45b2-4760-922c-ab534869ce44")
+	)
+	(hierarchical_label "CAN_TX_3V3"
+		(shape output)
+		(at 384.81 116.84 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c066b8c9-5775-4c17-b234-9a62cd88d545")
+	)
 	(sheet_instances
 		(path "/"
 			(page "1")

@@ -6,8 +6,12 @@ Interface PCB between a TI **LAUNCHXL-F28379D** (FOC firmware) and an Infineon *
 
 ## Roadmap & current phase
 
-**Current phase: S1 COMPLETE. Next: S2 — System architecture.**
+**Current phase: S2 COMPLETE. Next: S3 — Power supplies.**
 *(This line is the ONLY place phase state lives — update it when a session's exit criteria pass.)*
+
+**S2's deliverable is [`ARCHITECTURE.md`](ARCHITECTURE.md)** — power tree + budget, LaunchPad
+power policy (jumper table), grounding/shield rules, floorplan, mounting status, and the
+root-sheet interface net table. S3–S8 implement that contract; changes to it get logged.
 
 Full roadmap: [`REDESIGN_PLAN.md`](REDESIGN_PLAN.md) — 12 sessions, one per Claude Code session. Exit criteria are gates: do not start a session until its prerequisites are met, do not bleed into the next session's scope.
 
@@ -58,12 +62,14 @@ Never contradict these without logging a decision; the final board must answer `
 
 **Verified in S1 from the 3.0 design files (not bench):** BoosterPack header grid ΔX 43.18 mm / ΔY 63.5 mm; DB37 as-built pin→net map (table below); DB37 jackscrew spacing 63.5 mm.
 
+**Verified in S2 from SPRUI77 (LaunchPad User's Guide, `datasheets/`):** GPIO131 reaches header J6-58 (GPIO66 → J6-59, GPIO130 → J6-57) per Table 4; jumper semantics per §5.2: JP1/JP2/JP3 = USB 3.3 V/GND/5 V links (all three removed → debugger galvanically isolated when powered via BoosterPack headers), JP4/JP5 bridge MCU 3.3 V/5 V to site-2 headers, JP6 = USB-derived 5 V (stays out).
+
 **Assumed — MUST bench-verify before the dependent session (see REDESIGN_PLAN.md bench-day checklist):**
 - Fault output polarity (firmware says fault=LOW; `infineon.md` says fault=HIGH) → blocks S5
 - Enable active levels for GPIO66/GPIO131 → blocks S4
 - Internal current-sensor zero-current bias (assumed 2.5 V, never measured) + per-channel sensitivity/polarity → blocks S6
 - RM44AC differential vs single-ended, supply V/I, true output levels at the connector → blocks S7
-- LaunchPad JP1/JP2/JP4/JP5 back-feed behavior; GPIO131 header continuity → blocks S2/S8
+- LaunchPad no-back-feed with the S2 jumper config; GPIO131 header continuity → downgraded to *verification* of documented behavior (S2 finding above), no longer design inputs
 
 ## Project structure (S1)
 
@@ -76,7 +82,8 @@ FE_UFPR_4_0/
 ├── FE_UFPR_4_0.kicad_sym     THE project symbol library (28 symbols)
 ├── FE_UFPR_4_0.pretty/       THE project footprint library (19 footprints)
 ├── sym-lib-table / fp-lib-table   both ${KIPRJMOD}-relative, project scope only
-├── CLAUDE.md / REDESIGN_PLAN.md
+├── CLAUDE.md / REDESIGN_PLAN.md / ARCHITECTURE.md (S2)
+├── datasheets/               fetched reference PDFs (SPRUI77 LaunchPad UG)
 ```
 
 **Library rule:** nothing is ever placed from a global/system library. Standard KiCad parts are *re-exported* into `FE_UFPR_4_0.kicad_sym` / `.pretty`. This is the fix for 3.0, whose `sym-lib-table` and `fp-lib-table` point at files that do not exist — it only still opens because of embedded caches.
@@ -224,13 +231,24 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - 2026-08-18 — S1 — **DB37 symbol is numbered 1–37 + G1/G2, not functionally named.** The functional pin table is S4/S5/S6 scope and partly blocked on bench data; 3.0's as-built map is recorded above as reference only so nothing unverified gets baked into a library part.
 - 2026-08-18 — S1 — **Capacitor sourcing constraints logged** (no Basic C0G >100 pF; C0G ceiling ~10 nF/0603, ~22 nF/0805; Basic bulk is X5R not X7R). These change how S5–S7 build anti-alias filters and how S3 picks bulk caps — see the numbered list above.
 - 2026-08-18 — S1 — **Netclasses + track/via presets + 14 netclass patterns written to `.kicad_pro`** per the conventions above, as S1 baselines for S9 to re-derive.
+- 2026-08-25 — S2 — **LaunchPad power policy:** board feeds 5 V into the BoosterPack 5 V pins through a series Schottky (part in S3); silkscreen jumper table **JP1✗ JP2✗ JP3✗ JP4✓ JP5✓ JP6✗** = TI's documented external-power config (SPRUI77 §5.2; removing JP2 opens USB *GND* too → debugger fully isolated). LaunchPad regenerates its own 3.3 V; header 3V3 pins left NC (no paralleled regulators); board carries its own small 3V3 LDO so CAN/fault logic run with the LaunchPad unplugged. Never both sources hard-paralleled — the 3.0 failure mode this replaces.
+- 2026-08-25 — S2 — **GPIO131 confirmed on header J6-58** (GPIO66 J6-59, GPIO130 J6-57) from SPRUI77 Table 4 — bench item #11 drops to a continuity sanity check; bench item #10 becomes verification of documented jumper behavior.
+- 2026-08-25 — S2 — **Grounding frozen** (ARCHITECTURE.md §4): one GND net + L2 plane; star at 24 V entry; DB37 aux return (pins 10/28) on dedicated copper to the star; Kelvin pairs `VBUS_SNS_RAW`+`VBUS_RTN` and `ISNS_*_RAW`+`ISNS_RTN` exist as sheet-level nets from day one; every deliberate GND junction is a `NetTie_2`. **Shield policy:** every connector shell gets 1 nF C0G ∥ 1 MΩ + solder-jumper direct option; defaults — DB37/CAN soft-tie, encoder + LEM shields direct (receiver-end termination).
+- 2026-08-25 — S2 — **Power tree + budget frozen** (ARCHITECTURE.md §1–2): 24→12→5→3.3 cascade (TPS62153's 17 V Vin cap forces the cascade anyway; 12 V rail must exist for gate drivers) + isolated ±15 V branch. Budget ≈ 2.1 A @ 24 V / 2.9 A @ 18 V including the 40 W module aux pass-through → design current 3 A, fuse ~5 A, entry contacts ≥ 8 A. ±15 V load math (3 × LA 100-P ≈ 180 mA ≈ 4 W) confirms the 2 W module is undersized — S3 closes with ≥5 W or per-sensor modules.
+- 2026-08-25 — S2 — **Floorplan inherits 3.0's proven arrangement** (extracted from the 3.0 board file: outline 91.9 × 121.7 mm, DB37 centered on a short edge, LaunchPad long axis perpendicular to it): DB37 = module edge; power entry + CAN/switches = service edge; encoder + 3× LEM connectors = analog edge (left flank = analog partition); bucks diagonal-opposite the analog corner. **BoosterPack headers = `PinSocket_2x10`, bottom side; LaunchPad hangs below the board** (stock LaunchPad has male pins on top only), USB/XDS end overhanging the service edge; nylon standoffs at the LaunchPad mounting holes. Closes S1's gender question — `PinHeader_2x10` stays in the library unused.
+- 2026-08-25 — S2 — **Mounting pattern PENDING user measurement** (allowed by S2 exit criteria): the 6PS04512E43W39693 mechanical drawing is myInfineon-gated; only the 215 × 280 mm envelope is public (`infineon.md`). Leading plan: board gets its own regular hole pattern (S9), a laser-cut **adapter plate** maps it onto the real module top face — decouples board layout from module geometry.
+- 2026-08-25 — S2 — **DB37 lives on the `gate_drive` sheet** (its dominant, layout-critical cargo is the gate bus); module raw signals export via hierarchical pins to `module_status` / `current_sense`. DB37 geometry is de-facto validated (3.0's identical footprint geometry mated the real harness); only the purchasable MPN stays open.
+- 2026-08-25 — S2 — **Root interface captured: 40 nets / 80 sheet pins** + stubs + net labels on the root, matching hierarchical labels in all sub-sheets (net table in ARCHITECTURE.md §8). Sheet boxes **re-gridded from integer-mm to 1.27 mm multiples** (S1 had them off the connectivity grid — 80 `endpoint_off_grid` warnings the moment wires appeared; now zero). ERC = exactly 160 `label_dangling` and nothing else — this KiCad flags any label whose net has no component pin yet, so the count is the expected empty-hierarchy noise and burns down as S3–S8 fill sheets.
 
-## Open items raised in S1 (owner session in brackets)
+## Open items (owner session in brackets; struck items resolved with the session noted)
 
-- **[S2] DB37 physical part number.** The footprint now assumes a *female, right-angle, 2.77 × 2.54 mm* DC-37 with 63.5 mm jackscrews, matching 3.0's as-built geometry. Confirm against the actual connector + harness before S9 places it; if it is a vertical part the row pitch becomes 2.84 mm and the footprint must be re-derived.
-- **[S2] BoosterPack header gender** (`PinHeader` vs `PinSocket`) — follows from the LaunchPad-above/below decision.
-- **[S3] X5R vs X7R for bulk rails** given the on-inverter thermal environment.
+- ~~[S2] BoosterPack header gender~~ — **resolved S2:** `PinSocket_2x10`, bottom side, LaunchPad below.
+- **[user, before S9] PrimeSTACK top-face mounting measurement** (or myInfineon drawing export): hole positions/threads, obstructions, DB37 cable arrival point. Board plan decouples via adapter plate (ARCHITECTURE.md §7) so only the plate depends on the result.
+- **[user] DB37 purchasable MPN** for the consigned list. Geometry (female, right-angle, 2.77 × 2.54 mm, 63.5 mm jackscrews) is de-facto validated by 3.0 mating the real harness — only the buyable part number is open. If the team ever switches to a *vertical* part, the row pitch becomes 2.84 mm and the footprint must be re-derived.
+- **[S3] Schottky vs ideal-diode/load-switch** for the LaunchPad 5 V feed (drop ~0.35 V matters only to the LaunchPad's 3.3 V LDO headroom — plain Schottky is the leading choice).
+- **[S3] X5R vs X7R for bulk rails** — assume ~70 °C local ambient (board above the water-cooled inverter, LaunchPad sandwiched beneath; ARCHITECTURE.md §7).
 - **[S5/S6/S7] Standardise C0G filter values** across sheets to limit Extended part count.
+- **[S8] CAN GPIO pair** for `CAN_TX_3V3`/`CAN_RX_3V3` — pick CAN-mux-capable GPIOs that reach the BoosterPack headers (SPRUI77 Tables 1–4 in `datasheets/`); note the LaunchPad's own CAN transceiver hangs on GPIO12/17 via 0 Ω links (J12) — avoid or account for it.
 - **[S9] 3D model** for the derived DB37 footprint still points at KiCad's `…_EdgePinOffset9.40mm.step` (correct body, name differs from the footprint) — harmless, revisit if 3D export matters.
 
 ## Tooling notes

@@ -15,6 +15,193 @@
     (comment 3 "See CLAUDE.md + REDESIGN_PLAN.md in project dir")
   )
 	(lib_symbols)
+	(hierarchical_label "FLT_OC_A_15V"
+		(shape input)
+		(at 40.64 40.64 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "df7525d5-903b-4d1f-a2ba-cb0d2d7fe6a2")
+	)
+	(hierarchical_label "FLT_OC_B_15V"
+		(shape input)
+		(at 40.64 48.26 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "21e52595-fbb8-44da-9789-39c2755f04f9")
+	)
+	(hierarchical_label "FLT_OC_C_15V"
+		(shape input)
+		(at 40.64 55.88 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "cc7430f7-e535-42a4-9982-ae7a486020ae")
+	)
+	(hierarchical_label "FLT_OT_15V"
+		(shape input)
+		(at 40.64 63.5 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d8a4a85d-c3fc-4cdb-9b4d-486d5135c4db")
+	)
+	(hierarchical_label "FLT_OV_15V"
+		(shape input)
+		(at 40.64 71.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3031dd18-a708-4f55-bbd3-bdc719d2b92d")
+	)
+	(hierarchical_label "VBUS_SNS_RAW"
+		(shape input)
+		(at 40.64 86.36 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "780934dd-5af3-4056-8c19-4243aefc07cb")
+	)
+	(hierarchical_label "VBUS_RTN"
+		(shape bidirectional)
+		(at 40.64 93.98 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c65d30fc-4bdc-4366-b152-001a5dc1c406")
+	)
+	(hierarchical_label "NTC_1_RAW"
+		(shape input)
+		(at 40.64 109.22 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "624e449e-89c9-48e0-9a3b-ede69d59d1b6")
+	)
+	(hierarchical_label "NTC_2_RAW"
+		(shape input)
+		(at 40.64 116.84 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0deb1e9f-a7f4-4071-a4d0-fa0aea1c86b4")
+	)
+	(hierarchical_label "FLT_OC_A_3V3"
+		(shape output)
+		(at 384.81 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e1d8a105-f1b4-489e-b1d1-391e79499aee")
+	)
+	(hierarchical_label "FLT_OC_B_3V3"
+		(shape output)
+		(at 384.81 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "08da61f7-5f2b-473e-bd07-ec7d9b188ca5")
+	)
+	(hierarchical_label "FLT_OC_C_3V3"
+		(shape output)
+		(at 384.81 55.88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3c285228-8774-4e9d-969a-55f209defe06")
+	)
+	(hierarchical_label "FLT_OT_3V3"
+		(shape output)
+		(at 384.81 63.5 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1a986840-5d29-4489-b885-602cbf796c76")
+	)
+	(hierarchical_label "FLT_OV_3V3"
+		(shape output)
+		(at 384.81 71.12 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e858a0b4-1988-4dc6-a1d1-cbfcafa225ae")
+	)
+	(hierarchical_label "VBUS_ADC"
+		(shape output)
+		(at 384.81 86.36 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4e8d50fd-dca4-45d7-a4b4-a5631e086681")
+	)
+	(hierarchical_label "NTC_1_ADC"
+		(shape output)
+		(at 384.81 101.6 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fac3da68-84d9-4495-9978-a76c20008f70")
+	)
+	(hierarchical_label "NTC_2_ADC"
+		(shape output)
+		(at 384.81 109.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c605baca-f4df-44f8-a173-4d036f2a6aa8")
+	)
 	(sheet_instances
 		(path "/"
 			(page "1")
