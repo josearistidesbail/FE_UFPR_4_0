@@ -6,8 +6,11 @@ Interface PCB between a TI **LAUNCHXL-F28379D** (FOC firmware) and an Infineon *
 
 ## Roadmap & current phase
 
-**Current phase: S2 COMPLETE. Next: S3 — Power supplies.**
+**Current phase: S3 COMPLETE. Next: S4 — Gate drive, level shifting, enables.**
 *(This line is the ONLY place phase state lives — update it when a session's exit criteria pass.)*
+
+**S3's deliverable is [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md)** — every computed value, datasheet
+equation and JLC stock check behind the `power` sheet.
 
 **S2's deliverable is [`ARCHITECTURE.md`](ARCHITECTURE.md)** — power tree + budget, LaunchPad
 power policy (jumper table), grounding/shield rules, floorplan, mounting status, and the
@@ -82,7 +85,7 @@ FE_UFPR_4_0/
 ├── FE_UFPR_4_0.kicad_sym     THE project symbol library (28 symbols)
 ├── FE_UFPR_4_0.pretty/       THE project footprint library (19 footprints)
 ├── sym-lib-table / fp-lib-table   both ${KIPRJMOD}-relative, project scope only
-├── CLAUDE.md / REDESIGN_PLAN.md / ARCHITECTURE.md (S2)
+├── CLAUDE.md / REDESIGN_PLAN.md / ARCHITECTURE.md (S2) / S3_POWER_DESIGN.md (S3)
 ├── datasheets/               fetched reference PDFs (SPRUI77 LaunchPad UG)
 ```
 
@@ -98,13 +101,23 @@ FE_UFPR_4_0/
 | Connector | `DSUB-37_Socket` (generated) `Conn_02x10_Odd_Even` |
 | Utility | `TestPoint` `MountingHole` `NetTie_2` `SolderJumper_2_Open` `SolderJumper_3_Open` |
 
+**Appended in S3 (39 → 41 symbols):** `TPS54360DDA`, `TPS62933` + `TPS62933F`, `AP1117-15` + `AMS1117-3.3`, `Conn_01x02`, `MOSFET_P_GDS`, `D_TVS_Unidirectional`, `Converter_DCDC_URA-YMD_Dual`, and power symbols `+24V_IN` `+24V_PROT` `+24V_MOD` `+13V5_GATE`.
+- `MOSFET_P_GDS` is KiCad's `IRF9540N` renamed — it is the P-channel symbol with **numeric 1=G / 2=D / 3=S** pins that map to TO-252. `Device:Q_PMOS` uses letter pin *numbers* and cannot map to a footprint.
+- `D_TVS_Unidirectional` is `D_Zener` renamed: KiCad ships only **bidirectional** TVS symbols (A1/A2 pins) and SMBJ33A is unidirectional, so the zener glyph is both electrically correct and unambiguous about K/A polarity.
+- `+12V` and `+24V` remain in the library but are now **unused** (superseded by `+13V5_GATE` / `+24V_IN`).
+
 `+15V_ISO` / `-15V_ISO` are KiCad's `+15V` / `-15V` renamed so the power symbol drives the isolated-rail net names used in the net convention below. All BOM-bearing symbols carry an empty hidden **`LCSC`** property so the field is always present in the symbol-fields table.
 
 ### Footprint library inventory
 
 `R_0603/0805/1206/2512` · `C_0603/0805/1206/1210` · `L_0805/1206` · `PinHeader_2x10_P2.54mm_Vertical` · `PinSocket_2x10_P2.54mm_Vertical` · `DSUB-37_Socket_Horizontal_P2.77x2.54mm_MountingHoles` · `TestPoint_Pad_D1.5mm` · `TestPoint_THTPad_D1.5mm_Drill0.7mm` · `MountingHole_3.2mm_M3` · `MountingHole_3.2mm_M3_Pad` · `SolderJumper-2_P1.3mm_Open` · `SolderJumper-3_P1.3mm_Open_NumberLabels`
 
-Both libraries were validated by a full KiCad parse (`kicad-cli sym export svg` → 28/28, `kicad-cli fp export svg` → 19/19).
+**Appended in S3 (19 → 35 footprints):** `TI_SO-PowerPAD-8_ThermalVias` · `SOT-583-8` · `SOT-223-3_TabPin2` · `TO-252-2` · `SOT-23` · `D_SMA` · `D_SMB` · `Fuse_1206_3216Metric` · `CP_Elec_8x10.5` · `LED_0603_1608Metric` · `NetTie-2_SMD_Pad0.5mm` · `Molex_Mini-Fit_Jr_5566-02A_2x01_P4.20mm_Vertical` · `L_Changjiang_FNR8040S` · `L_Changjiang_FNR5040S` (exact matches for the chosen inductors) — plus two **derived** because KiCad ships neither:
+
+- **`Fuse_2410_6125Metric`** — Littelfuse 451/453 recommended land: pads 1.96 × 3.15 mm, gap 2.95 mm, centres ±2.455 mm, span 6.86 mm; body 6.10 × 2.69 × 2.69 mm.
+- **`Converter_DCDC_Mornsun_URA-YMD-6WR3_THT`** — from the URA_YMD-6WR3 datasheet Top View (PCB Layout): 25.40 × 25.40 mm, Ø1.0 mm pins / Ø1.5 mm holes, 2.54 mm grid, columns 20.32 mm apart, pins 3–5 spanning 20.32 mm, pins 1–2 5.08 mm apart straddling the centre. Pin-out **1=GND(−Vin) 2=Vin 3=+Vo 4=0V 5=−Vo**.
+
+Both libraries were validated by a full KiCad parse — S1: `sym export svg` → 28/28, `fp export svg` → 19/19; **S3: 41/41 symbols and 35/35 footprints**. Note the MCP `import_symbol` writes imported symbols at column 0, so run `kicad-cli sym upgrade` afterwards to restore canonical formatting.
 
 ## DB37 — as-built 3.0 pin map (REFERENCE ONLY, not yet the v4.0 pin table)
 
@@ -149,6 +162,19 @@ All are the Uniroyal `0603WAF…T5E` series (one manufacturer across the kit ⇒
 | 330 | C23138 | 15 k | C22809 | | |
 | 470 | C23179 | | | | |
 
+**Appended in S3** (same 0603 ±1 % family; all stock-checked 2026-08-29):
+
+| Ω | LCSC | JLC | Used for |
+|---|---|---|---|
+| 5.6 k | C23189 | **Basic** | U1 compensation resistor |
+| 49.9 k | C23184 | **Basic** | U1 UVLO divider bottom |
+| 75 k | C23242 | **Basic** | U1 FB divider top (13.566 V) |
+| 200 k | C25811 | **Basic** | U1 R_T (500 kHz) |
+| 52.3 k | C23198 | Extended | U2 FB divider top (4.984 V) |
+| 620 k | C23219 | Extended | U1 UVLO divider top |
+
+⚠ **Do not "correct" these to the exact E96 values** — 162 kΩ (C22815) has **1** in stock, 10.2 kΩ (C22772) has **3**, 5.49 kΩ (C23069) has **19**, and 604 kΩ (C23216) only 3 434. See `S3_POWER_DESIGN.md` §8.
+
 Price ≈ $0.85–1.46 / 1000, stock 0.5 M–37 M on every line. **0.1 % gain/divider resistors are deliberately NOT in this kit** — their values are computed in S5/S6/S7 and vetted there.
 
 ### Capacitors
@@ -171,6 +197,33 @@ Price ≈ $0.85–1.46 / 1000, stock 0.5 M–37 M on every line. **0.1 % gain/di
 | 10 µF | 0805 | X5R | 25 | C15850 | CL21A106KAYNNNE | **Basic** | rail bulk |
 | 10 µF | 1206 | X5R | 50 | C13585 | CL31A106KBHNNNE | **Basic** | 24 V-side bulk |
 | 22 µF | 1206 | X5R | 25 | C12891 | CL31A226KAHNNNE | **Basic** | buck output bulk |
+
+**Appended in S3:**
+
+| Value | Pkg | Dielectric | V | LCSC | JLC | Use |
+|---|---|---|---|---|---|---|
+| 120 pF | 0603 | NP0 | 50 | C107035 | Extended | U1 compensation pole |
+| 47 nF | 0603 | X7R | 50 | **C1622** | **Basic** | U1 compensation zero + U2 soft-start |
+| 100 µF | D8×10.2 elec | — | 50 | C2836439 | Extended | 24 V input bulk / harness LC damping |
+
+### Other parts appended in S3
+
+| Part | LCSC | JLC | Notes |
+|---|---|---|---|
+| SQD50P06-15L P-FET, −60 V, 15.5 mΩ, TO-252 | C3281500 | Ext | reverse polarity |
+| SMBJ33A TVS, SMB | C19077586 | **Preferred** | 33 V standoff, 53.3 V clamp |
+| BZX84C15 15 V Zener, SOT-23 | C19077472 | **Preferred** | Q1 Vgs clamp |
+| SS36 60 V 3 A Schottky, SMA | C7420367 | **Preferred** | U1 catch diode |
+| SS34 40 V 3 A Schottky, SMA | C8678 | **Basic** | LaunchPad 5 V feed (placed in S8) |
+| Fuse 5 A 125 V 2410 | C48467 | Ext | F1 — only in-stock 5 A with adequate V rating |
+| Fuse 3 A 63 V 1206 | C182445 | Ext | F2 — module-aux pass-through |
+| L 47 µH FNR8040S470MT 1.7/2 A | C168137 | Ext | L1 |
+| L 3.3 µH FNR5040S3R3NT 3.9/4.45 A | C167960 | Ext | L2 |
+| LED red 0603 KT-0603R | C2286 | **Basic** | D4–D8, all five rails |
+| TPS54360BDDAR | C524806 | Ext | U1 |
+| TPS62933FDRLR | C5219272 | Ext | U2 |
+| AMS1117-3.3 | C6186 | **Basic** | U3 |
+| URA2415YMD-6WR3 | C5369735 | Ext | U4 — consigned THT, only 362 stock |
 
 ### Two hard capacitor constraints found in S1 (they shape S3 and S5–S7)
 
@@ -210,6 +263,9 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
   | Power_3A | 1.20 mm | 0.30 mm | 1.0 / 0.5 | 40 |
 
   Track presets 0.25/0.3/0.4/0.5/0.8/1.2/2.0 mm; via presets 0.6/0.3, 0.8/0.4, 1.0/0.5. 14 netclass **patterns** are pre-seeded against the net convention (`+24V_IN`, `GND` → Power_3A; rails → Power_1A; `PWM_*_15V`, `DRV_EN*` → Gate; `ISNS_*`, `ENC_*`, `VBUS_*`, `NTC_*`, `*_ADC` → Analog) so nets self-classify as S3–S8 create them.
+  **S3 update:** `+12V` pattern renamed `+13V5_GATE`; added `+24V_PROT`/`+24V_MOD` → Power_3A,
+  `ISO_COM` → Power_1A, and `PWR_U*_SW` → Power_1A (buck switch nodes: high di/dt, want wide + short).
+  18 patterns total.
 - **Mounting:** board mounts on top of the inverter; mounting holes required (3.0 had none — only DB37 jackscrews). Pattern from the PrimeSTACK top-face drawing (S2/S9).
 
 ## Decision log (append-only: date — session — decision — rationale)
@@ -239,16 +295,32 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - 2026-08-25 — S2 — **Mounting pattern PENDING user measurement** (allowed by S2 exit criteria): the 6PS04512E43W39693 mechanical drawing is myInfineon-gated; only the 215 × 280 mm envelope is public (`infineon.md`). Leading plan: board gets its own regular hole pattern (S9), a laser-cut **adapter plate** maps it onto the real module top face — decouples board layout from module geometry.
 - 2026-08-25 — S2 — **DB37 lives on the `gate_drive` sheet** (its dominant, layout-critical cargo is the gate bus); module raw signals export via hierarchical pins to `module_status` / `current_sense`. DB37 geometry is de-facto validated (3.0's identical footprint geometry mated the real harness); only the purchasable MPN stays open.
 - 2026-08-25 — S2 — **Root interface captured: 40 nets / 80 sheet pins** + stubs + net labels on the root, matching hierarchical labels in all sub-sheets (net table in ARCHITECTURE.md §8). Sheet boxes **re-gridded from integer-mm to 1.27 mm multiples** (S1 had them off the connectivity grid — 80 `endpoint_off_grid` warnings the moment wires appeared; now zero). ERC = exactly 160 `label_dangling` and nothing else — this KiCad flags any label whose net has no component pin yet, so the count is the expected empty-hierarchy noise and burns down as S3–S8 fill sheets.
+- 2026-08-29 — S3 — **Gate rail = 13.566 V, not 12.0 V** (user decision; S3/S4 joint). FB divider **75 kΩ / 4.7 kΩ**, both JLC Basic. Centres the rail in the module's 11–15 V HIGH window (12.75–13.29 V at the module across ±2 % rail and a 0.55 V drop), so S4 is free to pick any series damping resistor ≤100 Ω. 12.0 V worked in 3.0 but left only ~0.45 V of margin once tolerance stacked.
+- 2026-08-29 — S3 — **12 V buck = TPS54360BDDAR (C524806), replacing the roadmap's LMR33630.** Two reasons: (a) **60 V input rating** — SMBJ33A clamps at 53.3 V, which a 36 V part does not survive; (b) LMR33630 has **no MODE/SYNC pin** (verified against its pin table) so it is auto-mode/PFM-only, and TI's own sizing rule puts its PFM boundary at ≈0.45 A — exactly our 12 V load. That is a part-sizing mismatch, not a tuning problem.
+- 2026-08-29 — S3 — **5 V buck = TPS62933FDRLR (C5219272), replacing TPS62153.** TPS6215x has **no MODE pin** either — its power-save mode cannot be defeated (and TPS62153 is the *fixed* 5.0 V member; TPS62150 is the adjustable one). The `F` suffix is **FCCM**: fixed 1.2 MHz at any load including LaunchPad-unplugged, and it is the only family member **without** spread spectrum. This is the rail that feeds every analog front-end, so forced-PWM is a hard requirement here and only here.
+- 2026-08-29 — S3 — **L1 = 47 µH** so U1 stays in **CCM down to ≈0.13 A**, below the real 0.25–0.5 A load. Do not reduce it in S10 — a smaller inductor raises the DCM/skip threshold back into the working range. 12 V-rail skip noise is otherwise tolerable because that rail feeds only gate drivers and the FCCM 5 V buck.
+- 2026-08-29 — S3 — **±15 V = one Mornsun URA2415YMD-6WR3 (C5369735), 6 W, ±200 mA/rail** — closes the S0 flag that the ±66 mA A2415SDL-2W was undersized against ≈180 mA / 4 W for 3× LA 100-P. Datasheet also widens the assumed input range to **9–36 V**. Isolation is kept even though the secondary commons to GND at one point, so the ±15 V return current stays inside the analog partition. ⚠ consigned through-hole part, only 362 in stock.
+- 2026-08-29 — S3 — **[ARCH CHANGE] rail `+12V_GATE` renamed `+13V5_GATE`** — the net regulates to 13.57 V and labelling it `+12V` on a schematic is actively misleading. New power symbol derived from KiCad's `+24V`, netclass pattern updated.
+- 2026-08-29 — S3 — **[ARCH CHANGE] new global net `+24V_MOD`** — the module-aux pass-through needs its own fused net (F2, 3 A) to cross from `power` to `gate_drive`. S4 lands it on DB37 pins 8/26.
+- 2026-08-29 — S3 — **Input fuse F1 = 0451005.MRL, 2410, 5 A / 125 V (C48467)**, user chose SMD/non-replaceable. It is the **only in-stock 5 A SMD fuse with an adequate voltage rating** — the two 1206 alternatives are 32 V and unrated, and a fuse must interrupt the arc at the applied voltage, which the TVS pins at 53.3 V. Cost: one derived footprint (KiCad ships no 2410 fuse land).
+- 2026-08-29 — S3 — **Three EN/SS hazards caught during capture, each of which would have destroyed hardware:** U1 EN abs max is **8.4 V** and U2 EN abs max is **6.0 V** — neither may be tied to its input rail, so both get dividers (620 k/49.9 k → UVLO start 15.37 V / stop 13.26 V; 100 k/33 k → 3.37 V); and U2's **SS pin cannot float** (≥6.8 nF required, C13 = 47 nF fitted).
+- 2026-08-29 — S3 — **Divider values re-picked against live stock, not just E96 tables.** The natural 13.5 V pair 162 kΩ/10.2 kΩ is unbuyable (**1** and **3** units in stock), as is the exact compensation resistor 5.49 kΩ (**19**). Final picks are Basic/high-stock parts; the unbuyable values are recorded in `S3_POWER_DESIGN.md` §8 so nobody "restores" them later.
+- 2026-08-29 — S3 — **All five rail LEDs are the same Basic red part (KT-0603R, C2286)** with silkscreen naming each rail, rather than a green Extended line — and green's ~3.1 V Vf is marginal off the 3.3 V rail anyway. All five series resistors come from the S1 kit.
+- 2026-08-29 — S3 — **`power` sheet captured: 79 components, 30 nets, ERC 0 violations on the sheet**, netlist verified node-by-node. Connectivity is by net labels at pins rather than drawn wires — electrically verified but visually dense around U1/U2; a wire-stub tidy-up is logged as a cosmetic follow-up. Both bucks' datasheet layout rules are written onto the sheet as text notes for S10.
 
 ## Open items (owner session in brackets; struck items resolved with the session noted)
 
 - ~~[S2] BoosterPack header gender~~ — **resolved S2:** `PinSocket_2x10`, bottom side, LaunchPad below.
 - **[user, before S9] PrimeSTACK top-face mounting measurement** (or myInfineon drawing export): hole positions/threads, obstructions, DB37 cable arrival point. Board plan decouples via adapter plate (ARCHITECTURE.md §7) so only the plate depends on the result.
 - **[user] DB37 purchasable MPN** for the consigned list. Geometry (female, right-angle, 2.77 × 2.54 mm, 63.5 mm jackscrews) is de-facto validated by 3.0 mating the real harness — only the buyable part number is open. If the team ever switches to a *vertical* part, the row pitch becomes 2.84 mm and the footprint must be re-derived.
-- **[S3] Schottky vs ideal-diode/load-switch** for the LaunchPad 5 V feed (drop ~0.35 V matters only to the LaunchPad's 3.3 V LDO headroom — plain Schottky is the leading choice).
-- **[S3] X5R vs X7R for bulk rails** — assume ~70 °C local ambient (board above the water-cooled inverter, LaunchPad sandwiched beneath; ARCHITECTURE.md §7).
+- ~~[S3] Schottky vs ideal-diode/load-switch for the LaunchPad 5 V feed~~ — **resolved S3:** plain Schottky **SS34, C8678 (JLC Basic)**; V_f ≈ 0.35 V at ~200 mA leaves the LaunchPad ≈4.63 V, ample for its own 3.3 V LDO. **Physically placed in S8** on the `launchpad` sheet at the header.
+- ~~[S3] X5R vs X7R for bulk rails~~ — **resolved S3:** X7R wherever a Basic/Preferred X7R exists at the needed value (100 nF, 47 nF, 1 µF); X5R for the bulk ≥4.7 µF where JLC Basic offers nothing else, with ≥2× voltage derating (50 V parts on the 24 V rail, 25 V parts on 5 V/3V3). AMS1117 dissipates 0.25 W → ≈85 °C junction at the 70 °C worst-case local ambient.
 - **[S5/S6/S7] Standardise C0G filter values** across sheets to limit Extended part count.
 - **[S8] CAN GPIO pair** for `CAN_TX_3V3`/`CAN_RX_3V3` — pick CAN-mux-capable GPIOs that reach the BoosterPack headers (SPRUI77 Tables 1–4 in `datasheets/`); note the LaunchPad's own CAN transceiver hangs on GPIO12/17 via 0 Ω links (J12) — avoid or account for it.
+- **[S12] Re-verify `C5369735`** (URA2415YMD-6WR3 isolated module) — only **362 in stock** and it is a consigned through-hole part. Highest supply risk on the board.
+- **[S4] `+24V_MOD`** is the fused (F2, 3 A) module-aux pass-through created in S3 — land it on DB37 pins 8/26 on the `gate_drive` sheet.
+- **[S4] Series damping resistor ≤100 Ω** on the gate lines keeps the module inside 11–15 V with the 13.566 V rail; log the value actually chosen.
+- **[cosmetic, any session] `power` sheet readability** — connectivity is by net labels at pins, not drawn wires. Electrically verified (ERC 0, netlist checked node-by-node) but visually dense around U1/U2 where 8–9 labels converge. A wire-stub pass fanning the IC pins out would make it presentation-quality.
 - **[S9] 3D model** for the derived DB37 footprint still points at KiCad's `…_EdgePinOffset9.40mm.step` (correct body, name differs from the footprint) — harmless, revisit if 3D export matters.
 
 ## Tooling notes

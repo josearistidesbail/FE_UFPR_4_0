@@ -17,3 +17,7 @@ fp-info-cache
 # MCP snapshot checkpoints (duplicate git history)
 /snapshots/
 /logs/
+
+# MCP server checkpoint repo — a stale checkpoint here overwrote the finished S2
+# schematics once (see S3 session notes). Never track it; safest is to delete it.
+/.history/

@@ -2,8 +2,16 @@
 
 Frozen 2026-08-25 (S2). Scope: power tree + budget, LaunchPad power-domain policy,
 grounding/shield policy, floorplan + connector plan, mechanical/mounting status, and the
-root-sheet interface net table. Component-level design happens in S3–S8; this file is the
-contract those sessions implement. Changes here after S2 require a Decision Log entry.
+root-sheet interface net table.
+
+> **Amended 2026-08-29 (S3)** — three changes, all logged in the `CLAUDE.md` Decision Log:
+> gate rail renamed `+12V_GATE` → **`+13V5_GATE`** (regulates to 13.566 V), new global net
+> **`+24V_MOD`** for the fused module-aux pass-through, and **both switching converters replaced**
+> (LMR33630 → TPS54360B, TPS62153 → TPS62933F) because neither original part can be forced out
+> of light-load PFM. Derivations: [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
+
+Component-level design happens in S3–S8; this file is the contract those sessions implement.
+Changes here after S2 require a Decision Log entry.
 
 Sources: `../foc-f28379d-fsae/foc_f28379d/docs/infineon.md` (module electrical interface),
 `datasheets/SPRUI77_LAUNCHXL-F28379D_users_guide.pdf` (LaunchPad UG, fetched in S2 —
@@ -20,40 +28,49 @@ jumper table §5.2, pinout tables 1–4, PCB layout §6.3), 3.0 as-built board f
   ├─ input protection (S3): fuse ~5 A → reverse-polarity P-FET → SMBJ33A TVS → bulk
   │      = +24V_PROT
   │
-  ├─►[pass-through] +24V_PROT → own fuse → DB37 pins 8/26 (module aux, 40 W spec)
+  ├─►[pass-through] +24V_PROT → F2 (3 A) → **+24V_MOD** → DB37 pins 8/26 (module aux, 40 W)
   │                  return: DB37 pins 10/28 → star point at 24 V entry   (no regulator in path)
   │
-  ├─►Buck 1 (LMR33630 class, S3):  +24V_PROT → +12V_GATE   (12.0 vs 13.5 V: S3+S4 joint)
+  ├─►Buck 1 **TPS54360B, 60 V** (S3):  +24V_PROT → **+13V5_GATE = 13.566 V**  (500 kHz, 47 µH)
   │      loads: 2× TC4468 gate drivers, PrimeSTACK PWM/EN inputs, (option) fault pull-up rail
   │      │
-  │      └─►Buck 2 (TPS62153 class, Vin≤17 V): +12V_GATE → +5V
+  │      └─►Buck 2 **TPS62933F, FCCM** (S3): +13V5_GATE → **+5V = 4.984 V** (1.2 MHz, 3.3 µH)
   │             loads: LaunchPad (via series Schottky), op-amp rail (ferrite/RC → clean 5 V),
   │                    encoder supply (filtered branch, S7), +3V3 LDO input
   │             │
   │             └─►LDO (S3): +5V → +3V3
   │                    loads: CAN transceiver, fault Schmitt/logic, GPIO-side pull-ups
   │
-  └─►Isolated DC/DC (S3 closes sizing): +24V_PROT → +15V_ISO / −15V_ISO
+  └─►Isolated DC/DC **Mornsun URA2415YMD-6WR3, 6 W, 9–36 V in** (S3): +24V_PROT → +15V_ISO / −15V_ISO
          loads: 2–3× LEM LA 100-P (closed-loop). Secondary common ties to GND at ONE point
          in the analog partition (burden resistors are board-GND-referenced by necessity).
-         S3 decides: 1× 5–6 W module vs 2× 2 W vs drop isolation (LEM primary is already
-         galvanically isolated) — see budget row below for the load number that decision needs.
+         **S3 CLOSED: one 6 W module, ±200 mA/rail** vs the ≈180 mA / 4 W load. Isolation kept
+         so the ±15 V return stays inside the analog partition. Secondary commons to GND at NT1.
 ```
 
-Rationale for the cascade (24→12→5→3.3 instead of parallel bucks off 24 V): TPS62153 is
-limited to 17 V in, the 12 V rail must exist anyway for the gate drivers, and the 5 V load
-(~0.7 A) is small enough that double conversion loss (~0.5 W) is irrelevant next to the
+Rationale for the cascade (24→13.5→5→3.3 instead of parallel bucks off 24 V): the 5 V converter
+is limited to 30 V in, the gate rail must exist anyway for the gate drivers, and the 5 V load
+(~0.75 A) is small enough that double conversion loss (~0.5 W) is irrelevant next to the
 noise benefit of one hot 24 V switcher instead of two.
+
+**S3 amendment — light-load mode is the reason both converters changed.** The roadmap's
+LMR33630 and TPS62153 both turned out to have **no MODE pin**, so neither can be forced out of
+PFM/power-save, and a *load-dependent* burst rate lands in the band this board samples. The 5 V
+rail feeds every analog front-end, so it now uses **TPS62933F (FCCM**, fixed 1.2 MHz at any load,
+and the only family member without spread spectrum**)**. The gate rail uses **TPS54360B**, chosen
+for its **60 V input rating** — the SMBJ33A TVS clamps at 53.3 V, which a 36 V part does not
+survive — and sized (47 µH) to stay in CCM at the real 0.25–0.5 A load. Full derivation in
+[`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
 
 ## 2. Power budget (S2 estimates — S3 replaces with computed numbers)
 
 | Rail | Loads | Est. draw | Notes |
 |---|---|---|---|
 | 24 V pass-through | PrimeSTACK aux | **1.7 A @ 24 V, 2.2 A @ 18 V** (40 W) | copper + connector rating only, not through regulators |
-| +12V_GATE | 2× TC4468 quiescent+switching, 6 PWM + 2 EN module inputs, 5 fault pull-ups | ~60 mA (0.9 W) | module input current unspecified in `infineon.md` — assumed ≤5 mA/input, bench-confirm during S4 |
+| +13V5_GATE | 2× TC4468 quiescent+switching, 6 PWM + 2 EN module inputs, 5 fault pull-ups, **+5 V buck input (0.32 A)** | **~0.45 A** (0.25 A typ) | module input current unspecified in `infineon.md` — assumed ≤5 mA/input, bench-confirm during S4 |
 | +5V | LaunchPad ≤500 mA (dual-core @200 MHz + its own 3V3 LDO), op-amps ~20 mA, encoder ~60 mA (bench item #8), 3V3 LDO input ~90 mA | ~0.7 A (3.5 W) | LaunchPad figure is a budget cap, not a measurement |
 | +3V3 (board) | CAN transceiver (~70 mA dominant-TX), Schmitt + misc logic | ~90 mA | from +5V LDO |
-| ±15V_ISO | per LA 100-P: 10 mA idle + Ip/2000 compensation (50 mA @ 100 Arms; 75 mA pk @ 150 A) | 3 sensors ≈ 180 mA avg → **~4 W in** | confirms A2415SDL-2W (±66 mA) is undersized — S3 must pick a ≥5 W solution or 1 module/sensor |
+| ±15V_ISO | per LA 100-P: 10 mA idle + Ip/2000 compensation (50 mA @ 100 Arms; 75 mA pk @ 150 A) | 3 sensors ≈ 180 mA avg → **~4 W in** | **S3 closed: URA2415YMD-6WR3, 6 W, ±200 mA/rail, 9–36 V in** |
 | **Total input** | | **≈ 2.1 A @ 24 V / ≈ 2.9 A @ 18 V** | design current 3 A; fuse ~5 A; entry contacts ≥8 A (Mini-Fit Jr 9 A ✓, DT 13 A ✓) |
 
 ## 3. LaunchPad power-domain policy  **[DECIDED]**
@@ -178,7 +195,7 @@ envelope (grows only if S9 placement demands).
 
 ## 8. Root-sheet interface nets (captured as sheet pins in S2)
 
-Rails (`+24V_IN`, `+24V_PROT`, `+12V_GATE`, `+5V`, `+3V3`, `+15V_ISO`, `−15V_ISO`, `GND`)
+Rails (`+24V_IN`, `+24V_PROT`, **`+24V_MOD`**, **`+13V5_GATE`**, `+5V`, `+3V3`, `+15V_ISO`, `−15V_ISO`, `GND`, **`ISO_COM`**)
 are global power nets — no sheet pins. The DB37 lives on `gate_drive` (the gate bus is its
 dominant, layout-critical cargo); module-side raw signals export from there.
 

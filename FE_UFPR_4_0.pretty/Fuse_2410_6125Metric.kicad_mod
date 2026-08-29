@@ -1,0 +1,119 @@
+(footprint "Fuse_2410_6125Metric"
+	(version 20260206)
+	(generator "FE_UFPR_4_0_S3_builder")
+	(layer "F.Cu")
+	(descr "Fuse SMD 2410 (6125 Metric), square end terminal. Land pattern per Littelfuse 451/453 Nano2 datasheet 'Recommended pad layout': pads 1.96 x 3.15 mm, gap 2.95 mm, pad centres +/-2.455 mm, overall span 6.86 mm. Body 6.10 x 2.69 x 2.69 mm. Derived in S3 because KiCad ships no 2410 fuse footprint.")
+	(tags "fuse smd 2410 6125 nano2")
+	(property "Reference" "REF**"
+		(at 0 -2.53 0)
+		(layer "F.SilkS")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Fuse_2410_6125Metric"
+		(at 0 2.53 0)
+		(layer "F.Fab")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -1.3 -1.61)
+		(end 1.3 -1.61)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a1000000-0000-4000-8000-000000000001")
+	)
+	(fp_line
+		(start -1.3 1.61)
+		(end 1.3 1.61)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a1000000-0000-4000-8000-000000000002")
+	)
+	(fp_rect
+		(start -3.69 -1.83)
+		(end 3.69 1.83)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill none)
+		(layer "F.CrtYd")
+		(uuid "a1000000-0000-4000-8000-000000000003")
+	)
+	(fp_rect
+		(start -3.05 -1.345)
+		(end 3.05 1.345)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill none)
+		(layer "F.Fab")
+		(uuid "a1000000-0000-4000-8000-000000000004")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "a1000000-0000-4000-8000-000000000005")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -2.455 0)
+		(size 1.96 3.15)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.127551)
+		(uuid "a1000000-0000-4000-8000-000000000011")
+	)
+	(pad "2" smd roundrect
+		(at 2.455 0)
+		(size 1.96 3.15)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.127551)
+		(uuid "a1000000-0000-4000-8000-000000000012")
+	)
+	(embedded_fonts no)
+)

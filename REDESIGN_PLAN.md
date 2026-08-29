@@ -13,6 +13,7 @@
 
 ```
 S1 Foundation ─► S2 Architecture ─► S3 Power ─► S4 Gate drive ─► S5 Module status
+   ✅              ✅                 ✅          ◄── next
                        │                                               │
   BENCH DAY (before S5/S6/S7) ────────────► S6 Current sense ─► S7 Encoder
                        │                                               │
@@ -65,7 +66,27 @@ S1 Foundation ─► S2 Architecture ─► S3 Power ─► S4 Gate drive ─►
 
 ---
 
-## S3 — Power supplies sheet
+## S3 — Power supplies sheet  ✅ **DONE (2026-08-29)**
+
+**Outcome:** `power` sheet captured — **79 components, 30 nets, ERC 0 violations on the sheet**,
+netlist verified node-by-node, all 64 BOM parts carry an `LCSC` field, every value computed from
+datasheet equations. Deliverable = [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
+
+**Deviations from plan, logged in `CLAUDE.md`:** **both named converters were rejected.**
+LMR33630 and TPS62153 each turned out to have **no MODE pin**, so neither can be forced out of
+light-load PFM — and on a board that samples at 10 kHz a load-dependent burst rate is exactly the
+wrong failure mode. The 5 V rail (which feeds every analog front-end) is now **TPS62933F**, whose
+`F` suffix is FCCM and which is the only family member without spread spectrum; the gate rail is
+**TPS54360B**, picked for a **60 V** input rating because the SMBJ33A clamps at 53.3 V and a 36 V
+part does not survive that. Gate rail set to **13.566 V** (user decision) rather than 12.0 V.
+Two **[ARCH CHANGE]** items: rail renamed `+12V_GATE` → `+13V5_GATE`, and new global net
+`+24V_MOD` for the fused pass-through.
+
+**Three hardware-destroying traps caught during capture:** TPS54360 EN is rated **8.4 V** max and
+TPS62933F EN **6.0 V** max — neither may be tied to its input rail, so both got dividers; and the
+TPS62933F **SS pin cannot float** (≥6.8 nF required). Also: the "obvious" E96 divider values were
+**unbuyable** (162 kΩ → 1 in stock, 10.2 kΩ → 3, 5.49 kΩ → 19), so every value was re-picked
+against live stock.
 
 **Objective:** Complete `power`: input protection, all rails, isolated ±15 V, indicators, entry connectors.
 
