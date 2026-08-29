@@ -87,7 +87,7 @@ does not back-feed when +3V3 is down.
 | 1 | Fault asserted = **LOW** | `hw_control_v2.h`: `MODULE_FAULT_ACTIVE_LOW 1`; `infineon.md` "LOW (Fault Active)" | p.2: *"Digital output level: open collector, **logic low = no fault**, max 15 mA"*; p.6 error table: *"X = high level with required external pull-up"* | **Fault = HIGH.** Firmware is inverted. Blocks S5 no longer — bench item #1 is answered on paper. |
 | 2 | Module analog outputs may not be able to drive a divider | never measured; S5 planned a buffer op-amp | p.2: every analog output rated **"load max 5 mA"** | S5 may use a plain resistive divider on Vbus. Bench item #4 answered on paper. |
 | 3 | Two NTC channels exist, pin 29 and pin 9 | `ARCHITECTURE.md` §8, from 3.0's net names | p.6: **one** "Temperature" pin (29). p.2 lists NTC1 4.9 V and NTC2 10 V but only the inverter-section sensor is fitted | `NTC_2_RAW`/`NTC_2_ADC` retired. Pin 29's divider must be rated for **10 V**. |
-| 4 | Pin 9 = "PTC+" sensor input; pin 27 = GND | 3.0 as-built | p.6: pins 9 and 27 are **15 V / 50 mA supply OUTPUTS** (labelled PTC) | **3.0 shorted a 15 V supply output (pin 27) to ground.** v4.0 brings both to test points. |
+| 4 | Pin 9 = "PTC+" sensor input; pin 27 = GND | 3.0 as-built | p.6: pins 9 and 27 are two pins of **one 15 V / 50 mA supply output**, and the "PTC" next to them is the **fuse symbol protecting it** (see §3.2) | **3.0 shorted that output (pin 27) to ground** — self-limited by the module's own PTC fuse. v4.0 brings both to test points. |
 | 5 | Pin 1 = GND | 3.0 as-built | p.6: pin 1 = **"True earth / shield"** | Pin 1 joins the shell net `SHIELD_DB37` under the S2 soft-tie policy, not GND. |
 
 Two further confirmations that were *assumptions* until now:
@@ -102,6 +102,31 @@ Two further confirmations that were *assumptions* until now:
 Cross-validation: the datasheet's NC set (14, 15, 17, 18, 33, 34, 35, 36) is **exactly** the set of
 pins 3.0 left dangling. Independent agreement on 8 pins.
 
+### 3.2 "PTC" on pins 9/27 is a fuse, not a sensor
+
+The natural objection — *if both pins output 15 V, how would a PTC work?* — is the right instinct,
+and the answer is that there is no PTC sensor on this connector at all.
+
+Rendering p.6 at 600 dpi shows the "Out" sub-block of the **Power supply** group containing a legend
+box with the **IEC fuse symbol labelled PTC**. It is drawn in exactly the same style and position as
+the legend box in the adjacent **"In"** sub-block, which holds *two solid fuse symbols* for the
+13–30 V feed on pins 8/26. So the element is a **PTC resettable fuse (polyfuse)** limiting the
+output — the protection component's name, not a signal.
+
+Therefore **pins 9 and 27 are two pins of the same 15 V / 50 mA auxiliary rail.** Duplicated pins
+are this connector's convention throughout (8/26 in, 10/28 GND, 19/25/37 GND digital, 11/12/13 GND
+analog). The module's only temperature output is pin 29.
+
+Infineon most likely named the rail "PTC" because it is *intended* to excite a customer-built motor
+PTC circuit, with the return on GND — which is the most plausible route by which "PTC" became a
+signal name on 3.0's schematic and got wired as if it were a sensor.
+
+**Why the board still keeps two nets.** `MOD_AUX15V_1` (pin 9) and `MOD_AUX15V_2` (pin 27) stay
+separate on the schematic. Merging them would be electrically correct and would let the two pins
+share current, but at 50 mA that is worth nothing — whereas two independent nets remain safe even if
+this reading of the diagram is wrong, where a merge would tie two sources together. Two test points,
+no risk. A bench measurement at TP17/TP18 settles it in ten seconds.
+
 ### 3.1 How much of this was actually broken in 3.0? — not much, and nothing that ran
 
 Rows 1–3 above are corrections to *documents* (the firmware header, `infineon.md`, and our own
@@ -113,8 +138,8 @@ table predicts.**
 
 | Pin | 3.0 | Reality | Real-world consequence |
 |---|---|---|---|
-| 27 | GND | 15 V/50 mA supply output | The only true mistake. A supply output shorted to ground — but nothing in the signal chain depends on that rail, so it is **symptomless**; ≤0.75 W dissipated inside the module. |
-| 9 | divider → header as "PTC" | same output | A dead circuit reading a constant. Firmware never sampled it (`NTC channels: none today`). Harmless. |
+| 27 | GND | 15 V/50 mA supply output | The only true mistake — and **self-protecting**: that output's own PTC resettable fuse (§3.2) trips and holds at a small leakage current. Nothing in the signal chain depends on the rail, so it is **symptomless**. |
+| 9 | divider → header as "PTC" | same rail as 27 | A dead circuit reading a constant. Firmware never sampled it (`NTC channels: none today`). Harmless. |
 | 1 | GND | true earth/shield (bonded to module chassis) | **Not an error** — a hard chassis-to-signal-ground bond is a defensible choice. It conflicts only with the *soft-tie* policy S2 adopted for v4.0, which is a new rule, not a 3.0 defect. |
 
 The phantom NTC#2 (row 3) was **our** error, introduced in S2's `ARCHITECTURE.md` §8 by inferring a

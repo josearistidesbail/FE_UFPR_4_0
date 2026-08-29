@@ -154,7 +154,7 @@ Full derivation, level maths and timing budget: [`S4_GATE_DRIVE_DESIGN.md`](S4_G
 | 6 | Temp. error | `FLT_OT_15V` | 25 | GND digital | `GND` |
 | 7 | Voltage DC-link | `VBUS_SNS_RAW` | 26 | 13–30 V supply in | `+24V_MOD` |
 | 8 | 13–30 V supply in | `+24V_MOD` | 27 | **15 V/50 mA OUT** | `MOD_AUX15V_2` (TP18) |
-| 9 | **15 V/50 mA OUT** | `MOD_AUX15V_1` (TP17) | 28 | GND (supply return) | `PGND_MOD` |
+| 9 | **15 V/50 mA OUT** ¹ | `MOD_AUX15V_1` (TP17) | 28 | GND (supply return) | `PGND_MOD` |
 | 10 | GND (supply return) | `PGND_MOD` | 29 | Temperature (NTC) | `NTC_1_RAW` — **rate 10 V** |
 | 11 | GND analog | `VBUS_RTN` (Kelvin) | 30 | HB A current | `ISNS_A_RAW` |
 | 12 | GND analog | `ISNS_RTN` | 31 | HB B current | `ISNS_B_RAW` |
@@ -165,6 +165,18 @@ Full derivation, level maths and timing budget: [`S4_GATE_DRIVE_DESIGN.md`](S4_G
 | 17 | NC | no-connect | 36 | NC | no-connect |
 | 18 | NC | no-connect | 37 | GND digital | `GND` |
 | 19 | GND digital | `GND` | G1/G2 | shell | `SHIELD_DB37` |
+
+¹ **Pins 9 and 27 are two pins of the SAME 15 V / 50 mA auxiliary rail, and "PTC" is the FUSE that
+protects it — not a temperature sensor.** The p.6 "Out" group draws the IEC **fuse symbol labelled
+PTC** in a legend box, in exactly the same style and position as the *two solid fuse symbols* the
+"In" group draws for the 13–30 V feed on pins 8/26. A PTC resettable fuse (polyfuse) is what limits
+that output to 50 mA. Infineon presumably names it PTC because the rail is *intended* for exciting a
+customer-built motor-PTC circuit — which is very likely how "PTC" became a signal name on 3.0's
+schematic. **There is no PTC/thermistor interface on this connector**; the module's only temperature
+output is pin 29. Duplicated pins are this connector's habit (8/26, 10/28, 19/25/37, 11/12/13).
+v4.0 still keeps `MOD_AUX15V_1`/`_2` as **two separate nets**: merging them would be correct and
+would share current, but at 50 mA that buys nothing, whereas separate nets stay safe even if this
+reading is wrong.
 
 **Controller interface, datasheet p.2 — the numbers every downstream sheet needs:**
 
@@ -190,7 +202,7 @@ Only **three** pins change, and none of them are in a signal path:
 
 | Pin | 3.0 did | Reality | What it actually was |
 |---|---|---|---|
-| **27** | tied to GND | 15 V/50 mA supply **output** | The one genuine electrical mistake — a supply output shorted to ground. **Silent**: nothing depends on that rail, ≤0.75 W wasted inside the module, no symptom. |
+| **27** | tied to GND | 15 V/50 mA supply **output** | The one genuine electrical mistake — a supply output shorted to ground. **Self-protecting and symptomless**: that output's own PTC resettable fuse (see ¹) trips, goes high-resistance and holds at a small leakage current. Nothing in the signal chain depends on the rail. |
 | **9** | divided → header, read as a "PTC" temperature | same 15 V/50 mA output | Dead circuit — reads a constant, not a temperature. Firmware never sampled it (`NTC channels: none today`). Harmless. |
 | **1** | tied to GND | "True earth/shield", bonded to module chassis internally | **Not an error.** A hard chassis-to-signal-GND bond is a legitimate choice; it only conflicts with the *soft-tie* policy S2 adopted for v4.0. |
 
