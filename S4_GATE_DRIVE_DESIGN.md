@@ -102,6 +102,24 @@ Two further confirmations that were *assumptions* until now:
 Cross-validation: the datasheet's NC set (14, 15, 17, 18, 33, 34, 35, 36) is **exactly** the set of
 pins 3.0 left dangling. Independent agreement on 8 pins.
 
+### 3.1 How much of this was actually broken in 3.0? — not much, and nothing that ran
+
+Rows 1–3 above are corrections to *documents* (the firmware header, `infineon.md`, and our own
+`ARCHITECTURE.md`), not to 3.0's board. Only rows 4 and 5 touch 3.0's wiring, and **34 of the 37
+pins were right**: all six gates including TOP/BOT within each leg, all five fault lines, the three
+phase currents, Vbus, temperature, the 24 V feed and return, every ground, and the eight NC pins.
+v4.0 carries all of those over unchanged. **The interface working on the bench is exactly what this
+table predicts.**
+
+| Pin | 3.0 | Reality | Real-world consequence |
+|---|---|---|---|
+| 27 | GND | 15 V/50 mA supply output | The only true mistake. A supply output shorted to ground — but nothing in the signal chain depends on that rail, so it is **symptomless**; ≤0.75 W dissipated inside the module. |
+| 9 | divider → header as "PTC" | same output | A dead circuit reading a constant. Firmware never sampled it (`NTC channels: none today`). Harmless. |
+| 1 | GND | true earth/shield (bonded to module chassis) | **Not an error** — a hard chassis-to-signal-ground bond is a defensible choice. It conflicts only with the *soft-tie* policy S2 adopted for v4.0, which is a new rule, not a 3.0 defect. |
+
+The phantom NTC#2 (row 3) was **our** error, introduced in S2's `ARCHITECTURE.md` §8 by inferring a
+second channel from `infineon.md`'s spec table. It never existed in 3.0's netlist either.
+
 ---
 
 ## 4. DB37 pin table — v4.0, authoritative
@@ -369,7 +387,7 @@ an `LCSC` field.
 | Symbol library parses | `kicad-cli sym export svg` → **46/46** |
 | Footprint library parses | `kicad-cli fp export svg` → **40/40** |
 | BOM | every refdes has `LCSC`; `CONSIGNED` / `NOFIT` used for hand-solder and copper-only parts |
-| Datasheet pin table vs 3.0 as-built | 29 of 37 pins agree; the 5 disagreements are all 3.0 errors (§3) |
+| Datasheet pin table vs 3.0 as-built | **34 of 37 agree** (26 functional + 8 NC). Only pins 1, 9, 27 change and **none is in a signal path** — see §3.1. |
 
 ---
 

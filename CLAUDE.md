@@ -181,10 +181,21 @@ Full derivation, level maths and timing budget: [`S4_GATE_DRIVE_DESIGN.md`](S4_G
 
 ### 3.0 as-built map (SUPERSEDED — kept only to show what changed)
 
-29 of 37 pins agree with the datasheet. The five disagreements were all 3.0 errors: **pin 1** tied to
-GND (it is true earth/shield), **pin 27** tied to GND (it is a 15 V/50 mA supply *output* — 3.0 shorted
-it), **pin 9** divided and read as a temperature (same 15 V output), and the NTC#2 channel that does
-not exist. 3.0's NC set (14/15/17/18/33–36) matches the datasheet exactly.
+**34 of 37 pins agree with the datasheet** — the 26 functional pins plus the 8 NC pins 3.0 correctly
+left dangling. **Every pin that carries traffic was right in 3.0** (6 gates incl. TOP/BOT within each
+leg, 5 faults, 3 phase currents, Vbus, temperature, 24 V in + return, all grounds) and v4.0 keeps
+them identical. The interface working on the bench is fully consistent with this.
+
+Only **three** pins change, and none of them are in a signal path:
+
+| Pin | 3.0 did | Reality | What it actually was |
+|---|---|---|---|
+| **27** | tied to GND | 15 V/50 mA supply **output** | The one genuine electrical mistake — a supply output shorted to ground. **Silent**: nothing depends on that rail, ≤0.75 W wasted inside the module, no symptom. |
+| **9** | divided → header, read as a "PTC" temperature | same 15 V/50 mA output | Dead circuit — reads a constant, not a temperature. Firmware never sampled it (`NTC channels: none today`). Harmless. |
+| **1** | tied to GND | "True earth/shield", bonded to module chassis internally | **Not an error.** A hard chassis-to-signal-GND bond is a legitimate choice; it only conflicts with the *soft-tie* policy S2 adopted for v4.0. |
+
+The phantom **NTC#2 channel was an S2 error of ours**, in `ARCHITECTURE.md` §8 — inferred from
+`infineon.md`'s spec table listing two NTC part numbers. 3.0 never claimed a second temperature pin.
 
 | Pin | 3.0 net | Pin | 3.0 net | Pin | 3.0 net |
 |---|---|---|---|---|---|
