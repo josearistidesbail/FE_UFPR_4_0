@@ -15,6 +15,18 @@ root-sheet interface net table.
 > change, **SMBJ33A → SMCJ26A**: the SMBJ33A's 36.7–40.6 V breakdown straddles the LMR33630's 38 V
 > absolute max, so that S2 pair was broken. Derivations: [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
 
+> **Amended 2026-08-29 (S4)** — the PrimeSTACK datasheet
+> (`datasheets/Infineon-6PS04512E43W39693-DS-v02_00-en-1840455.pdf`) arrived and made five rows of
+> the §8 net table wrong. Corrections, all logged in `CLAUDE.md`:
+> **`NTC_2_RAW` / `NTC_2_ADC` retired** (the connector has one temperature pin, and it is the 10 V
+> channel); **`NTC_1_RAW` moves to DB37 pin 29 only** — pin 9 is a **15 V/50 mA supply output**, not
+> a sensor; **new global net `PGND_MOD`** for the module aux return (DB37 10/28), tied to GND at
+> exactly one point (NT2, the 24 V entry star); **new sheet-local net `SHIELD_DB37`** carrying
+> DB37 pin 1 ("true earth/shield") plus the shell pins G1/G2; and **`SW_MAIN_3V3` now also feeds
+> `gate_drive`** as the third term of the hardware enable. Also settled on paper:
+> **fault = HIGH** and **analog outputs drive 5 mA**, which together unblock two S5 bench items.
+> Derivations: [`S4_GATE_DRIVE_DESIGN.md`](S4_GATE_DRIVE_DESIGN.md).
+
 Component-level design happens in S3–S8; this file is the contract those sessions implement.
 Changes here after S2 require a Decision Log entry.
 
@@ -37,7 +49,8 @@ jumper table §5.2, pinout tables 1–4, PCB layout §6.3), 3.0 as-built board f
   │                  return: DB37 pins 10/28 → star point at 24 V entry   (no regulator in path)
   │
   ├─►Buck 1 **LMR33630A** (S3):  +24V_PROT → **+13V5_GATE = 13.500 V**  (400 kHz, 22 µH, synchronous)
-  │      loads: 2× TC4468 gate drivers, PrimeSTACK PWM/EN inputs, (option) fault pull-up rail
+  │      loads: **3× UCC27524** gate drivers (S4 — the TC4468 is out of stock at JLC),
+  │             PrimeSTACK PWM inputs, (option) fault pull-up rail. Measured budget **≈10 mA**
   │      │
   │      └─►Buck 2 **TPS62933F, FCCM** (S3): +13V5_GATE → **+5V = 4.984 V** (1.2 MHz, 3.3 µH)
   │             loads: LaunchPad (via series Schottky), op-amp rail (ferrite/RC → clean 5 V),
@@ -76,7 +89,7 @@ realistic surge. Full derivation in [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
 | Rail | Loads | Est. draw | Notes |
 |---|---|---|---|
 | 24 V pass-through | PrimeSTACK aux | **1.7 A @ 24 V, 2.2 A @ 18 V** (40 W) | copper + connector rating only, not through regulators |
-| +13V5_GATE | 2× TC4468 quiescent+switching, 6 PWM + 2 EN module inputs, 5 fault pull-ups, **+5 V buck input (0.32 A)** | **~0.45 A** (0.25 A typ) | module input current unspecified in `infineon.md` — assumed ≤5 mA/input, bench-confirm during S4 |
+| +13V5_GATE | 3× UCC27524 quiescent+switching, 6 PWM module inputs, 5 fault pull-ups, **+5 V buck input (0.32 A)** | **~0.36 A** | **S4 computed the gate path exactly: 10 mA** (7.8 mA into the module's 10 kΩ inputs at 50 % duty + 2.1 mA quiescent + 0.3 mA switching). The S2 "assumed ≤5 mA/input" guess is superseded by the datasheet's stated 10 kΩ input network |
 | +5V | LaunchPad ≤500 mA (dual-core @200 MHz + its own 3V3 LDO), op-amps ~20 mA, encoder ~60 mA (bench item #8), 3V3 LDO input ~90 mA | ~0.7 A (3.5 W) | LaunchPad figure is a budget cap, not a measurement |
 | +3V3 (board) | CAN transceiver (~70 mA dominant-TX), Schmitt + misc logic | ~90 mA | from +5V LDO |
 | ±15V_ISO | per LA 100-P: 10 mA idle + Ip/2000 compensation (50 mA @ 100 Arms; 75 mA pk @ 150 A) | 3 sensors ≈ 180 mA avg → **~4 W in** | **S3 closed: URA2415YMD-6WR3, 6 W, ±200 mA/rail, 9–36 V in** |
@@ -212,18 +225,27 @@ dominant, layout-critical cargo); module-side raw signals export from there.
 |---|---|---|
 | `PWM_UH_3V3` `PWM_UL_3V3` `PWM_VH_3V3` `PWM_VL_3V3` `PWM_WH_3V3` `PWM_WL_3V3` | launchpad → gate_drive | GPIO6–11, active-HIGH |
 | `DRV_EN_3V3` `DRV_EN_AUX_3V3` | launchpad → gate_drive | GPIO66 / GPIO131 (J6-59 / J6-58) |
-| `FLT_OC_A_15V` `FLT_OC_B_15V` `FLT_OC_C_15V` `FLT_OT_15V` `FLT_OV_15V` | gate_drive (DB37 2/22/5/6/16) → module_status | open-collector, ≤15 V, polarity = bench item #1 |
+| `PWM_UH_15V` … `PWM_WL_15V` | *internal to gate_drive* | driver → 100 Ω → DB37 21/20/4/3/24/23; 10 kΩ + 1 nF C0G at the pin |
+| `FLT_OC_A_15V` `FLT_OC_B_15V` `FLT_OC_C_15V` `FLT_OT_15V` `FLT_OV_15V` | gate_drive (DB37 2/22/5/6/16) → module_status | open-collector, ≤15 V, ≤15 mA sink; **FAULT = HIGH (S4, datasheet p.2)** |
 | `FLT_OC_A_3V3` `FLT_OC_B_3V3` `FLT_OC_C_3V3` `FLT_OT_3V3` `FLT_OV_3V3` | module_status → launchpad | GPIO25/27/26, GPIO64, GPIO52 |
 | `VBUS_SNS_RAW` + `VBUS_RTN` | gate_drive (DB37 7 + Kelvin pin) → module_status | 6.5 V @ 900 V, Kelvin pair |
 | `VBUS_ADC` | module_status → launchpad | ADCINC2, ~1000 V full scale @ 3.0 V |
-| `NTC_1_RAW` `NTC_2_RAW` | gate_drive (DB37 29 / 9) → module_status | NTC#2 reaches 10 V — divider rating (S5) |
-| `NTC_1_ADC` `NTC_2_ADC` | module_status → launchpad | ADC pins chosen in S5 |
+| `NTC_1_RAW` | gate_drive (**DB37 29 only**) → module_status | the module's single temperature output; **0–10 V**, divider must be rated for it (S5) |
+| `NTC_1_ADC` | module_status → launchpad | ADC pin chosen in S5 |
+| `PGND_MOD` | gate_drive (DB37 10/28) → power (**NT2 star**) | module aux return, ≤2.2 A, dedicated copper — global net, no sheet pins |
+| `SHIELD_DB37` | *internal to gate_drive* | DB37 pin 1 "true earth/shield" + shell G1/G2 → 1 nF ∥ 1 MΩ ∥ JP2 → GND |
+| `MOD_AUX15V_1` `MOD_AUX15V_2` | *internal to gate_drive* | DB37 9/27 = module **15 V/50 mA supply output**; test points TP17/TP18 only |
 | `ISNS_A_RAW` `ISNS_B_RAW` `ISNS_C_RAW` + `ISNS_RTN` | gate_drive (DB37 30/31/32 + return) → current_sense | internal sensors ~8 mV/A, bias bench item #3 |
 | `ISNS_A_ADC` `ISNS_B_ADC` `ISNS_C_ADC` | current_sense → launchpad | ADCINB4 / ADCINC4 / S8 pin; 1.5 V ± 1.4 V @ ≥±300 A |
 | `ISNS_REF_A_ADC` `ISNS_REF_B_ADC` | current_sense → launchpad | ADCINA4 / ADCINB5 bias taps (keep/drop S6) |
 | `ENC_SIN_ADC` `ENC_COS_ADC` | encoder → launchpad | ADCINA2 / ADCINB2, 1.5 V ± 1.4 V matched |
 | `CAN_TX_3V3` / `CAN_RX_3V3` | launchpad ↔ vehicle_io | GPIO pair chosen in S8 |
-| `SW_MAIN_3V3` `SW_START_3V3` | vehicle_io → launchpad | conditioned cockpit inputs (S8); S4 may also tap SW_MAIN for the hardware enable interlock |
+| `SW_MAIN_3V3` | vehicle_io → launchpad **and → gate_drive** | conditioned cockpit input (S8). **S4 took the tap**: third term of the hardware enable AND, bypassable at JP1. No filtering in gate_drive — filtering would delay de-assertion |
+| `SW_START_3V3` | vehicle_io → launchpad | conditioned cockpit input (S8) |
+
+**S4 net-count delta:** −2 nets retired (`NTC_2_RAW`, `NTC_2_ADC`), +1 sheet pin (`SW_MAIN_3V3`
+into gate_drive), +1 global net (`PGND_MOD`, no sheet pins). Root ERC is correspondingly down from
+160 `label_dangling` to 90 + 37 `isolated_pin_label` warnings.
 
 80 sheet pins total (40 nets × 2 endpoints); every sub-sheet carries matching hierarchical
 labels so S3–S8 wire into a pre-declared interface. ERC note: this KiCad build reports

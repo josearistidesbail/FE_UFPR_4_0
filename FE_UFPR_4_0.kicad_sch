@@ -155,6 +155,16 @@
 				(justify left)
 			)
 		)
+		(pin "SW_MAIN_3V3" input
+			(at 129.54 66.04 180)
+			(uuid "f385e63e-d063-4707-b943-8a168682654a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(pin "FLT_OC_A_15V" output
 			(at 214.63 40.64 0)
 			(uuid "29526f97-5be8-434e-8a99-22fbf768a199")
@@ -228,16 +238,6 @@
 		(pin "NTC_1_RAW" output
 			(at 214.63 60.96 0)
 			(uuid "1392b60f-a74f-4098-bd72-e347ab8601e2")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "NTC_2_RAW" output
-			(at 214.63 63.5 0)
-			(uuid "208f9119-470f-4d64-834c-22f7d6c56b88")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -396,16 +396,6 @@
 				(justify left)
 			)
 		)
-		(pin "NTC_2_RAW" input
-			(at 273.05 63.5 180)
-			(uuid "48a6eafd-dc9f-471b-962c-4b7544ee3028")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
 		(pin "FLT_OC_A_3V3" output
 			(at 358.14 40.64 0)
 			(uuid "764dd18e-7973-4ce7-bf99-1426c555d7cb")
@@ -469,16 +459,6 @@
 		(pin "NTC_1_ADC" output
 			(at 358.14 58.42 0)
 			(uuid "14bedf82-2e21-4bdb-90e8-8bda6a589f7c")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "NTC_2_ADC" output
-			(at 358.14 60.96 0)
-			(uuid "c49c3fb1-a834-4c20-912b-4e0bf9e63251")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -882,16 +862,6 @@
 		(pin "NTC_1_ADC" input
 			(at 358.14 138.43 0)
 			(uuid "b2a7e1d0-af4f-4cbf-a6ad-a66a563b0916")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "NTC_2_ADC" input
-			(at 358.14 140.97 0)
-			(uuid "85d7d22f-9ced-4be0-8f54-51b46b59b93b")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1353,26 +1323,6 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 63.5) (xy 222.25 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aa8881da-b0d3-4868-8ade-bff288374d5a")
-	)
-	(label "NTC_2_RAW"
-		(at 222.25 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "fa63a2ee-3939-4abf-80df-c73f6c13732e")
-	)
-	(wire
-		(pts
 			(xy 214.63 68.58) (xy 222.25 68.58)
 		)
 		(stroke
@@ -1613,26 +1563,6 @@
 	)
 	(wire
 		(pts
-			(xy 273.05 63.5) (xy 265.43 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "83e594f6-edad-4597-bda5-64feac46cd15")
-	)
-	(label "NTC_2_RAW"
-		(at 265.43 63.5 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "4e5ecbeb-e6a3-4dfb-b6e8-74d7ce8b0943")
-	)
-	(wire
-		(pts
 			(xy 358.14 40.64) (xy 365.76 40.64)
 		)
 		(stroke
@@ -1770,26 +1700,6 @@
 			(justify left bottom)
 		)
 		(uuid "270cc926-a689-4a16-b4a9-6b78b28551c6")
-	)
-	(wire
-		(pts
-			(xy 358.14 60.96) (xy 365.76 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3b01f290-0596-4de0-a5da-5ec504c973db")
-	)
-	(label "NTC_2_ADC"
-		(at 365.76 60.96 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ee19edad-2546-4594-8983-2e7e7134ed4e")
 	)
 	(wire
 		(pts
@@ -2413,26 +2323,6 @@
 	)
 	(wire
 		(pts
-			(xy 358.14 140.97) (xy 365.76 140.97)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "197525fb-b01c-4260-803b-880757e55c6d")
-	)
-	(label "NTC_2_ADC"
-		(at 365.76 140.97 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "f424f8c4-3fb8-4973-9d36-965e17a366b8")
-	)
-	(wire
-		(pts
 			(xy 358.14 146.05) (xy 365.76 146.05)
 		)
 		(stroke
@@ -2630,6 +2520,26 @@
 			(justify left bottom)
 		)
 		(uuid "f65eb95e-57d8-4d2a-ba47-5d3f3f6c6b4d")
+	)
+	(wire
+		(pts
+			(xy 129.54 66.04) (xy 121.92 66.04)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "85dee6ba-e3c7-45b2-950d-4be04b4319d7")
+	)
+	(label "SW_MAIN_3V3"
+		(at 121.92 66.04 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "0333a221-2282-4a64-b330-1c92a381e756")
 	)
 	(sheet_instances
 		(path "/"

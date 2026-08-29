@@ -103,17 +103,6 @@
 		)
 		(uuid "624e449e-89c9-48e0-9a3b-ede69d59d1b6")
 	)
-	(hierarchical_label "NTC_2_RAW"
-		(shape input)
-		(at 40.64 116.84 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "0deb1e9f-a7f4-4071-a4d0-fa0aea1c86b4")
-	)
 	(hierarchical_label "FLT_OC_A_3V3"
 		(shape output)
 		(at 384.81 40.64 0)
@@ -190,17 +179,6 @@
 			(justify left)
 		)
 		(uuid "fac3da68-84d9-4495-9978-a76c20008f70")
-	)
-	(hierarchical_label "NTC_2_ADC"
-		(shape output)
-		(at 384.81 109.22 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "c605baca-f4df-44f8-a173-4d036f2a6aa8")
 	)
 	(sheet_instances
 		(path "/"

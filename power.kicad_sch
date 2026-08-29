@@ -10457,6 +10457,15 @@
 				)
 			)
 		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
 		(property "Description" "test point"
 			(at 320.04 190.5 0)
 			(hide yes)
@@ -10537,6 +10546,15 @@
 				)
 			)
 		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
 		(property "Description" "test point"
 			(at 340.36 190.5 0)
 			(hide yes)
@@ -10617,6 +10635,15 @@
 				)
 			)
 		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
 		(property "Description" "test point"
 			(at 359.41 190.5 0)
 			(hide yes)
@@ -10697,6 +10724,15 @@
 				)
 			)
 		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
 		(property "Description" "test point"
 			(at 379.73 190.5 0)
 			(hide yes)
@@ -10777,6 +10813,15 @@
 				)
 			)
 		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
 		(property "Description" "test point"
 			(at 400.05 190.5 0)
 			(hide yes)
@@ -10857,6 +10902,15 @@
 				)
 			)
 		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
 		(property "Description" "test point"
 			(at 320.04 224.79 0)
 			(hide yes)
@@ -10937,6 +10991,15 @@
 				)
 			)
 		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
 		(property "Description" "test point"
 			(at 340.36 224.79 0)
 			(hide yes)
@@ -11017,6 +11080,15 @@
 				)
 			)
 		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
 		(property "Description" "test point"
 			(at 359.41 224.79 0)
 			(hide yes)
@@ -11097,6 +11169,15 @@
 				)
 			)
 		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
 		(property "Description" "test point"
 			(at 379.73 224.79 0)
 			(hide yes)
@@ -12061,6 +12142,118 @@
 	(no_connect
 		(at 165.1 67.31)
 		(uuid "97aa18f4-46f8-4e60-bb24-c97b9d0c8e14")
+	)
+	(symbol
+		(lib_id "FE_UFPR_4_0:NetTie_2")
+		(at 30.48 64.77 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "46487843-8fb9-44d7-9625-62fb3c9a1660")
+		(property "Reference" "NT2"
+			(at 30.48 62.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PGND_MOD-GND star"
+			(at 30.48 67.31 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FE_UFPR_4_0:NetTie-2_SMD_Pad0.5mm"
+			(at 30.48 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+      (property "LCSC" "NOFIT"
+        (at 0 0 0)
+        (effects
+          (font
+            (size 1.27 1.27)
+          )
+          (hide yes)
+        )
+      )
+		(property "Description" "Net tie, 2 pins"
+			(at 30.48 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "973cc1a4-90c6-49b1-bef2-e4110a62bc55")
+		)
+		(pin "2"
+			(uuid "79f3424c-4e60-4f0c-9de1-5dbee6325767")
+		)
+		(instances
+			(project "FE_UFPR_4_0"
+				(path "/f36b3dbb-4842-44d3-ae27-d77d669e5268"
+					(reference "NT2")
+					(unit 1)
+				)
+				(path "/0cde0ae3-e31e-4592-8212-8a072a248a80/6442f421-491d-4bfb-bee7-d0b4e843a827"
+					(reference "NT2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "PGND_MOD"
+		(at 27.94 64.77 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0bf1a42d-748d-4a36-898f-657e42b958e0")
+	)
+	(global_label "GND"
+		(at 33.02 64.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d5392614-eb77-45a5-9677-705711e98d09")
 	)
 	(sheet_instances
 		(path "/"

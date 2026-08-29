@@ -147,17 +147,6 @@
 		)
 		(uuid "9b5cc370-95ac-4579-98fe-557dbee3c818")
 	)
-	(hierarchical_label "NTC_2_ADC"
-		(shape input)
-		(at 40.64 147.32 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "217903b6-2e47-4ef7-922f-f2efa03579b7")
-	)
 	(hierarchical_label "ENC_SIN_ADC"
 		(shape input)
 		(at 40.64 162.56 180)

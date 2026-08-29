@@ -13,7 +13,7 @@
 
 ```
 S1 Foundation ─► S2 Architecture ─► S3 Power ─► S4 Gate drive ─► S5 Module status
-   ✅              ✅                 ✅          ◄── next
+   ✅              ✅                 ✅            ✅                ◄── next
                        │                                               │
   BENCH DAY (before S5/S6/S7) ────────────► S6 Current sense ─► S7 Encoder
                        │                                               │
@@ -107,7 +107,37 @@ was re-picked from Basic, high-stock parts against live stock.
 
 ---
 
-## S4 — Gate-drive path, level shifting, enables
+## S4 — Gate-drive path, level shifting, enables  ✅ **DONE (2026-08-29)**
+
+**Outcome:** `gate_drive` captured — **56 components, 44 nets, ERC 0 violations on the sheet**,
+netlist verified node-by-node (44/44, zero mismatches). Deliverable =
+[`S4_GATE_DRIVE_DESIGN.md`](S4_GATE_DRIVE_DESIGN.md).
+
+**The session's defining event was an input, not a decision:** the user placed the real PrimeSTACK
+datasheet in `datasheets/`. Page 6 is the **authoritative DB37 pinout**, page 2 the controller
+electrical table, page 5 the **mechanical drawing S9 has been waiting for**. Five inherited beliefs
+were wrong and are now corrected in `CLAUDE.md`: fault is **HIGH** not LOW (firmware's
+`MODULE_FAULT_ACTIVE_LOW` is inverted); analog outputs drive **5 mA** so S5 needs no Vbus buffer;
+there is **one** NTC pin (29) and it is the **10 V** channel; pins 9/27 are a **15 V/50 mA supply
+output** that 3.0 shorted to ground; pin 1 is **true earth/shield**, not GND.
+
+**Deviations from plan, logged in `CLAUDE.md`:** the topology is **3 × UCC27524** (dual 5 A, per-channel
+enable), **not** the roadmap's 2 × TC4468 — the availability-first rule caught that the whole
+TC446x/MIC446x quad family is dead at JLC (14 / 4 / 25 in stock) against 9 550 for the UCC27524. The
+enables are **board-local** because the module has no enable pin, so bench item #2 stopped being a
+blocker: we define them ACTIVE-HIGH, as firmware assumes. The hardware interlock survives as a
+3-input AND (`SN74LVC1G11`, properly powered — 3.0 fed its AND gate's VCC from GPIO131) with an
+**exclusive 3-pad bypass jumper**.
+
+**Trap caught during capture:** the F28379D powers up with **GPIO pull-ups enabled**. With the
+first-pass 100 kΩ pull-downs, the enable and PWM inputs would have sat at ≈2.7 V — arming all six
+gates while the MCU is in reset. Pull-downs are **4.7 kΩ** for that reason. Separately, the six
+UCC27524 enable pins present 33 kΩ of internal pull-up **to 13.5 V**, so the enable-net pull-down is
+**1 kΩ**; a conventional 10 kΩ would have sat at 3.1 V and enabled the drivers.
+
+**Numbers that closed the exit criteria:** module input **12.95–13.62 V** against an 11–15 V window
+(validating S3's 13.5 V rail — a 12.0 V rail leaves only 0.52 V); worst-case channel-to-channel skew
+**53 ns = 3.5 %** of the 1500 ns deadband; **effective deadtime 1399 ns**; gate-path draw **≈10 mA**.
 
 **Objective:** Replace the 3-stage chain (6× '1G126 → CD4504B → GPIO-powered AND gate) with a **single-stage 3.3 V → gate-rail** solution with hardware enable gating. All 6 PWM + 2 enables to the DB37.
 
@@ -119,7 +149,10 @@ was re-picked from Basic, high-stock parts against live stock.
 - **Fail-safe:** 100 k pulldowns per line at the DB37 side (unpowered LaunchPad ⇒ gates LOW = off) + ~100 Ω series damping near the driver.
 - **MAIN_SWITCH / FSAE shutdown-circuit interlock:** decide whether the hardware enable is gated by the car's shutdown circuit and how (ask team about rules mapping of the old /MAIN_SWITCH concept; `vehicle_io` sheet carries the switch inputs).
 
-**Exit criteria:** ERC-clean; skew-vs-deadband note written; DB37 pin table started in the schematic (gates, enables — extended by S5/S6); end-to-end active-HIGH polarity chain documented, consistent with `hw_control_v2.h`.
+**Exit criteria:** ERC-clean ✅ (0 on the sheet); skew-vs-deadband note written ✅ (on the sheet + §6 of the
+deliverable); DB37 pin table ✅ — **complete for all 37 pins, not just gates/enables, because the
+datasheet made it possible**; end-to-end active-HIGH polarity chain documented ✅ and consistent with
+`hw_control_v2.h` (with the one firmware correction, `MODULE_FAULT_ACTIVE_LOW`, logged for S12).
 
 ---
 
@@ -127,7 +160,7 @@ was re-picked from Basic, high-stock parts against live stock.
 
 **Objective:** Receive side for the PrimeSTACK's 5 open-collector fault lines, the Vbus analog output, and the NTC channel(s).
 
-**Prerequisites:** **BENCH DAY items #1 (fault polarity — the doc conflict is unresolvable on paper), #4 (Vbus drive capability), #5 (NTC outputs).**
+**Prerequisites:** ~~BENCH DAY #1 / #4~~ — **both answered by the datasheet in S4** (fault = HIGH; analog outputs drive 5 mA). Remaining: **BENCH DAY item #5 (NTC output at room temperature, one channel)**. Historical text: ~~items #1 (fault polarity — the doc conflict is unresolvable on paper), #4 (Vbus drive capability), #5 (NTC outputs)~~.**
 
 **Decisions:**
 - **Fault receivers:** pull-up rail (gate rail vs dedicated — outputs rated to 15 V) and value (recompute for a few mA of noise immunity; 3.0's 82 k is weak for a cable run), then divider/RC/Schmitt (SN74LVC2G17) or comparator to 3.3 V. **Fail-safe requirement: a disconnected DB37 must read as FAULT asserted** in whatever polarity the bench establishes. Record the final `MODULE_FAULT_ACTIVE_LOW` value for firmware (affects X-BAR inversion too).
@@ -246,11 +279,11 @@ was re-picked from Basic, high-stock parts against live stock.
 Everything below is marked "assumed" in the firmware docs but is load-bearing for hardware design.
 
 **Setup A — PrimeSTACK aux-powered only (24 V aux, NO DC link, no motor):**
-1. **Fault polarity** *(blocks S5 — known doc conflict)*: 10 k pull-ups to 12 V on DB37-side fault pins (module pins 2/22/5/6/16); record healthy-state levels; force a cheap fault (brown-out aux below 18 V → watch the voltage flag, pin 16). Conclusion per pin: fault pulls LOW or releases HIGH?
-2. **Enable active levels** *(blocks S4)*: toggle master/aux enable between 0 V and 12 V with gates off; watch whether drivers arm (fault flags / gate response). Confirm active-high for GPIO66/GPIO131 functions.
+1. ~~**Fault polarity**~~ *(**RESOLVED S4 from the datasheet: fault = HIGH.** Now only a confirmation, not a gate)*: 10 k pull-ups to 12 V on DB37-side fault pins (module pins 2/22/5/6/16); record healthy-state levels; force a cheap fault (brown-out aux below 18 V → watch the voltage flag, pin 16). Conclusion per pin: fault pulls LOW or releases HIGH?
+2. ~~**Enable active levels**~~ *(**RESOLVED S4: the module has no enable pin.** The enables are board-local and defined ACTIVE-HIGH. Nothing to measure)*: toggle master/aux enable between 0 V and 12 V with gates off; watch whether drivers arm (fault flags / gate response). Confirm active-high for GPIO66/GPIO131 functions.
 3. **Internal current sensors** *(blocks S6)*: zero-current bias of all three outputs (assumed 2.5 V — never verified); then a known DC current (bench supply + clamp-meter reference, 10–50 A loop) through one phase → mV/A + polarity per channel; channel-to-channel spread.
-4. **Vbus sensor** *(blocks S5)*: output at 0 V and 24–48 V DC link; quantify the "unusable < ~40 V" floor; load with 10 k then 3.3 k → droop ⇒ divider allowed or buffer mandatory.
-5. **NTC outputs** at room temperature, both channels.
+4. **Vbus sensor** *(**no longer blocks S5** — the datasheet rates every analog output at "load max 5 mA", so a resistive divider is allowed. Still worth measuring the low-voltage floor)*: output at 0 V and 24–48 V DC link; quantify the "unusable < ~40 V" floor; load with 10 k then 3.3 k → droop ⇒ divider allowed or buffer mandatory.
+5. **NTC output** at room temperature — **one channel only** (DB37 pin 29, the 10 V inverter-section NTC). There is no second temperature pin.
 6. **DB37 cable**: length, shield termination end, gauge.
 
 **Setup B — RM44AC encoder:**
@@ -269,7 +302,7 @@ Everything below is marked "assumed" in the firmware docs but is load-bearing fo
 
 # Appendix B — Candidate part directions (seeds, not selections)
 
-- **Single-stage 3.3 V→gate rail (S4):** TC4468 ×2 (quad AND-input driver — deletes '1G126×6 + CD4504 + AND gate); TC4469 (inverting-input variant); MIC4468/MIC4469; 3× UCC27523/24 (dual + EN); discrete totem last resort.
+- **Single-stage 3.3 V→gate rail (S4):** ✅ **SELECTED: 3× UCC27524DR (C465729).** The TC446x/MIC446x quad family was rejected on **stock**, not merit — TC4468 had 14 units at JLC. Do not "restore" it in a later session.
 - **LEM (S6):** LA 100-P (confirmed baseline; ±150 A range — see S6 tension); LA 200-P / LA 305-S / LF 305-S (≥±300 A); HO 150-S/250-S open-loop 5 V (kills the ±15 V problem, lower accuracy — likely rejected for FOC).
 - **±15 V isolated (S3):** A2415SDL-2W ×1 per sensor; Mornsun URB2415 5 W class; Mean Well DKA15.
 - **Op-amps (S5/S6/S7):** OPA2376 (incumbent), OPA2365, OPA2320, TLV9062 (budget); INA826/INA333-class or matched diff-amp for differential encoder receive.
