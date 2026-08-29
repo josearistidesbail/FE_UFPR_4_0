@@ -6,9 +6,14 @@ root-sheet interface net table.
 
 > **Amended 2026-08-29 (S3)** — three changes, all logged in the `CLAUDE.md` Decision Log:
 > gate rail renamed `+12V_GATE` → **`+13V5_GATE`** (regulates to 13.566 V), new global net
-> **`+24V_MOD`** for the fused module-aux pass-through, and **both switching converters replaced**
-> (LMR33630 → TPS54360B, TPS62153 → TPS62933F) because neither original part can be forced out
-> of light-load PFM. Derivations: [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
+> **`+24V_MOD`** for the fused module-aux pass-through, and the input range narrowed to
+> **18–26 V** (user-confirmed LV rail maximum).
+>
+> The 5 V converter changed **TPS62153 → TPS62933F** because the TPS62153's power-save mode cannot
+> be defeated and that rail feeds every analog front-end. The gate-rail buck **stays LMR33630** — an
+> interim swap to a 60 V TPS54360B was reverted once the 26 V rail max was confirmed. The TVS did
+> change, **SMBJ33A → SMCJ26A**: the SMBJ33A's 36.7–40.6 V breakdown straddles the LMR33630's 38 V
+> absolute max, so that S2 pair was broken. Derivations: [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
 
 Component-level design happens in S3–S8; this file is the contract those sessions implement.
 Changes here after S2 require a Decision Log entry.
@@ -23,7 +28,7 @@ jumper table §5.2, pinout tables 1–4, PCB layout §6.3), 3.0 as-built board f
 ## 1. Power domains & tree
 
 ```
-+24V_IN  (vehicle LV, 18–30 V — Deutsch DT vehicle side / Mini-Fit Jr on board)
++24V_IN  (vehicle LV, **18–26 V** — S3 narrowed from 18–30 V, user-confirmed — Deutsch DT / Mini-Fit Jr)
   │
   ├─ input protection (S3): fuse ~5 A → reverse-polarity P-FET → SMBJ33A TVS → bulk
   │      = +24V_PROT
@@ -31,7 +36,7 @@ jumper table §5.2, pinout tables 1–4, PCB layout §6.3), 3.0 as-built board f
   ├─►[pass-through] +24V_PROT → F2 (3 A) → **+24V_MOD** → DB37 pins 8/26 (module aux, 40 W)
   │                  return: DB37 pins 10/28 → star point at 24 V entry   (no regulator in path)
   │
-  ├─►Buck 1 **TPS54360B, 60 V** (S3):  +24V_PROT → **+13V5_GATE = 13.566 V**  (500 kHz, 47 µH)
+  ├─►Buck 1 **LMR33630A** (S3):  +24V_PROT → **+13V5_GATE = 13.500 V**  (400 kHz, 22 µH, synchronous)
   │      loads: 2× TC4468 gate drivers, PrimeSTACK PWM/EN inputs, (option) fault pull-up rail
   │      │
   │      └─►Buck 2 **TPS62933F, FCCM** (S3): +13V5_GATE → **+5V = 4.984 V** (1.2 MHz, 3.3 µH)
@@ -53,14 +58,18 @@ is limited to 30 V in, the gate rail must exist anyway for the gate drivers, and
 (~0.75 A) is small enough that double conversion loss (~0.5 W) is irrelevant next to the
 noise benefit of one hot 24 V switcher instead of two.
 
-**S3 amendment — light-load mode is the reason both converters changed.** The roadmap's
-LMR33630 and TPS62153 both turned out to have **no MODE pin**, so neither can be forced out of
-PFM/power-save, and a *load-dependent* burst rate lands in the band this board samples. The 5 V
-rail feeds every analog front-end, so it now uses **TPS62933F (FCCM**, fixed 1.2 MHz at any load,
-and the only family member without spread spectrum**)**. The gate rail uses **TPS54360B**, chosen
-for its **60 V input rating** — the SMBJ33A TVS clamps at 53.3 V, which a 36 V part does not
-survive — and sized (47 µH) to stay in CCM at the real 0.25–0.5 A load. Full derivation in
-[`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
+**S3 amendment — light-load mode changed the 5 V converter only.** The roadmap's LMR33630 and
+TPS62153 both turned out to have **no MODE pin**, so neither can be forced out of PFM/power-save,
+and a *load-dependent* burst rate lands in the band this board samples. That matters on the **5 V**
+rail, which feeds every analog front-end, so it now uses **TPS62933F (FCCM**, fixed 1.2 MHz at any
+load, and the only family member without spread spectrum**)**.
+
+It does **not** matter on the gate rail, which feeds only the gate drivers and U2's input — U2's
+FCCM loop rejects it — so the gate rail **keeps the LMR33630A**, at 400 kHz with L1 = 22 µH per TI's
+ripple rule (PWM above ≈0.35 A, PFM below). What did have to change is the **TVS**: SMBJ33A breaks
+down at 36.7–40.6 V, straddling the LMR33630's **38 V absolute max**, so it becomes the 1500 W
+**SMCJ26A**, which reaches the same 42.1 V clamp only at 35.6 A and so sits near 30–34 V at a
+realistic surge. Full derivation in [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
 
 ## 2. Power budget (S2 estimates — S3 replaces with computed numbers)
 

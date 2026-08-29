@@ -68,25 +68,29 @@ S1 Foundation ─► S2 Architecture ─► S3 Power ─► S4 Gate drive ─►
 
 ## S3 — Power supplies sheet  ✅ **DONE (2026-08-29)**
 
-**Outcome:** `power` sheet captured — **79 components, 30 nets, ERC 0 violations on the sheet**,
-netlist verified node-by-node, all 64 BOM parts carry an `LCSC` field, every value computed from
+**Outcome:** `power` sheet captured — **75 components, 29 nets, ERC 0 violations on the sheet**,
+netlist verified node-by-node, all 60 BOM parts carry an `LCSC` field, every value computed from
 datasheet equations. Deliverable = [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
 
-**Deviations from plan, logged in `CLAUDE.md`:** **both named converters were rejected.**
-LMR33630 and TPS62153 each turned out to have **no MODE pin**, so neither can be forced out of
-light-load PFM — and on a board that samples at 10 kHz a load-dependent burst rate is exactly the
-wrong failure mode. The 5 V rail (which feeds every analog front-end) is now **TPS62933F**, whose
-`F` suffix is FCCM and which is the only family member without spread spectrum; the gate rail is
-**TPS54360B**, picked for a **60 V** input rating because the SMBJ33A clamps at 53.3 V and a 36 V
-part does not survive that. Gate rail set to **13.566 V** (user decision) rather than 12.0 V.
-Two **[ARCH CHANGE]** items: rail renamed `+12V_GATE` → `+13V5_GATE`, and new global net
-`+24V_MOD` for the fused pass-through.
+**Deviations from plan, logged in `CLAUDE.md`:** the **5 V** converter changed
+**TPS62153 → TPS62933F**. TPS62153 has no MODE pin, so its power-save mode cannot be defeated — and
+on a board that samples at 10 kHz a load-dependent PFM burst rate is exactly the wrong failure mode
+for the rail that feeds every analog front-end. The `F` suffix is FCCM (fixed 1.2 MHz at any load)
+and is the only family member without spread spectrum.
 
-**Three hardware-destroying traps caught during capture:** TPS54360 EN is rated **8.4 V** max and
-TPS62933F EN **6.0 V** max — neither may be tied to its input rail, so both got dividers; and the
-TPS62933F **SS pin cannot float** (≥6.8 nF required). Also: the "obvious" E96 divider values were
-**unbuyable** (162 kΩ → 1 in stock, 10.2 kΩ → 3, 5.49 kΩ → 19), so every value was re-picked
-against live stock.
+The **gate-rail** buck stays the roadmap's **LMR33630A**. An interim swap to a 60 V TPS54360B was
+made on transient-headroom grounds and then **reverted** after user challenge: it rested on the S2
+assumption `18–30 V`, and the real LV rail max is **≤26 V** (now an **[ARCH CHANGE]**: input range
+18–26 V). Reverting also removed 5 parts — synchronous, internally compensated, fixed 400 kHz.
+Gate rail set to **13.500 V** exactly (150 k/12 k, V_ref = 1.000 V), user's call over 12.0 V.
+What *did* change is the **TVS**: SMBJ33A breaks down at 36.7–40.6 V, straddling the LMR33630's
+38 V absolute max, so it becomes the 1500 W **SMCJ26A**. Two further **[ARCH CHANGE]** items: rail
+renamed `+12V_GATE` → `+13V5_GATE`, and new global net `+24V_MOD` for the fused pass-through.
+
+**Traps caught during capture:** TPS62933F's EN pin is rated **6.0 V** max — tying it to the 13.5 V
+rail would destroy it — and its **SS pin cannot float** (≥6.8 nF required). Also: the "obvious" E96
+divider values were **unbuyable** (162 kΩ → 1 in stock, 10.2 kΩ → 3, 5.49 kΩ → 19), so every value
+was re-picked from Basic, high-stock parts against live stock.
 
 **Objective:** Complete `power`: input protection, all rails, isolated ±15 V, indicators, entry connectors.
 
