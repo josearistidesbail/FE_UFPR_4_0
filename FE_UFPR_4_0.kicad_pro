@@ -662,27 +662,27 @@
       },
       {
         "netclass": "Gate",
-        "pattern": "PWM_*_15V"
+        "pattern": "*PWM_*_15V"
       },
       {
         "netclass": "Gate",
-        "pattern": "DRV_EN*"
+        "pattern": "*DRV_EN*"
       },
       {
         "netclass": "Analog",
-        "pattern": "ISNS_*"
+        "pattern": "*ISNS_*"
       },
       {
         "netclass": "Analog",
-        "pattern": "ENC_*"
+        "pattern": "*ENC_*"
       },
       {
         "netclass": "Analog",
-        "pattern": "VBUS_*"
+        "pattern": "*VBUS_*"
       },
       {
         "netclass": "Analog",
-        "pattern": "NTC_*"
+        "pattern": "*NTC_*"
       },
       {
         "netclass": "Analog",
@@ -702,7 +702,7 @@
       },
       {
         "netclass": "Power_1A",
-        "pattern": "PWR_U*_SW"
+        "pattern": "*PWR_U*_SW"
       },
       {
         "netclass": "Power_3A",
@@ -710,15 +710,15 @@
       },
       {
         "netclass": "Gate",
-        "pattern": "PWM_*_DRV"
+        "pattern": "*PWM_*_DRV"
       },
       {
         "netclass": "Gate",
-        "pattern": "GATE_EN*"
+        "pattern": "*GATE_EN*"
       },
       {
         "netclass": "Gate",
-        "pattern": "GATE_ILOCK_3V3"
+        "pattern": "*GATE_ILOCK_3V3"
       }
     ]
   },

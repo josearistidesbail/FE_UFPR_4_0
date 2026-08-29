@@ -6,8 +6,13 @@ Interface PCB between a TI **LAUNCHXL-F28379D** (FOC firmware) and an Infineon *
 
 ## Roadmap & current phase
 
-**Current phase: S4 COMPLETE. Next: S5 — Module status: fault receivers, Vbus sense, NTC.**
+**Current phase: S5 COMPLETE. Next: S6 — Current sensing: 3 channels, dual-source (internal / LEM).**
 *(This line is the ONLY place phase state lives — update it when a session's exit criteria pass.)*
+
+**S5's deliverable is [`S5_MODULE_STATUS_DESIGN.md`](S5_MODULE_STATUS_DESIGN.md)** — the fault
+receiver chain and its noise/timing budget, the decoded **module error table** (overcurrent is NOT
+per-phase), the Vbus and NTC front-ends with every computed value, the ADC pin choice, and the
+netclass-pattern defect found and fixed there.
 
 **S4's deliverable is [`S4_GATE_DRIVE_DESIGN.md`](S4_GATE_DRIVE_DESIGN.md)** — the gate chain, the
 skew/deadband budget, the fail-safe table, and the **authoritative DB37 pin table** taken from the
@@ -43,14 +48,14 @@ Never contradict these without logging a decision; the final board must answer `
 | PWM W high / low | GPIO10 / GPIO11 (EPWM6A/B) | |
 | Gate-driver master EN | GPIO66 (out) | **active-HIGH, confirmed S4** — board-local (U8 input A); the module has no enable pin |
 | Gate-driver aux EN | GPIO131 (out) | **active-HIGH, confirmed S4** — board-local (U8 input B). On 3.0 it was the AND gate's *VCC*, not a logic input |
-| OC fault A / B / C | GPIO25 / GPIO27 / GPIO26 (in, pull-up) | X-BAR INPUT1/2/3 → hardware trip OSHT1–3; trip action = active short (TZA LOW / TZB HIGH) |
+| OC fault A / B / C | GPIO25 / GPIO27 / GPIO26 (in, pull-up) | X-BAR INPUT1/2/3 → hardware trip OSHT1–3; trip action = active short (TZA LOW / TZB HIGH). **S5: `MODULE_FAULT_ACTIVE_LOW` → 0 and X-BAR polarity inverted.** ⚠ OC asserts **all three** pins whatever the leg — these bits do NOT identify the phase |
 | Over-temperature fault | GPIO64 (in, pull-up) | software read only |
 | DC-link OV fault | GPIO52 (in, pull-up) | software read only |
 | Encoder SIN / COS | ADCINA2 / ADCINB2 | RM44AC, 1 sin/cos cycle per mech rev; ×10 pole pairs electrical |
 | Phase current A / B | ADCINB4 / ADCINC4 | 3rd phase by KCL today; v4 adds channel C (ADC pin chosen in S6/S8) |
 | Current offset refs | ADCINA4 / ADCINB5 | wired but never sampled — keep/drop decided in S6 |
-| Vbus sense | ADCINC2 | module outputs 6.5 V @ 900 VDC |
-| NTC channels | *(none today)* | **exactly ONE** module temperature pin exists (DB37 pin 29, 0–10 V) — S4 finding; ADC pin chosen in S5 |
+| Vbus sense | ADCINC2 (J3-27) | module outputs 6.5 V @ 900 VDC. **S5: `VBUS_DIVIDER_RATIO` 297.14 → 341.538**, full scale 1024.6 V, 0.250150 V/code |
+| NTC channel | **ADCINC3** (ADC-C ch3) | **chosen S5** — BoosterPack site-1 **J3-24**; suggest **ADC-C SOC2** (after the SOC1/Vbus EOC that fires the ISR). ADC-D is NOT on the headers. Divider rated for 10 V |
 | Status LED | GPIO31 | LaunchPad's own D9 — nothing needed on the board |
 | ISR scope probe | GPIO67 | expose a test point (pin unverified on Control_V2) |
 | SCI-A debug | GPIO42/43 | LaunchPad USB (XDS100v2) backchannel — **no board connector needed** |
@@ -78,9 +83,19 @@ digital input network **10 kΩ to GND + 1 nF to GND**, HIGH = on; **one** temper
 pins 9/27 are a **15 V/50 mA supply output**, not sensors; pin 1 is **true earth/shield**;
 the module has **no enable input pin**, so both firmware enables are board-local.
 
+**Verified in S5 from the same datasheet (p.6 error table, p.3 optional-components table):**
+the **error table decodes which pin asserts for which fault** — and **overcurrent in ANY leg
+asserts ALL THREE half-bridge error pins**, so `FLT_OC_A/B/C` cannot identify the faulting phase;
+only "error driver core HB x" is unique to one pin. Full decode table in `S5_MODULE_STATUS_DESIGN.md` §1.2.
+Datasheet also states **"Over temperature shut down must be realized by customer"** — the module
+*reports* OT but does not act on it, which makes the NTC channel a safety function, not a convenience.
+The p.3 options table shows **only the "Inverter Section" voltage / current / temperature sensors
+fitted** (Unit 1 and Unit 3 columns empty), independently confirming S4's single-temperature-pin finding.
+
 **Assumed — MUST bench-verify before the dependent session (see REDESIGN_PLAN.md bench-day checklist):**
 - ~~Fault output polarity~~ — **resolved S4 on paper: fault = HIGH.** Bench now only confirms it.
 - ~~Enable active levels for GPIO66/GPIO131~~ — **resolved S4: board-local, we define them ACTIVE-HIGH.**
+- ~~NTC output level~~ — **no longer blocks S5**: the divider is rated for the full 0–10 V the datasheet specifies. The bench measurement now only calibrates the curve, needed before the OT trip threshold is set.
 - Internal current-sensor zero-current bias (assumed 2.5 V, never measured) + per-channel sensitivity/polarity → blocks S6
 - RM44AC differential vs single-ended, supply V/I, true output levels at the connector → blocks S7
 - LaunchPad no-back-feed with the S2 jumper config; GPIO131 header continuity → downgraded to *verification* of documented behavior (S2 finding above), no longer design inputs
@@ -98,6 +113,7 @@ FE_UFPR_4_0/
 ├── sym-lib-table / fp-lib-table   both ${KIPRJMOD}-relative, project scope only
 ├── CLAUDE.md / REDESIGN_PLAN.md / ARCHITECTURE.md (S2) / S3_POWER_DESIGN.md (S3)
 │                            / S4_GATE_DRIVE_DESIGN.md (S4)
+│                            / S5_MODULE_STATUS_DESIGN.md (S5)
 ├── datasheets/               SPRUI77 (LaunchPad UG) + **Infineon-6PS04512E43W39693-DS-v02_00**
 │                            (user-supplied S4 — the authoritative DB37 pinout is on p.6,
 │                             the controller-interface electrical table on p.2,
@@ -115,6 +131,8 @@ FE_UFPR_4_0/
 | Power/flags | `GND` `PWR_FLAG` `+3V3` `+5V` `+12V` `+24V` `+15V_ISO` `-15V_ISO` |
 | Connector | `DSUB-37_Socket` (generated) `Conn_02x10_Odd_Even` |
 | Utility | `TestPoint` `MountingHole` `NetTie_2` `SolderJumper_2_Open` `SolderJumper_3_Open` |
+
+**Appended in S5 (46 → 47 symbols):** `74LVC2G17` (KiCad `74xGxx`, dual non-inverting Schmitt buffer; DBV pinout 1=1A 2=GND 3=2A 4=2Y 5=VCC 6=1Y cross-checked against TI SCES381N). No new footprints — it reuses S4's `SOT-23-6`. Library re-validated: **47/47 symbols (49 SVGs, the 3-unit symbol renders 3) and 40/40 footprints**. S5 also normalised the leading-tab indentation of the four MCP-imported symbols (`UCC27524D`, `74LVC1G11`, `PGND_MOD`, `74LVC2G17`) — cosmetic only; KiCad's parser is whitespace-insensitive.
 
 **Appended in S4 (43 → 46 symbols):** `UCC27524D` (KiCad `Driver_FET`), `74LVC1G11` (KiCad `74xGxx`, pinout cross-checked against TI SCES487I: 1=A 2=GND 3=B 4=Y 5=VCC 6=C), and power symbol `PGND_MOD` (KiCad `GNDPWR` renamed — kept for symmetry with the other rail symbols even though the sheets express power nets as **global labels**, which is the convention S3 established).
 
@@ -299,6 +317,28 @@ Price ≈ $0.85–1.46 / 1000, stock 0.5 M–37 M on every line. **0.1 % gain/di
 | **UCC27524DR** dual 5 A driver, SOIC-8 | C465729 | Ext | 9 550 | U5–U7. VDD 4.5–18 V; TTL input/enable thresholds **independent of VDD**; IN pins pull DOWN 120 kΩ, EN pins pull UP 200 kΩ; outputs LOW during UVLO |
 | **SN74LVC1G11DBVR** 3-in AND, SOT-23-6 | C22046 | Ext | 10 443 | U8 enable combiner. Pinout 1=A 2=GND 3=B 4=Y 5=VCC 6=C |
 
+### Parts appended in S5
+
+| Part | LCSC | JLC | Stock | Notes |
+|---|---|---|---|---|
+| **SN74LVC2G17DBVR** dual non-inverting Schmitt buffer, SOT-23-6 | C10429 | Ext | 107 122 | U9–U11 fault receivers. V_CC 1.65–5.5 V; inputs accept 5.5 V; **Ioff** (partial power down) — the property that makes a dead board-3V3 read as FAULT |
+| **2.20 kΩ 0603 0.1 %** Yageo RT0603BRD072K2L | C861295 | Ext | 38 458 | R57, Vbus divider top |
+| **1.50 kΩ 0603 0.1 %** Yageo RT0603BRD071K5L | C705741 | Ext | 33 446 | R58, Vbus divider bottom — same RT0603B family as R57 so the *ratio* tracks over temperature |
+
+⚠ **There is no hex non-inverting Schmitt at JLC.** `SN74LVC17A` returns **zero** results, which
+is why the design is 3 × dual instead of 1 × hex. The hex *inverting* parts do exist
+(`SN74LVC14APWR` C7663, 87 k; `74HC14D` C5605 **Basic**, 323 k) and using one would even have
+preserved `MODULE_FAULT_ACTIVE_LOW = 1` — rejected because hidden inversion between connector and
+GPIO is a bench trap, and because 74HC has no `Ioff`.
+
+⚠ **Do not "improve" the Vbus divider to 2.32 k / 1.65 k.** That pair gives a closer ratio
+(999.4 V full scale vs 1024.6 V) but the 1.65 k 0.1 % line has **673** in stock against 33 446 —
+the same trap as the S3 divider values. See `S5_MODULE_STATUS_DESIGN.md` §2.2.
+
+Everything else S5 places comes from the S1/S3 kit: 4.7 kΩ `C23162`, 10 kΩ `C25804`,
+12 kΩ `C22790`, 3.3 kΩ `C22978`, 1 nF C0G `C106246`, **22 nF 0805 C0G `C77069`**,
+100 nF `C14663`, 1 µF/0805 `C28323`. **S5 introduces no new C0G value.**
+
 ⚠ **The roadmap's TC4468 is unbuildable at JLC** — 14 in stock (TC4468COE: 4, TC4469COE: 18,
 MIC4468ZWM: 25, UCC27523D: 79). The whole TC446x quad family is out. That, not a technical
 preference, is why the design is 3× dual instead of 2× quad.
@@ -369,6 +409,16 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
   18 patterns total.
   **S4 update:** added `PGND_MOD` → Power_3A (module aux return, up to 2.2 A on dedicated copper),
   `PWM_*_DRV` and `GATE_EN*` / `GATE_ILOCK_3V3` → Gate. **22 patterns total.**
+  **S5 update — [BUG FIX] every path-sensitive pattern was silently matching nothing.** KiCad
+  matches netclass patterns against the **full, path-qualified net name** (`/gate_drive/PWM_UH_15V`),
+  not the base name, so any pattern anchored at the start never fired. **24 nets were sitting on
+  `Default`, including the entire gate bus and both Kelvin sense pairs.** Only the global power
+  nets worked (their names carry no sheet path) and `*_ADC` (already wildcard-led) — which is why
+  it went unnoticed for four sessions. The ten path-sensitive patterns are now `*`-prefixed:
+  **`*PWM_*_15V` `*DRV_EN*` `*ISNS_*` `*ENC_*` `*VBUS_*` `*NTC_*` `*PWR_U*_SW` `*PWM_*_DRV`
+  `*GATE_EN*` `*GATE_ILOCK_3V3`**. Still 22 patterns; no netclass *values* changed (S9 owns those).
+  Result: 51 Default / 17 Gate / 11 Analog / 8 Power_1A / 5 Power_3A, netlist byte-identical.
+  **Any new pattern must start with `*` unless it names a global power net.**
 - **Mounting:** board mounts on top of the inverter; mounting holes required (3.0 had none — only DB37 jackscrews). Pattern from the PrimeSTACK top-face drawing (S2/S9).
 
 ## Decision log (append-only: date — session — decision — rationale)
@@ -431,6 +481,19 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - 2026-08-29 — S4 — **Lesson logged: "vet availability first" earned its place in the roadmap.** Had the TC4468 design been drawn before the stock check, the whole enable architecture (quad AND-input driver, 8 channels, enable as the second AND input) would have been built around a part with 14 units in stock, and the rework would have touched every net on the sheet. The check cost one API call.
 - 2026-08-29 — S4 — **Windfall for S9: the mechanical drawing is page 5 of the same datasheet** — 215 × 280 mm body, mounting pattern with Ø9.2 and Ø11×10-deep holes, M8×14-deep and M6×11-deep threads, dimensions 195 / 143.2 / 155 / 93 / 31 / 62 / 242.6 / 260, plus the X1 SUB-D position and G1/2" coolant threads. The long-standing "[user, before S9] measure the module top face" item is very likely closed by it; S9 extracts the pattern properly rather than S4 bleeding scope.
 
+- 2026-08-29 — S5 — **[MAJOR FINDING] The datasheet's p.6 error table decoded: overcurrent is NOT per-phase.** An OC in any leg asserts **all three** half-bridge error pins (2/22/5); only "error driver core HB x" is unique to one pin. `FLT_OC_A/B/C` therefore cannot attribute the fault to a phase — firmware must stop implying they can, and use the decode table in `S5_MODULE_STATUS_DESIGN.md` §1.2 instead. Also from p.6/p.2: **"Over temperature shut down must be realized by customer"** — the module reports OT but does not act on it, so the NTC channel is a *safety function*. The p.3 options table (only the Inverter-Section sensors fitted) independently confirms S4's single-temperature-pin reading.
+- 2026-08-29 — S5 — **Fault pull-up = 4.7 kΩ to `+13V5_GATE`, then a 10 k/4.7 k divider into a Schmitt.** Levels at the DB37 pin: 0.15 V no-fault (module sinks 2.84 mA of its 15 mA budget) / 10.23 V fault; the receiver trips between 2.60 V and 7.32 V referred to that pin ⇒ **2.45 V / 2.91 V of noise margin**. A 5 V pull-up needing no divider was considered and **rejected**: it leaves only 0.5 V on the low side, and that budget has to absorb *module-GND shift across the harness*, not just board noise. 3.0's 82 kΩ is 17× too weak.
+- 2026-08-29 — S5 — **Receiver = 3 × SN74LVC2G17 (C10429), non-inverting.** The hex non-inverting SN74LVC17A **does not exist at JLC** (zero results), so it is 3 duals not 1 hex. Non-inverting is deliberate — a hex *inverting* part is in stock and would even have preserved `MODULE_FAULT_ACTIVE_LOW = 1`, but hidden inversion between connector and GPIO is a bench trap. **`Ioff` is load-bearing:** board +3V3 (AMS1117 off +5V) can die while the LaunchPad lives on its own LDO from the same +5V; with Ioff the outputs go high-Z and the GPIO pull-ups read **FAULT**. Fail-safe also holds for an unplugged DB37 — all five lines float high.
+- 2026-08-29 — S5 — **Fault chain response 5.7 µs typ / 8.9 µs worst case** (two 3.56 µs poles from the 2× 1 nF C0G). Accepted deliberately: the module protects itself against OC **within 15 µs** and the PWM period is 100 µs, so this is the *reporting + X-BAR backstop* path and filtering is worth more than microseconds.
+- 2026-08-29 — S5 — **Vbus divider = 2.20 kΩ / 1.50 kΩ, 0.1 % Yageo RT0603B (C861295 / C705741).** `VBUS_DIVIDER_RATIO` **297.14 → 341.538**, full scale **1024.6 V**, 0.250150 V/code, module load 1.95 mA of the 5 mA limit. Same resistor *family* on both legs matters more than the tolerance — the divider is ratiometric, so 25 ppm/°C parts track where a thick-film pair could drift 0.6 % differentially (≈6 V of bus). The closer-ratio 2.32 k/1.65 k pair was rejected on **673 units of stock**.
+- 2026-08-29 — S5 — **22 nF C0G charge bucket at each ADC pin, fed through 3.3 kΩ** — Vbus corner 1726 Hz, NTC corner 1083 Hz. **This retires the 512-cycle ACQPS workaround:** the S/H sees the bucket (68 ns settling), not the divider. Charge-sharing costs a deterministic 2.8 codes. All three documented 3.0 Vbus defects are now closed — source impedance, Kelvin return (NT3 is the *only* GND tie for `VBUS_RTN`), and scale.
+- 2026-08-29 — S5 — **No buffer op-amp on Vbus**, as S4's `load max 5 mA` finding allowed. A plain low-Z divider does the job; the part count and the offset/drift of an op-amp buy nothing here.
+- 2026-08-29 — S5 — **NTC divider = 12 kΩ / 4.7 kΩ**, rated for 10 V continuous (DB37 pin 29 is the 10 V NTC2 channel): 10.000 V → 2.814 V = **93.8 % range use**, clips at 10.66 V, load 0.60 mA. Referenced to board **GND, not `VBUS_RTN`** — keeping the Kelvin line single-purpose is worth more than the ~1 % FS error a module-GND shift adds to a thermal channel.
+- 2026-08-29 — S5 — **NTC ADC pin = `ADCINC3` (ADC-C ch3), BoosterPack site-1 J3-24; suggested SOC = ADC-C SOC2.** **ADCIND0–D5 are NOT on the BoosterPack headers** (SPRUI77 Fig. 5 — they go to the LaunchPad's own J21 via its differential amps), so ADC-D was not an option. SOC2 converts *after* the SOC1 (Vbus) EOC that fires the 10 kHz ISR, so the slow channel never delays the loop. This leaves **ADC-A SOC1 free for S6's third current channel** (ADCINA3 = J3-26 or ADCINA5 = J7-66).
+- 2026-08-29 — S5 — **No fault LEDs.** These five lines drive a hardware trip; nothing optional gets hung on them. Fault indication belongs to the LaunchPad's own D9 and to telemetry.
+- 2026-08-29 — S5 — **[BUG FIX] Netclass patterns were silently matching nothing** — see the netclass section above. KiCad matches the **path-qualified** net name, so 24 nets (the whole gate bus, both Kelvin pairs, both buck switch nodes, the enables) sat on `Default`. Ten patterns `*`-prefixed; 28 nets moved to their intended class, none lost one, netlist byte-identical. **Lesson: a convention written into a config file is not a convention until something proves it fires.** The S1/S3/S4 patterns were reviewed by eye four times and the ones that were checked happened to be the ones that worked.
+- 2026-08-29 — S5 — **`module_status` captured: 54 components, 22 signal nets, ERC clean of every class except the documented label noise.** Netlist verified node-by-node against a hand-written expected-membership table (**22/22 exact, 0 mismatches**), and every module-side net lands on the DB37 pin the frozen table specifies. Root ERC **89 = 76 `label_dangling` + 13 `isolated_pin_label`**, down from S4's 127. The 15 dangling labels this sheet contributes are its own edge hierarchical labels, which carry no wire because the project captures connectivity as net-labels-at-pins — a cosmetic item, already logged, that should be fixed project-wide in one pass rather than per sheet.
+
 ## Open items (owner session in brackets; struck items resolved with the session noted)
 
 - ~~[S2] BoosterPack header gender~~ — **resolved S2:** `PinSocket_2x10`, bottom side, LaunchPad below.
@@ -438,17 +501,21 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - **[user] DB37 purchasable MPN** for the consigned list. Geometry (female, right-angle, 2.77 × 2.54 mm, 63.5 mm jackscrews) is de-facto validated by 3.0 mating the real harness **and now by the datasheet's "X1 = 37 contacts, SUB-D, male" with UNC 4-40 female thread** — only the buyable part number is open. If the team ever switches to a *vertical* part, the row pitch becomes 2.84 mm and the footprint must be re-derived.
 - ~~[S3] Schottky vs ideal-diode/load-switch for the LaunchPad 5 V feed~~ — **resolved S3:** plain Schottky **SS34, C8678 (JLC Basic)**; V_f ≈ 0.35 V at ~200 mA leaves the LaunchPad ≈4.63 V, ample for its own 3.3 V LDO. **Physically placed in S8** on the `launchpad` sheet at the header.
 - ~~[S3] X5R vs X7R for bulk rails~~ — **resolved S3:** X7R wherever a Basic/Preferred X7R exists at the needed value (100 nF, 47 nF, 1 µF); X5R for the bulk ≥4.7 µF where JLC Basic offers nothing else, with ≥2× voltage derating (50 V parts on the 24 V rail, 25 V parts on 5 V/3V3). AMS1117 dissipates 0.25 W → ≈85 °C junction at the 70 °C worst-case local ambient.
-- **[S5/S6/S7] Standardise C0G filter values** across sheets to limit Extended part count.
+- **[S6/S7] Standardise C0G filter values** across sheets to limit Extended part count. **S5 added none** — it reuses 1 nF (`C106246`, S4's line) for every fault/EMC cap and 22 nF 0805 (`C77069`, an S1 kit line) for both ADC charge buckets. S6/S7 should reuse those two before opening a third.
 - **[S8] CAN GPIO pair** for `CAN_TX_3V3`/`CAN_RX_3V3` — pick CAN-mux-capable GPIOs that reach the BoosterPack headers (SPRUI77 Tables 1–4 in `datasheets/`); note the LaunchPad's own CAN transceiver hangs on GPIO12/17 via 0 Ω links (J12) — avoid or account for it.
 - **[S12] Re-verify `C5369735`** (URA2415YMD-6WR3 isolated module) — only **362 in stock** and it is a consigned through-hole part. Highest supply risk on the board.
 - ~~[S4] `+24V_MOD` land it on DB37 pins 8/26~~ — **done S4** (pins 8/26 per the datasheet; return on 10/28 as `PGND_MOD`).
 - ~~[S4] Series damping resistor ≤100 Ω~~ — **resolved S4: 100 Ω (R18–R23)**, with the datasheet's 10 kΩ + 1 nF input network fitted at the connector. Module sees 12.95–13.62 V.
 - ~~[S4] FSAE shutdown-circuit interlock on the gate enable~~ — **resolved S4 (user):** 3-input AND with `SW_MAIN_3V3`, bypassable by the exclusive jumper JP1.
 - **[user, before S12] DB37 hardware:** the module end is SUB-D 37 **male with UNC 4-40 female threads**, so the harness end that mates our socket needs matching jackscrews. Confirm the board-side hardware with the purchasable MPN.
-- **[S5] Fault pull-up value** now that polarity is known: R ≥ 13.5/0.015 = 900 Ω is the floor (15 mA sink limit); 2.2–4.7 kΩ is the sensible band. 3.0's 82 kΩ is far too weak for a harness run.
-- **[S5] `NTC_1_RAW` divider must survive 10 V** continuously (DB37 pin 29 is the NTC2 channel).
+- ~~[S5] Fault pull-up value~~ — **resolved S5: 4.7 kΩ to `+13V5_GATE`** (2.84 mA sink), then 10 k/4.7 k into an SN74LVC2G17 Schmitt. 2.45 V / 2.91 V of noise margin referred to the DB37 pin.
+- ~~[S5] `NTC_1_RAW` divider must survive 10 V~~ — **resolved S5: 12 k / 4.7 k**, 10.000 V → 2.814 V (93.8 % range), clips at 10.66 V, 0.60 mA load. ADC pin `ADCINC3` (J3-24).
 - **[S8] `vehicle_io` must produce `SW_MAIN_3V3`** as a clean 3.3 V logic level with all contact conditioning on its side — `gate_drive` consumes it as a hardware interlock term with no local filtering by design.
 - **[cosmetic, any session] `power` sheet readability** — connectivity is by net labels at pins, not drawn wires. Electrically verified (ERC 0, netlist checked node-by-node) but visually dense around U1/U2 where 8–9 labels converge. A wire-stub pass fanning the IC pins out would make it presentation-quality.
+- **[S6] Third current channel:** **ADC-A SOC1 is free** and keeps the three converters balanced (A: SIN+Iw, B: Iu+COS, C: Iv+Vbus+NTC). Candidate pins ADCINA3 (J3-26) / ADCINA5 (J7-66).
+- **[S12 firmware] `FAULT_OC_A/B/C` do not identify the faulting phase** — any leg's OC asserts all three. Implement the decode table in `S5_MODULE_STATUS_DESIGN.md` §1.2, and note the module does **not** self-shutdown on over-temperature.
+- **[cosmetic, project-wide] Hierarchical labels carry no wire stub on any sheet**, which is the sole cause of the 76 `label_dangling` ERC errors. One consistent wire-stub pass across `power` / `gate_drive` / `module_status` clears them; doing it per-sheet would leave the project inconsistent. Supersedes the older `power`-only readability note below.
+- **[cosmetic, any session] A3 title-block `Title` field overflows its box on all seven sheets** — the S1 sheet titles are longer than the block. Harmless on screen, visible in PDF/print.
 - **[S9] 3D model** for the derived DB37 footprint still points at KiCad's `…_EdgePinOffset9.40mm.step` (correct body, name differs from the footprint) — harmless, revisit if 3D export matters.
 
 ## Tooling notes

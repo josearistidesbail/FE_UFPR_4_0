@@ -227,11 +227,11 @@ dominant, layout-critical cargo); module-side raw signals export from there.
 | `DRV_EN_3V3` `DRV_EN_AUX_3V3` | launchpad → gate_drive | GPIO66 / GPIO131 (J6-59 / J6-58) |
 | `PWM_UH_15V` … `PWM_WL_15V` | *internal to gate_drive* | driver → 100 Ω → DB37 21/20/4/3/24/23; 10 kΩ + 1 nF C0G at the pin |
 | `FLT_OC_A_15V` `FLT_OC_B_15V` `FLT_OC_C_15V` `FLT_OT_15V` `FLT_OV_15V` | gate_drive (DB37 2/22/5/6/16) → module_status | open-collector, ≤15 V, ≤15 mA sink; **FAULT = HIGH (S4, datasheet p.2)** |
-| `FLT_OC_A_3V3` `FLT_OC_B_3V3` `FLT_OC_C_3V3` `FLT_OT_3V3` `FLT_OV_3V3` | module_status → launchpad | GPIO25/27/26, GPIO64, GPIO52 |
+| `FLT_OC_A_3V3` `FLT_OC_B_3V3` `FLT_OC_C_3V3` `FLT_OT_3V3` `FLT_OV_3V3` | module_status → launchpad | GPIO25/27/26, GPIO64, GPIO52. **S5:** SN74LVC2G17 Schmitt outputs, non-inverting ⇒ `MODULE_FAULT_ACTIVE_LOW` = 0 |
 | `VBUS_SNS_RAW` + `VBUS_RTN` | gate_drive (DB37 7 + Kelvin pin) → module_status | 6.5 V @ 900 V, Kelvin pair |
-| `VBUS_ADC` | module_status → launchpad | ADCINC2, ~1000 V full scale @ 3.0 V |
+| `VBUS_ADC` | module_status → launchpad | ADCINC2 (**J3-27**). **S5:** 2.20 k/1.50 k 0.1 %, full scale **1024.6 V**, `VBUS_DIVIDER_RATIO` = 341.538 |
 | `NTC_1_RAW` | gate_drive (**DB37 29 only**) → module_status | the module's single temperature output; **0–10 V**, divider must be rated for it (S5) |
-| `NTC_1_ADC` | module_status → launchpad | ADC pin chosen in S5 |
+| `NTC_1_ADC` | module_status → launchpad | **S5: ADCINC3 (ADC-C ch3), J3-24**, suggest ADC-C SOC2. 12 k/4.7 k, 10 V → 2.814 V |
 | `PGND_MOD` | gate_drive (DB37 10/28) → power (**NT2 star**) | module aux return, ≤2.2 A, dedicated copper — global net, no sheet pins |
 | `SHIELD_DB37` | *internal to gate_drive* | DB37 pin 1 "true earth/shield" + shell G1/G2 → 1 nF ∥ 1 MΩ ∥ JP2 → GND |
 | `MOD_AUX15V_1` `MOD_AUX15V_2` | *internal to gate_drive* | DB37 9/27 = module **15 V/50 mA supply output**; test points TP17/TP18 only |
@@ -242,6 +242,11 @@ dominant, layout-critical cargo); module-side raw signals export from there.
 | `CAN_TX_3V3` / `CAN_RX_3V3` | launchpad ↔ vehicle_io | GPIO pair chosen in S8 |
 | `SW_MAIN_3V3` | vehicle_io → launchpad **and → gate_drive** | conditioned cockpit input (S8). **S4 took the tap**: third term of the hardware enable AND, bypassable at JP1. No filtering in gate_drive — filtering would delay de-assertion |
 | `SW_START_3V3` | vehicle_io → launchpad | conditioned cockpit input (S8) |
+
+**S5 net-count delta:** no new sheet pins and no new global nets — S5 adds only **sheet-local**
+nets inside `module_status` (`FLT_OC_A_DIV` … `FLT_OV_DIV`, `VBUS_DIV`, `NTC_1_DIV`), the divider
+taps between each front-end and its receiver/ADC. `VBUS_RTN` gains its single GND tie there (**NT3**),
+as §4 always intended. Root ERC is down to 76 `label_dangling` + 13 `isolated_pin_label`.
 
 **S4 net-count delta:** −2 nets retired (`NTC_2_RAW`, `NTC_2_ADC`), +1 sheet pin (`SW_MAIN_3V3`
 into gate_drive), +1 global net (`PGND_MOD`, no sheet pins). Root ERC is correspondingly down from
