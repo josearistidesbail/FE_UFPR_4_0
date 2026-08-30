@@ -277,7 +277,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": ""
+      "sch_revision": "4.0"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -864,7 +864,7 @@
       {
         "filename": "FE_UFPR_4_0.kicad_sch",
         "name": "FE_UFPR_4_0",
-        "uuid": "00000000-0000-0000-0000-000000000000"
+        "uuid": "0cde0ae3-e31e-4592-8212-8a072a248a80"
       }
     ],
     "used_designators": "",
@@ -873,35 +873,35 @@
   "sheets": [
     [
       "0cde0ae3-e31e-4592-8212-8a072a248a80",
-      "Root"
+      "FE_UFPR_4_0"
     ],
     [
       "6442f421-491d-4bfb-bee7-d0b4e843a827",
       "power"
     ],
     [
-      "038facd0-2e0a-4162-b97c-b9ad4ef94eba",
-      "gate_drive"
-    ],
-    [
-      "a2165381-2d77-4319-9e8d-4618439f276e",
-      "module_status"
-    ],
-    [
       "4d347022-ba2f-49b9-8797-79ffc1b609ae",
       "current_sense"
+    ],
+    [
+      "1dbda7e8-fea8-4374-8822-c8926fcae792",
+      "vehicle_io"
+    ],
+    [
+      "038facd0-2e0a-4162-b97c-b9ad4ef94eba",
+      "gate_drive"
     ],
     [
       "c87dd457-99fd-4c81-82bb-75763b6537d2",
       "encoder"
     ],
     [
-      "c47f591f-0e93-45b1-b2eb-749c98db50f7",
-      "launchpad"
+      "a2165381-2d77-4319-9e8d-4618439f276e",
+      "module_status"
     ],
     [
-      "1dbda7e8-fea8-4374-8822-c8926fcae792",
-      "vehicle_io"
+      "c47f591f-0e93-45b1-b2eb-749c98db50f7",
+      "launchpad"
     ]
   ],
   "text_variables": {},

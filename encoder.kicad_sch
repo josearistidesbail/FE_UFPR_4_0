@@ -1,31 +1,19 @@
 (kicad_sch
-	(version 20260101)
+	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid 72212118-46b5-4ce8-aa95-5476d1986c6c)
+	(uuid "72212118-46b5-4ce8-aa95-5476d1986c6c")
 	(paper "A3")
-
-  (title_block
-    (title "FE_UFPR 4.0 - Encoder front-end: RM44AC sin/cos conditioning + connector")
-    (date "2026-08-18")
-    (rev "4.0")
-    (company "Formula UFPR - FSAE")
-    (comment 1 "LAUNCHXL-F28379D <-> Infineon PrimeSTACK 6PS04512E43W39693 interface")
-    (comment 2 "Emrax 208 / Renishaw RM44AC / LEM LA 100-P")
-    (comment 3 "See CLAUDE.md + REDESIGN_PLAN.md in project dir")
-  )
-	(lib_symbols)
-	(hierarchical_label "ENC_SIN_ADC"
-		(shape output)
-		(at 384.81 40.64 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "e2a742c0-135b-413b-89cc-cfff6c849a20")
+	(title_block
+		(title "FE_UFPR 4.0 - Encoder front-end: RM44AC sin/cos conditioning + connector")
+		(date "2026-08-18")
+		(rev "4.0")
+		(company "Formula UFPR - FSAE")
+		(comment 1 "LAUNCHXL-F28379D <-> Infineon PrimeSTACK 6PS04512E43W39693 interface")
+		(comment 2 "Emrax 208 / Renishaw RM44AC / LEM LA 100-P")
+		(comment 3 "See CLAUDE.md + REDESIGN_PLAN.md in project dir")
 	)
+	(lib_symbols)
 	(hierarchical_label "ENC_COS_ADC"
 		(shape output)
 		(at 384.81 48.26 0)
@@ -36,6 +24,17 @@
 			(justify left)
 		)
 		(uuid "be877333-c8d5-4b42-b97b-86c84da4f2b0")
+	)
+	(hierarchical_label "ENC_SIN_ADC"
+		(shape output)
+		(at 384.81 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e2a742c0-135b-413b-89cc-cfff6c849a20")
 	)
 	(sheet_instances
 		(path "/"
