@@ -172,7 +172,37 @@ datasheet made it possible**; end-to-end active-HIGH polarity chain documented �
 
 ---
 
-## S6 — Current sensing: 3 channels, dual-source (internal / LEM)
+## S6 — Current sensing: 3 channels, dual-source (internal / LEM)  ✅ **DONE (2026-08-30)**
+
+**Outcome:** `current_sense` captured — **94 components, 42 nets, netlist verified node-by-node
+(42/42 exact, 0 mismatches)**, root ERC down to 70 and containing no violation class beyond the two
+documented cosmetic ones. Deliverable = [`S6_CURRENT_SENSE_DESIGN.md`](S6_CURRENT_SENSE_DESIGN.md).
+
+**The session's shaping input was the user's, not a datasheet:** the LEMs go on a **separate board
+near the motor cables**, reached through **one global connector** — and the **burden resistors stay
+on our board**, so the harness carries the LEM secondary *current* rather than a voltage. That one
+choice deletes wire resistance, contact resistance and board-to-board ground shift from the
+measurement and is what makes an unshielded automotive connector acceptable here.
+
+**Deviations from plan, logged in `CLAUDE.md`:** the roadmap's "same transfer function for both
+sources" is **not achievable** and was consciously dropped. Matching the slopes exactly needs a
+16 Ω burden, which the fetched LA 100-P datasheet puts **below the 20 Ω floor** of its R_M window at
+85 °C. Instead each channel carries **two independent difference amps** (internal + LEM) that both
+run permanently, with a single 3-pad jumper selecting which *output* reaches the ADC — three extra
+op-amp halves buying one jumper per channel instead of nine positions, no wrong-but-plausible state,
+and both sensors scopeable against each other on the same current.
+
+**Traps caught during capture:** (a) the module's internal sensor scale is **ambiguous in the
+datasheet** — "4.9 V @ 300 A_RMS" reads as either 8.00 or 5.66 mV/A — so the gain is set for the
+*higher* one, which cannot clip under either reading; (b) `CLAUDE.md` listed that sensitivity as
+**bench-verified when it never was**, and the genuinely measured 78.6 mV/A belongs to a different
+device; (c) the MCP `import_symbol` produced an **unloadable symbol library** by copying a derived
+symbol without its parent, caught by the mandated `kicad-cli` re-export.
+
+**Numbers that closed the exit criteria:** internal 20.0 k/12.0 k → G = 0.600 → ADC bias **exactly
+1.500 V**, ±300 A → ±1.44 V, clipping at ±312 A; LEM 12.0 k/4.99 k with a 47 ‖ 47 Ω = 23.5 Ω burden
+→ 4.886 mV/A, +1.8 % of the internal slope; **±15 V load 111 mA/rail against ±200 mA (1.8×)**;
+`ISNS_C_ADC` on **ADCINA5 = J7-66**.
 
 **Objective:** Three identical conditioning channels, each fed from either the PrimeSTACK internal sensor (DB37 pins 30/31/32) or an external LA 100-P, selected by **solder jumpers**, both sources landing the **same transfer function** on the ADC.
 
@@ -187,7 +217,12 @@ datasheet made it possible**; end-to-end active-HIGH polarity chain documented �
 - Keep/drop the ADCINA4/ADCINB5 offset-reference outputs (cheap buffer taps — recommend keep).
 - **LEM secondary connectors:** 3 pins per sensor (+15 / −15 / M out), Deutsch DT/DTM per team standard — decided jointly with S7's connector direction.
 
-**Exit criteria:** ERC-clean; transfer-function table (V_ADC = f(I) for both sources, identical) in the sheet + handoff note; ±15 V load calculation closed against the chosen supply; SW-OC-trip coverage explicitly stated (≥300 A or waived with rationale).
+**Exit criteria:** ERC-clean ✅ (no real violation class); transfer-function table in the sheet +
+handoff note ✅ — **but the two sources are NOT identical**, by the R_M-floor argument above, so the
+handoff carries two constants instead of one; ±15 V load calculation closed ✅ (111 mA vs 200 mA);
+SW-OC-trip coverage explicitly stated ✅ — **waived on the LEM path with rationale** (LA 100-P
+saturates at ±150 A vs a 260 A trip; protection there is the module's 625 A_pk hardware shutdown,
+and the *default* jumper position is the internal sensor, which does cover ±312 A).
 
 ---
 
@@ -281,7 +316,7 @@ Everything below is marked "assumed" in the firmware docs but is load-bearing fo
 **Setup A — PrimeSTACK aux-powered only (24 V aux, NO DC link, no motor):**
 1. ~~**Fault polarity**~~ *(**RESOLVED S4 from the datasheet: fault = HIGH.** Now only a confirmation, not a gate)*: 10 k pull-ups to 12 V on DB37-side fault pins (module pins 2/22/5/6/16); record healthy-state levels; force a cheap fault (brown-out aux below 18 V → watch the voltage flag, pin 16). Conclusion per pin: fault pulls LOW or releases HIGH?
 2. ~~**Enable active levels**~~ *(**RESOLVED S4: the module has no enable pin.** The enables are board-local and defined ACTIVE-HIGH. Nothing to measure)*: toggle master/aux enable between 0 V and 12 V with gates off; watch whether drivers arm (fault flags / gate response). Confirm active-high for GPIO66/GPIO131 functions.
-3. **Internal current sensors** *(blocks S6)*: zero-current bias of all three outputs (assumed 2.5 V — never verified); then a known DC current (bench supply + clamp-meter reference, 10–50 A loop) through one phase → mV/A + polarity per channel; channel-to-channel spread.
+3. **Internal current sensors** *(**no longer blocks S6** — the design is deliberately insensitive to the answer: gain is set for the highest plausible sensitivity, so neither reading of the datasheet clips. The bench now only lets S10/S11 reclaim ADC range by changing one resistor per channel)*: zero-current bias of all three outputs (assumed 2.5 V — never verified); then a known DC current (bench supply + clamp-meter reference, 10–50 A loop) through one phase → mV/A + polarity per channel; channel-to-channel spread.
 4. **Vbus sensor** *(**no longer blocks S5** — the datasheet rates every analog output at "load max 5 mA", so a resistive divider is allowed. Still worth measuring the low-voltage floor)*: output at 0 V and 24–48 V DC link; quantify the "unusable < ~40 V" floor; load with 10 k then 3.3 k → droop ⇒ divider allowed or buffer mandatory.
 5. **NTC output** at room temperature — **one channel only** (DB37 pin 29, the 10 V inverter-section NTC). There is no second temperature pin.
 6. **DB37 cable**: length, shield termination end, gauge.
@@ -317,12 +352,12 @@ Everything below is marked "assumed" in the firmware docs but is load-bearing fo
 
 | Item | Session | Notes |
 |---|---|---|
-| Offset-ref outputs (ADCINA4/B5) keep/drop | S6 | recommend keep — cheap buffer taps |
+| ~~Offset-ref outputs (ADCINA4/B5) keep/drop~~ | S6 ✅ | **KEPT** — both read the buffered `ISNS_VREF` on two different converters (bias monitor + ADC-A/B cross-check) |
 | NTC: one or both channels + ADC pin choice | S5 | NTC#2 outputs up to 10 V — divider rating |
 | Fault pull-up rail: gate rail vs dedicated | S5 | outputs rated to 15 V |
 | FSAE shutdown-circuit interlock on gate enable | S4 | ask team — maps the old /MAIN_SWITCH concept to rules |
-| LA 100-P ±150 A range vs 260 A SW trip | S6 | accept-as-validation-tool vs upgrade model |
-| LEM mounting location + secondary connector | S6/S7 | remote clamps → Deutsch 3-pin per sensor |
+| ~~LA 100-P ±150 A range vs 260 A SW trip~~ | S6 ✅ | **accepted (user)** — LEM is a validation instrument; SW trip inert on that path, module HW OC covers it |
+| ~~LEM mounting location + secondary connector~~ | S6 ✅ | **remote sensor board, ONE 8-way connector**; Deutsch DTM at the bulkhead, Micro-Fit 3.0 2×4 on the PCB |
 | Gate rail setpoint 12 vs 13.5 V | S3+S4 | margin above 11 V minimum at module |
 | Encoder connector: DTM header vs panel DT vs M12 | S7 | vibration + shield + team standard |
 | Conformal coating / cleaning spec | S12 | affects open connectors |

@@ -6,8 +6,13 @@ Interface PCB between a TI **LAUNCHXL-F28379D** (FOC firmware) and an Infineon *
 
 ## Roadmap & current phase
 
-**Current phase: S5 COMPLETE. Next: S6 — Current sensing: 3 channels, dual-source (internal / LEM).**
+**Current phase: S6 COMPLETE. Next: S7 — Encoder front-end (RM44AC) + connector.**
 *(This line is the ONLY place phase state lives — update it when a session's exit criteria pass.)*
+
+**S6's deliverable is [`S6_CURRENT_SENSE_DESIGN.md`](S6_CURRENT_SENSE_DESIGN.md)** — the two
+difference-amp stages per channel and every computed value, the **LA 100-P R_M window** (a burden
+resistor is not a free knob), why the burden lives on *our* board, the ±15 V budget, the ADC pin
+choice, and the correction of a "bench-verified" figure that was never measured.
 
 **S5's deliverable is [`S5_MODULE_STATUS_DESIGN.md`](S5_MODULE_STATUS_DESIGN.md)** — the fault
 receiver chain and its noise/timing budget, the decoded **module error table** (overcurrent is NOT
@@ -52,8 +57,8 @@ Never contradict these without logging a decision; the final board must answer `
 | Over-temperature fault | GPIO64 (in, pull-up) | software read only |
 | DC-link OV fault | GPIO52 (in, pull-up) | software read only |
 | Encoder SIN / COS | ADCINA2 / ADCINB2 | RM44AC, 1 sin/cos cycle per mech rev; ×10 pole pairs electrical |
-| Phase current A / B | ADCINB4 / ADCINC4 | 3rd phase by KCL today; v4 adds channel C (ADC pin chosen in S6/S8) |
-| Current offset refs | ADCINA4 / ADCINB5 | wired but never sampled — keep/drop decided in S6 |
+| Phase current A / B / **C** | ADCINB4 / ADCINC4 / **ADCINA5** | **S6: channel C added on ADCINA5 = J7-66**, suggested ADC-A SOC1. J7-65…69 carry the whole block on five contiguous pins. KCL reconstruction becomes optional |
+| Current offset refs | ADCINA4 (J7-69) / ADCINB5 (J7-65) | **S6: KEPT** — both read the buffered `ISNS_VREF` ≈1.4685 V through their own 100 Ω + 22 nF buckets. Same node on two converters ⇒ a free ADC-A vs ADC-B cross-check |
 | Vbus sense | ADCINC2 (J3-27) | module outputs 6.5 V @ 900 VDC. **S5: `VBUS_DIVIDER_RATIO` 297.14 → 341.538**, full scale 1024.6 V, 0.250150 V/code |
 | NTC channel | **ADCINC3** (ADC-C ch3) | **chosen S5** — BoosterPack site-1 **J3-24**; suggest **ADC-C SOC2** (after the SOC1/Vbus EOC that fires the ISR). ADC-D is NOT on the headers. Divider rated for 10 V |
 | Status LED | GPIO31 | LaunchPad's own D9 — nothing needed on the board |
@@ -70,7 +75,7 @@ Never contradict these without logging a decision; the final board must answer `
 
 ## Bench-verified facts vs assumptions
 
-**Verified (bench/scope):** encoder = RM44AC sin/cos, already demodulated, 1 cycle/rev; old front-end 2.25 V / 0.725 V; encoder noise 33.5 mV RMS at ADC pin; Vbus divider = 2×69 k, ratio 297.14 + 11.4 code offset; internal current sensors ≈ 7.5–8 mV/A.
+**Verified (bench/scope):** encoder = RM44AC sin/cos, already demodulated, 1 cycle/rev; old front-end 2.25 V / 0.725 V; encoder noise 33.5 mV RMS at ADC pin; Vbus divider = 2×69 k, ratio 297.14 + 11.4 code offset.
 
 **Verified in S1 from the 3.0 design files (not bench):** BoosterPack header grid ΔX 43.18 mm / ΔY 63.5 mm; DB37 as-built pin→net map (table below); DB37 jackscrew spacing 63.5 mm.
 
@@ -96,7 +101,13 @@ fitted** (Unit 1 and Unit 3 columns empty), independently confirming S4's single
 - ~~Fault output polarity~~ — **resolved S4 on paper: fault = HIGH.** Bench now only confirms it.
 - ~~Enable active levels for GPIO66/GPIO131~~ — **resolved S4: board-local, we define them ACTIVE-HIGH.**
 - ~~NTC output level~~ — **no longer blocks S5**: the divider is rated for the full 0–10 V the datasheet specifies. The bench measurement now only calibrates the curve, needed before the OT trip threshold is set.
-- Internal current-sensor zero-current bias (assumed 2.5 V, never measured) + per-channel sensitivity/polarity → blocks S6
+- Internal current-sensor **bias AND sensitivity** — ~~blocks S6~~ **no longer blocks: S6 is designed to be
+  insensitive to it.** ⚠ The "≈7.5–8 mV/A" this file used to list as *bench-verified* was **not measured** —
+  `control_v2_pinmap.md` §6 derives 8.0 mV/A as `2.4 V / 300 A` from an *assumed* 2.5 V bias, and the
+  separate bench figure of 78.6 mV/A belongs to the bench clamp+amp board, not the module. The datasheet's
+  "4.9 V @ 300 A_RMS" admits two readings (8.00 or 5.66 mV/A); S6 sets the gain for the **higher** one so
+  neither reading clips. Bench now only reclaims ADC range (one resistor per channel). Polarity never
+  blocked anything — `PHASE_ID_DEFAULT_EN` re-detects each channel's sign at every ALIGN
 - RM44AC differential vs single-ended, supply V/I, true output levels at the connector → blocks S7
 - LaunchPad no-back-feed with the S2 jumper config; GPIO131 header continuity → downgraded to *verification* of documented behavior (S2 finding above), no longer design inputs
 
@@ -114,7 +125,9 @@ FE_UFPR_4_0/
 ├── CLAUDE.md / REDESIGN_PLAN.md / ARCHITECTURE.md (S2) / S3_POWER_DESIGN.md (S3)
 │                            / S4_GATE_DRIVE_DESIGN.md (S4)
 │                            / S5_MODULE_STATUS_DESIGN.md (S5)
-├── datasheets/               SPRUI77 (LaunchPad UG) + **Infineon-6PS04512E43W39693-DS-v02_00**
+│                            / S6_CURRENT_SENSE_DESIGN.md (S6)
+├── datasheets/               SPRUI77 (LaunchPad UG) + **LEM-LA_100-P-v15** (fetched S6)
+│                            + **Infineon-6PS04512E43W39693-DS-v02_00**
 │                            (user-supplied S4 — the authoritative DB37 pinout is on p.6,
 │                             the controller-interface electrical table on p.2,
 │                             the mechanical drawing with the mounting pattern on p.5)
@@ -131,6 +144,17 @@ FE_UFPR_4_0/
 | Power/flags | `GND` `PWR_FLAG` `+3V3` `+5V` `+12V` `+24V` `+15V_ISO` `-15V_ISO` |
 | Connector | `DSUB-37_Socket` (generated) `Conn_02x10_Odd_Even` |
 | Utility | `TestPoint` `MountingHole` `NetTie_2` `SolderJumper_2_Open` `SolderJumper_3_Open` |
+
+**Appended in S6 (47 → 49 symbols):** `OPA2376` (dual precision RRIO op-amp) and
+`Conn_02x04_Odd_Even` (KiCad `Connector_Generic`). New footprint:
+`Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal` (40 → 41). Library revalidated:
+**49/49 symbols (51 SVGs) and 41/41 footprints**.
+⚠ **`OPA2376` is a hand-flattened single-unit symbol**, like `UCC27524D` and `74LVC1G11` already
+were — one body, all 8 pins. KiCad's `Amplifier_Operational:OPA2376xxD` is a *derived* symbol
+(`extends "LM2904"`), and the MCP `import_symbol` copied it **without its parent**, producing a
+library that would not load at all. `kicad-cli sym export svg` caught it in one command. **Always
+re-export SVGs after any library edit, and never import a symbol whose definition contains
+`extends` without its parent.**
 
 **Appended in S5 (46 → 47 symbols):** `74LVC2G17` (KiCad `74xGxx`, dual non-inverting Schmitt buffer; DBV pinout 1=1A 2=GND 3=2A 4=2Y 5=VCC 6=1Y cross-checked against TI SCES381N). No new footprints — it reuses S4's `SOT-23-6`. Library re-validated: **47/47 symbols (49 SVGs, the 3-unit symbol renders 3) and 40/40 footprints**. S5 also normalised the leading-tab indentation of the four MCP-imported symbols (`UCC27524D`, `74LVC1G11`, `PGND_MOD`, `74LVC2G17`) — cosmetic only; KiCad's parser is whitespace-insensitive.
 
@@ -317,6 +341,30 @@ Price ≈ $0.85–1.46 / 1000, stock 0.5 M–37 M on every line. **0.1 % gain/di
 | **UCC27524DR** dual 5 A driver, SOIC-8 | C465729 | Ext | 9 550 | U5–U7. VDD 4.5–18 V; TTL input/enable thresholds **independent of VDD**; IN pins pull DOWN 120 kΩ, EN pins pull UP 200 kΩ; outputs LOW during UVLO |
 | **SN74LVC1G11DBVR** 3-in AND, SOT-23-6 | C22046 | Ext | 10 443 | U8 enable combiner. Pinout 1=A 2=GND 3=B 4=Y 5=VCC 6=C |
 
+### Parts appended in S6
+
+| Part | LCSC | JLC | Stock | Notes |
+|---|---|---|---|---|
+| **OPA2376AIDR** dual precision RRIO op-amp, SOIC-8 | C46316 | Ext | 10 213 | U12–U15. Chosen for output swing (the internal stage must reach **0.060 V**), 25 µV V_os / 0.25 µV/°C (drift *between* calibrations does not cancel), RRI for the 0.04 V common mode. Gain is resistor-set, so precision was not the binding constraint |
+| **20.0 kΩ 0603 0.1 %** Yageo RT0603BRD0720KL | C723637 | Ext | 210 576 | internal-stage input resistors |
+| **12.0 kΩ 0603 0.1 %** Yageo RT0603BRD0712KL | C326735 | Ext | 38 454 | internal-stage feedback + LEM-stage input + reference divider top |
+| **4.99 kΩ 0603 0.1 %** Yageo RT0603BRD074K99L | C723532 | Ext | 92 725 | LEM-stage feedback + reference divider bottom |
+| **47.0 Ω 1206 0.1 %** Yageo RT1206BRD0747RL | C870760 | Ext | 5 052 | LEM burden, **two in parallel per channel** = 23.5 Ω |
+| **Micro-Fit 3.0 2×4 right-angle** HC-MX3.0-2*4AW | C3294385 | Ext | 14 802 | J3, LEM harness. ⚠ Micro-Fit-compatible clone, not genuine Molex (43045-0812 has **8** in stock) — S12 must check its drawing against the footprint |
+
+⚠ **Do not consolidate the two 12 kΩ lines.** `C22790` (1 %, S3, U1's FB divider) and `C326735`
+(0.1 %, S6 gain positions) are different parts for different jobs.
+
+⚠ **Same trap as S3/S5, third time.** The "natural" 0.583 gain pair needs 5.76 kΩ (**3** in stock)
+or 5.90 kΩ (1 879). **20.0 k / 12.0 k** was picked from live stock — and happens to give
+G = 0.600 exactly, landing the ADC bias on exactly 1.500 V. See `S6_CURRENT_SENSE_DESIGN.md` §6.
+
+Everything else S6 places comes from the S1/S3 kit: 1 MΩ `C22936`, 100 Ω `C22775`, 0 Ω `C21189`,
+2.2 nF C0G `C107043`, 4.7 nF C0G `C85980`, 1 nF C0G `C106246`, 22 nF 0805 C0G `C77069`,
+100 nF `C14663`, 1 µF/0805 `C28323`, 10 µF/1206 `C13585`.
+**S6 introduces no new C0G value** — it reuses four existing lines, closing its half of the
+standing "standardise C0G values" item.
+
 ### Parts appended in S5
 
 | Part | LCSC | JLC | Stock | Notes |
@@ -419,6 +467,10 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
   `*GATE_EN*` `*GATE_ILOCK_3V3`**. Still 22 patterns; no netclass *values* changed (S9 owns those).
   Result: 51 Default / 17 Gate / 11 Analog / 8 Power_1A / 5 Power_3A, netlist byte-identical.
   **Any new pattern must start with `*` unless it names a global power net.**
+  **S6 update:** added **`*LEM_*`** → Analog (the LEM secondary nets `LEM_A/B/C_M`). **23 patterns.**
+  Verified empirically against the exported netlist, not by eye: all 27 `current_sense` signal nets
+  resolve to **Analog**, `SHIELD_LEM` stays Default (matching `SHIELD_DB37`). Project-wide:
+  125 nets = 52 Default / **43 Analog** / 17 Gate / 8 Power_1A / 5 Power_3A.
 - **Mounting:** board mounts on top of the inverter; mounting holes required (3.0 had none — only DB37 jackscrews). Pattern from the PrimeSTACK top-face drawing (S2/S9).
 
 ## Decision log (append-only: date — session — decision — rationale)
@@ -494,6 +546,24 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - 2026-08-29 — S5 — **[BUG FIX] Netclass patterns were silently matching nothing** — see the netclass section above. KiCad matches the **path-qualified** net name, so 24 nets (the whole gate bus, both Kelvin pairs, both buck switch nodes, the enables) sat on `Default`. Ten patterns `*`-prefixed; 28 nets moved to their intended class, none lost one, netlist byte-identical. **Lesson: a convention written into a config file is not a convention until something proves it fires.** The S1/S3/S4 patterns were reviewed by eye four times and the ones that were checked happened to be the ones that worked.
 - 2026-08-29 — S5 — **`module_status` captured: 54 components, 22 signal nets, ERC clean of every class except the documented label noise.** Netlist verified node-by-node against a hand-written expected-membership table (**22/22 exact, 0 mismatches**), and every module-side net lands on the DB37 pin the frozen table specifies. Root ERC **89 = 76 `label_dangling` + 13 `isolated_pin_label`**, down from S4's 127. The 15 dangling labels this sheet contributes are its own edge hierarchical labels, which carry no wire because the project captures connectivity as net-labels-at-pins — a cosmetic item, already logged, that should be fixed project-wide in one pass rather than per sheet.
 
+- 2026-08-30 — S6 — **[USER] LEM stays LA 100-P, and the sensors live on a separate board near the motor cables.** Our board provides ±15 V + `ISO_COM` and receives three sensor outputs through **one global connector**. The ±150 A range is knowingly short of the 260 A SW trip — roadmap option (a), taken deliberately.
+- 2026-08-30 — S6 — **[USER] The burden resistors are on THIS board**, so the harness carries the LEM secondary **current**, not a voltage. That single choice removes wire resistance, connector contact resistance and board-to-board ground shift from the measurement, makes an unshielded connector acceptable, and puts the gain element on the JLC-assembled board where it can be changed on the bench. **The remote board must not carry burdens.**
+- 2026-08-30 — S6 — **Burden = 47 Ω ‖ 47 Ω = 23.5 Ω per channel (C870760, 1206 0.1 %).** The LA 100-P datasheet (fetched this session, `datasheets/LEM-LA_100-P-v15.pdf`) bounds R_M in a **window**, not a maximum: at ±15 V and the full ±150 A range it is **20–25 Ω at 85 °C** (0–33 Ω at 70 °C). The *minimum* exists because the burden must take dissipation out of the transducer at high ambient. Lower current ceiling ⇒ wider window ⇒ more volts/amp. Fitting one resistor instead of two gives 47 Ω, legal to ±100 A — this is the user's "adjust it for different current levels" mechanism, and it is also why it is a parallel pair rather than one hot 0805 (0.132 W → 26 % of rating each).
+- 2026-08-30 — S6 — **Topology: two independent difference amps per channel, one 3-pad jumper selecting the OUTPUT.** The two sources are not interchangeable — the module sensor is a 2.5 V-biased signal (and 0.600 × 2.5 = **1.500 V**, so the ADC bias falls out of the attenuation for free), while the LEM burden is bipolar about 0 V and needs the bias injected. Sharing one amp would have meant switching signal, return **and** bias = nine jumper positions across three channels, where a wrong combination still reads plausibly. Cost of the chosen scheme is 3 op-amp halves and 12 resistors; it buys one jumper per channel, no wrong-but-plausible state, and **both stages live at once** on TP30–TP35 so the two sensors can be scoped against each other on the same current.
+- 2026-08-30 — S6 — **Both stages reject their own source return.** Internal: V2 = `ISNS_x_RAW`, V1 = `ISNS_RTN` (Kelvin, DB37 12/13), V_bot = GND. LEM: V2 = burden top, V1 = burden bottom (`ISO_COM`, Kelvin), V_bot = `ISNS_VREF`. This closes S2's Kelvin requirement structurally rather than by layout wish, and is what prevents 3.0's measured load-dependent IR-drop offset. **NT4 is `ISNS_RTN`'s only tie to GND.**
+- 2026-08-30 — S6 — **Internal gain 20.0 k/12.0 k = 0.600; LEM gain 12.0 k/4.99 k = 0.41583.** ADC: 4.800 mV/A internal (±300 A → ±1.44 V, span 0.06–2.94 V, clips ±312 A) and 4.886 mV/A LEM (+1.8 %). The residual mismatch is deliberate: matching exactly needs a **16 Ω** burden, which is legal at 70 °C but **below the 20 Ω floor at 85 °C**. A closer ratio from another manufacturer family would trade a *constant* 1.8 % (absorbed by one firmware constant) for a *differential tempco* between two thin-film families (up to 0.2 % over 40 °C, absorbed by nothing). **Same family beats closer ratio.**
+- 2026-08-30 — S6 — **[FINDING] The module's internal sensor scale is ambiguous in the datasheet, and the design was made not to care.** "4.9 V @ 300 A_RMS" reads either as 8.00 mV/A (clips at 312 A — below the module's own 424 A_pk rated current) or 5.66 mV/A (4.9 V at the peak of a 300 A_RMS sinewave). Gain is set for the **higher** sensitivity: if 8 mV/A is right the target is hit exactly; if 5.66 mV/A is right full scale becomes ±441 A and only range is wasted. **Neither reading clips.** Designing for the lower one would have clipped at 221 A. Also from the same line: the 4.7/5.0 V band is **±3 %**, so the module's own three sensors can differ by several percent — no 0.1 % board resistor fixes that, and firmware calibrates offsets but not gains. That is the reason the LEM path (±0.45 %) exists.
+- 2026-08-30 — S6 — **[RECORD CORRECTION] "internal current sensors ≈ 7.5–8 mV/A" was never bench-verified** and has been moved out of this file's verified list. `control_v2_pinmap.md` §6 *derives* it from an assumed 2.5 V bias and marks bias/polarity/limit as "must be verified on bench"; the genuinely bench-measured 78.6 mV/A belongs to the bench clamp+amp board, not the module. **Lesson, and it is S5's lesson again in another costume: a number inherited into a "verified" table is not verified until something points at the measurement.**
+- 2026-08-30 — S6 — **[S12 FIRMWARE BUG] `hw_control_v2.h` contradicts itself by 10×.** HEAD has `LEM_V_PER_A 0.0075f` directly beneath a comment block insisting 78.6 mV/A was bench-measured 2026-07-22 and that 8 mV/A was a 9.8× under-estimate. History is `0.008 → 0.0786 → 0.0075`; the commit that made the last change (`e46882a`) documented a phase-ID solver rewrite, not this. One of the two is wrong.
+- 2026-08-30 — S6 — **`ISNS_C_ADC` = ADCINA5 (ADC-A ch5) = BoosterPack J7-66**, suggested SOC1, over S5's other candidate ADCINA3 (J3-26). SPRUI77 Table 3 shows the current-sense block then occupies **five contiguous pins on one header** (J7-65…69 = ref B, I_C, I_B, I_A, ref A) across three different converters — adjacent, equal-length traces are exactly what channel-to-channel matching needs, and the per-ADC load stays balanced (A: SIN+I_w, B: I_u+COS, C: I_v+Vbus+NTC).
+- 2026-08-30 — S6 — **Offset-reference channels ADCINA4/ADCINB5 KEPT, with an actual job.** Both read the buffered `ISNS_VREF` (≈1.4685 V) through their own 100 Ω + 22 nF buckets, driven by U15B so the ADC's sampling charge never lands on the reference the LEM stages stand on. Same node on two different converters ⇒ firmware gets a live bias reading *and* a free ADC-A vs ADC-B cross-check. This is also why no reference IC is needed: the divider's absolute value does not matter (zero is captured at every CALIBRATE) and its drift is *observable*.
+- 2026-08-30 — S6 — **Anti-alias corner deliberately HIGH: 6.03 kHz (internal) / 6.79 kHz (LEM)**, in each difference amp's feedback with a matching cap across R2' so CMRR survives at HF. A single pole is a weak anti-alias filter at any corner (−6 dB at 10 kHz); what actually rejects the switching ripple is **synchronous sampling at the PWM peak**, which the firmware already does. Phase lag in *current* feedback, by contrast, rotates the measured current vector and costs torque accuracy — 9.4° at the 1 kHz max electrical fundamental instead of 19.5° at a 3 kHz corner.
+- 2026-08-30 — S6 — **±15 V budget closed: 111 mA/rail worst case vs ±200 mA available** (3 × 12 mA quiescent + 75 mA peak secondary), 1.8× margin — S3's URA2415YMD-6WR3 survives. ⚠ Correcting a number I gave the user earlier in the session: for a balanced 3-phase set the max instantaneous sum of the *positive* secondary currents is **1.0 × peak, not 1.73 ×**.
+- 2026-08-30 — S6 — **[SAFETY] With a LEM source selected the software OC trip is INERT.** The LA 100-P saturates at ±150 A against a 260 A `MOTOR_OC_TRIP_A`, and a larger burden lowers that ceiling. Protection there is the module's own 625 A_pk hardware shutdown (<15 µs) plus the `FLT_OC` X-BAR trip from S5. The internal sensors *do* cover ±312 A, so the **default jumper position (internal) is also the one that keeps the SW trip meaningful.** Goes in the S12 handoff, not just on the schematic.
+- 2026-08-30 — S6 — **Connector: Deutsch endorsed for the vehicle interface, but the board carries a Micro-Fit 3.0 2×4 right-angle (C3294385).** The usual analog objection to Deutsch is neutralised by the current-mode harness, so the team-standard argument wins — **the DTM 8-way stays at the bulkhead**. It is not on the PCB because TE's product drawing for `DTM13-08PA-R004` is login-gated and the only obtainable dimensions are marketing-level; deriving a through-hole pattern from those would repeat exactly what S1 rejected 3.0's `F37HP` for. One-part swap if the drawing turns up. ⚠ **Key or size the LEM connector differently from S7's encoder connector** — mis-mating ±15 V into an RM44AC destroys it.
+- 2026-08-30 — S6 — **[TOOLING] The MCP `import_symbol` produced an unloadable symbol library.** KiCad's `OPA2376xxD` is a *derived* symbol (`extends "LM2904"`) and the tool copied it without its parent; `kicad-cli sym export svg` went from 49 SVGs to 0. Fixed by flattening the parent's body under the child's name, matching how `UCC27524D` and `74LVC1G11` already sit in this library. **The `kicad-cli` re-export after every library edit is not ceremony — it caught a total library failure in one command.**
+- 2026-08-30 — S6 — **`current_sense` captured: 94 components, 42 nets, netlist verified node-by-node against a hand-written expected-membership table (42/42 exact, 0 mismatches).** Root ERC **70 = 66 `label_dangling` + 4 `isolated_pin_label`**, down from S5's 89 and containing **no other violation class**. LCSC on 94/94 (82 purchasable + 12 `NOFIT`). Transfer functions, the R_M window, the jumper table, the ±15 V budget, the SW-trip caveat and six S11 layout rules are written onto the sheet as text notes.
+
 ## Open items (owner session in brackets; struck items resolved with the session noted)
 
 - ~~[S2] BoosterPack header gender~~ — **resolved S2:** `PinSocket_2x10`, bottom side, LaunchPad below.
@@ -501,7 +571,7 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - **[user] DB37 purchasable MPN** for the consigned list. Geometry (female, right-angle, 2.77 × 2.54 mm, 63.5 mm jackscrews) is de-facto validated by 3.0 mating the real harness **and now by the datasheet's "X1 = 37 contacts, SUB-D, male" with UNC 4-40 female thread** — only the buyable part number is open. If the team ever switches to a *vertical* part, the row pitch becomes 2.84 mm and the footprint must be re-derived.
 - ~~[S3] Schottky vs ideal-diode/load-switch for the LaunchPad 5 V feed~~ — **resolved S3:** plain Schottky **SS34, C8678 (JLC Basic)**; V_f ≈ 0.35 V at ~200 mA leaves the LaunchPad ≈4.63 V, ample for its own 3.3 V LDO. **Physically placed in S8** on the `launchpad` sheet at the header.
 - ~~[S3] X5R vs X7R for bulk rails~~ — **resolved S3:** X7R wherever a Basic/Preferred X7R exists at the needed value (100 nF, 47 nF, 1 µF); X5R for the bulk ≥4.7 µF where JLC Basic offers nothing else, with ≥2× voltage derating (50 V parts on the 24 V rail, 25 V parts on 5 V/3V3). AMS1117 dissipates 0.25 W → ≈85 °C junction at the 70 °C worst-case local ambient.
-- **[S6/S7] Standardise C0G filter values** across sheets to limit Extended part count. **S5 added none** — it reuses 1 nF (`C106246`, S4's line) for every fault/EMC cap and 22 nF 0805 (`C77069`, an S1 kit line) for both ADC charge buckets. S6/S7 should reuse those two before opening a third.
+- **[S7] Standardise C0G filter values** across sheets to limit Extended part count. **S5 and S6 both added none.** The standing set is 1 nF `C106246` (EMC at connectors), 2.2 nF `C107043` and 4.7 nF `C85980` (active anti-alias poles), 22 nF 0805 `C77069` (ADC charge buckets). **S7's matched SIN/COS RCs should come from these four before opening a fifth.**
 - **[S8] CAN GPIO pair** for `CAN_TX_3V3`/`CAN_RX_3V3` — pick CAN-mux-capable GPIOs that reach the BoosterPack headers (SPRUI77 Tables 1–4 in `datasheets/`); note the LaunchPad's own CAN transceiver hangs on GPIO12/17 via 0 Ω links (J12) — avoid or account for it.
 - **[S12] Re-verify `C5369735`** (URA2415YMD-6WR3 isolated module) — only **362 in stock** and it is a consigned through-hole part. Highest supply risk on the board.
 - ~~[S4] `+24V_MOD` land it on DB37 pins 8/26~~ — **done S4** (pins 8/26 per the datasheet; return on 10/28 as `PGND_MOD`).
@@ -511,8 +581,17 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - ~~[S5] Fault pull-up value~~ — **resolved S5: 4.7 kΩ to `+13V5_GATE`** (2.84 mA sink), then 10 k/4.7 k into an SN74LVC2G17 Schmitt. 2.45 V / 2.91 V of noise margin referred to the DB37 pin.
 - ~~[S5] `NTC_1_RAW` divider must survive 10 V~~ — **resolved S5: 12 k / 4.7 k**, 10.000 V → 2.814 V (93.8 % range), clips at 10.66 V, 0.60 mA load. ADC pin `ADCINC3` (J3-24).
 - **[S8] `vehicle_io` must produce `SW_MAIN_3V3`** as a clean 3.3 V logic level with all contact conditioning on its side — `gate_drive` consumes it as a hardware interlock term with no local filtering by design.
-- **[cosmetic, any session] `power` sheet readability** — connectivity is by net labels at pins, not drawn wires. Electrically verified (ERC 0, netlist checked node-by-node) but visually dense around U1/U2 where 8–9 labels converge. A wire-stub pass fanning the IC pins out would make it presentation-quality.
-- **[S6] Third current channel:** **ADC-A SOC1 is free** and keeps the three converters balanced (A: SIN+Iw, B: Iu+COS, C: Iv+Vbus+NTC). Candidate pins ADCINA3 (J3-26) / ADCINA5 (J7-66).
+- **[cosmetic, any session] `power` and `current_sense` sheet readability** — connectivity is by net labels at pins, not drawn wires. Both are electrically verified (ERC clean of real classes, netlists checked node-by-node) but visually dense: `power` around U1/U2 where 8–9 labels converge, `current_sense` in the three channel blocks where a 10 mm row pitch puts value fields and net labels on top of each other. A wire-stub pass plus a wider row pitch would make them presentation-quality. **Not attempted in S6 on purpose** — the labels sit exactly on pin endpoints, so a bulk move risks silently detaching a verified netlist for a cosmetic gain.
+- ~~[S6] Third current channel~~ — **resolved S6: `ISNS_C_ADC` = ADCINA5 (J7-66), suggested ADC-A SOC1.** Puts the whole current block on five contiguous J7 pins (65–69) across three converters.
+- ~~[S6] LA 100-P ±150 A range vs the 260 A SW trip~~ — **resolved S6 (user): accept.** LEM path is a validation instrument; see the SAFETY decision above.
+- ~~[S6] Offset-ref outputs ADCINA4/B5 keep or drop~~ — **resolved S6: KEEP**, both reading the buffered `ISNS_VREF` on two different converters.
+- ~~[S6] LEM mounting location + secondary connector~~ — **resolved S6 (user): remote sensor board, one global 8-way connector.**
+- **[user / S7] Key or size the LEM connector differently from the encoder connector.** Both are candidates for Deutsch; mis-mating ±15 V into an RM44AC destroys it. Decide the pair together in S7.
+- **[user, if wanted] Board-mounted Deutsch instead of J3's Micro-Fit.** Needs TE's product drawing for `DTM13-08PA-R004` (login-gated) so the through-hole pattern can be derived honestly rather than from marketing dimensions. One-part swap — nets and stages are unaffected.
+- **[S12] Verify `C3294385`** (Micro-Fit 3.0 2×4 right-angle) — it is a Micro-Fit-*compatible* clone, not genuine Molex; check its drawing against `Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal` before ordering.
+- **[user, LEM board] Interface contract:** the remote board needs three LA 100-P, ±15 V / `ISO_COM` decoupling, and wiring — **and must not carry burden resistors.** Both burdens per channel are on this board by design.
+- **[S12 firmware] `LEM_V_PER_A` is self-contradictory by 10× in `hw_control_v2.h`** — the define says 7.5 mV/A, the comment directly above says 78.6 mV/A bench-measured. Resolve before the handoff; S6 supplies two new per-source constants anyway.
+- **[S10/S11] Reclaim ADC range after bench item #3.** If the module's sensors measure 5.66 mV/A rather than 8.00, the internal stages use only 70 % of the ADC span; one resistor per channel (R65/R76/R88) fixes it. No other change.
 - **[S12 firmware] `FAULT_OC_A/B/C` do not identify the faulting phase** — any leg's OC asserts all three. Implement the decode table in `S5_MODULE_STATUS_DESIGN.md` §1.2, and note the module does **not** self-shutdown on over-temperature.
 - **[cosmetic, project-wide] Hierarchical labels carry no wire stub on any sheet**, which is the sole cause of the 76 `label_dangling` ERC errors. One consistent wire-stub pass across `power` / `gate_drive` / `module_status` clears them; doing it per-sheet would leave the project inconsistent. Supersedes the older `power`-only readability note below.
 - **[cosmetic, any session] A3 title-block `Title` field overflows its box on all seven sheets** — the S1 sheet titles are longer than the block. Harmless on screen, visible in PDF/print.

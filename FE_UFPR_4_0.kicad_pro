@@ -686,6 +686,10 @@
       },
       {
         "netclass": "Analog",
+        "pattern": "*LEM_*"
+      },
+      {
+        "netclass": "Analog",
         "pattern": "*_ADC"
       },
       {
