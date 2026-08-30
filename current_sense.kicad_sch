@@ -1424,6 +1424,465 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "FE_UFPR_4_0:Conn_02x06_Counter_Clockwise"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 1.27 7.62 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_02x06_Counter_Clockwise"
+				(at 1.27 -10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, double row, 02x06, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_2x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_02x06_Counter_Clockwise_1_1"
+				(rectangle
+					(start -1.27 6.35)
+					(end 3.81 -8.89)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 5.207)
+					(end 0 4.953)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 2.667)
+					(end 0 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -7.493)
+					(end 0 -7.747)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 5.207)
+					(end 2.54 4.953)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 2.667)
+					(end 2.54 2.413)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 0.127)
+					(end 2.54 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -2.413)
+					(end 2.54 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -4.953)
+					(end 2.54 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start 3.81 -7.493)
+					(end 2.54 -7.747)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -7.62 0)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -7.62 180)
+					(length 3.81)
+					(name "Pin_7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -5.08 180)
+					(length 3.81)
+					(name "Pin_8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 -2.54 180)
+					(length 3.81)
+					(name "Pin_9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 3.81)
+					(name "Pin_10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 2.54 180)
+					(length 3.81)
+					(name "Pin_11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 5.08 180)
+					(length 3.81)
+					(name "Pin_12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(text "=== SOURCE SELECT JP3 / JP4 / JP5 (exclusive 3-pad) ===\n     1-2 = module internal sensor   (DEFAULT - bridge at fab)\n     2-3 = external LEM board\nBoth stages run at all times; the jumper only picks what the ADC sees.\nTP30..TP35 expose both outputs for A/B comparison on the bench.\n\n=== J3 LEM INTERFACE + ISOLATED SUPPLY BUDGET ===\nJ3 2x4:  1=+15V_ISO  2=-15V_ISO  3,4=ISO_COM\n         5=LEM_A_M   6=LEM_B_M   7=LEM_C_M   8=SHIELD_LEM\nWorst case per rail: 3 x 12 mA quiescent + 75 mA peak secondary\n   = 111 mA vs URA2415YMD-6WR3 +/-200 mA  ->  1.8x margin.\n(For a balanced 3-phase set the max instantaneous sum of the positive\n secondary currents is 1.0 x peak, not 1.73 x.)\nBurden return is ISO_COM, NOT GND: the whole secondary loop stays\ninside the isolated island. ISO_COM meets GND only at NT1 (power).\nSHIELD_LEM: R103 0R fitted = direct tie (S2 policy for LEM shields).\nRemove R103 to fall back to the C96 / R104 1nF || 1M soft tie."
 		(exclude_from_sim no)
@@ -1550,16 +2009,6 @@
 			(justify left bottom)
 		)
 		(uuid "011d51d9-f980-4677-b92b-c44f8bc071e0")
-	)
-	(label "SHIELD_LEM"
-		(at 317.5 219.71 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "062935ff-e399-4bf5-b84a-377df784a331")
 	)
 	(label "ISNS_C_INT"
 		(at 257.81 158.75 180)
@@ -1951,16 +2400,6 @@
 		)
 		(uuid "48763297-0f3b-45a2-a1a2-a4ee052919e7")
 	)
-	(label "LEM_B_M"
-		(at 317.5 217.17 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "4a3a1ad5-cc88-4560-85fd-22fa5325abec")
-	)
 	(label "ISNS_C_SEL"
 		(at 69.85 189.23 90)
 		(effects
@@ -2190,16 +2629,6 @@
 			(justify right bottom)
 		)
 		(uuid "72166fb5-ea32-4d93-9291-9ec6ca1c4d82")
-	)
-	(label "LEM_C_M"
-		(at 304.8 219.71 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "73e21558-8338-4bf4-97ab-ab2284aae283")
 	)
 	(label "ISNS_C_RAW"
 		(at 69.85 140.97 270)
@@ -2791,16 +3220,6 @@
 		)
 		(uuid "d7529948-85d4-4594-93e3-8cb019813373")
 	)
-	(label "LEM_A_M"
-		(at 304.8 217.17 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "dc7e1db2-2708-4843-a4bd-2f86929dd332")
-	)
 	(label "ISNS_B_INT_P"
 		(at 100.33 96.52 270)
 		(effects
@@ -3095,28 +3514,6 @@
 		(uuid "11266beb-74f2-4c1a-b48e-9d04f9aacba2")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 100.33 158.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+15V_ISO"
-		(shape bidirectional)
-		(at 304.8 212.09 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "1403800a-3d4c-410f-a29d-d01becfbfae7")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 304.8 212.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3919,28 +4316,6 @@
 			)
 		)
 	)
-	(global_label "ISO_COM"
-		(shape bidirectional)
-		(at 304.8 214.63 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "95a7f92d-9e45-47a9-8671-9e9e022d3bdc")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 304.8 214.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+5V"
 		(shape bidirectional)
 		(at 245.11 199.39 270)
@@ -4161,28 +4536,6 @@
 			)
 		)
 	)
-	(global_label "-15V_ISO"
-		(shape bidirectional)
-		(at 317.5 212.09 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "da07d4e7-b9a7-48d5-aa01-b78ed8c0d27c")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 317.5 212.09 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
 	(global_label "+5V"
 		(shape bidirectional)
 		(at 245.11 39.37 270)
@@ -4217,28 +4570,6 @@
 		(uuid "df6577d3-9730-4de3-9f94-9b6b49c90356")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 100.33 233.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "ISO_COM"
-		(shape bidirectional)
-		(at 317.5 214.63 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e173bf27-41a2-4764-b862-dae6d8c37386")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 317.5 214.63 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5101,114 +5432,6 @@
 			(project "FE_UFPR_4_0"
 				(path "/0cde0ae3-e31e-4592-8212-8a072a248a80/4d347022-ba2f-49b9-8797-79ffc1b609ae"
 					(reference "U14")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "FE_UFPR_4_0:Conn_02x04_Odd_Even")
-		(at 309.88 214.63 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0d21e113-89b8-49c0-9464-2c62f2481d1a")
-		(property "Reference" "J3"
-			(at 309.88 212.09 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "LEM 2x4 Micro-Fit"
-			(at 309.88 217.17 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "FE_UFPR_4_0:Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal"
-			(at 309.88 214.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 309.88 214.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic connector, double row, 02x04, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 309.88 214.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C3294385"
-			(at 309.88 214.63 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "381d1e21-ead3-407a-b4b9-bf6694289aa9")
-		)
-		(pin "2"
-			(uuid "e14786c9-b7cb-4e1a-b937-6b4d7ee03457")
-		)
-		(pin "3"
-			(uuid "94097775-c9dd-4244-965f-43923d39c513")
-		)
-		(pin "4"
-			(uuid "6c012ad5-7020-4f0c-8a99-11aebd2e8041")
-		)
-		(pin "5"
-			(uuid "e778bc8e-bbd6-4bad-9525-5a7d6047e62a")
-		)
-		(pin "6"
-			(uuid "e4b8b2cf-033e-4324-9c87-55e8893f957e")
-		)
-		(pin "7"
-			(uuid "6348f772-6735-4e55-84fc-e7bc06bd36e4")
-		)
-		(pin "8"
-			(uuid "703549c3-b621-4c48-82cc-9e7a2b3de09d")
-		)
-		(instances
-			(project "FE_UFPR_4_0"
-				(path "/0cde0ae3-e31e-4592-8212-8a072a248a80/4d347022-ba2f-49b9-8797-79ffc1b609ae"
-					(reference "J3")
 					(unit 1)
 				)
 			)
@@ -13150,6 +13373,267 @@
 				)
 			)
 		)
+	)
+	(symbol
+		(lib_id "FE_UFPR_4_0:Conn_02x06_Counter_Clockwise")
+		(at 309.88 214.63 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a4dd620c-ea46-4322-98ed-09f1e6aec69a")
+		(property "Reference" "J3"
+			(at 311.15 222.25 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LEM DTM13-12PA-R005 key A"
+			(at 311.15 204.47 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DTM13-12P-R005_Horizontal"
+			(at 309.88 214.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 309.88 214.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, double row, 02x04, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 309.88 214.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "CONSIGNED"
+			(at 309.88 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "DTM13-12PA-R005"
+			(at 309.88 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "TE Connectivity / DEUTSCH"
+			(at 309.88 214.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2d180bd2-5654-467b-807b-9e49f505cafe")
+		)
+		(pin "10"
+			(uuid "a9485386-0a91-479f-9734-3144fe150da4")
+		)
+		(pin "11"
+			(uuid "f9643f64-96e1-4859-b035-4f640f0dbf63")
+		)
+		(pin "12"
+			(uuid "3b185718-21f9-4392-8c54-2ca28f1f5ff3")
+		)
+		(pin "2"
+			(uuid "981c8fcf-5e96-43db-9d59-8b4cd27e95ba")
+		)
+		(pin "3"
+			(uuid "c18d5de3-bfcf-40b1-8544-736149ef2b1c")
+		)
+		(pin "4"
+			(uuid "f4bc0a29-6fc2-424a-b29b-61f146bf9211")
+		)
+		(pin "5"
+			(uuid "23f1f79b-e7db-41a3-a1fd-f4b224a721c1")
+		)
+		(pin "6"
+			(uuid "9c5198d6-c741-49d9-b020-8f31094b234e")
+		)
+		(pin "7"
+			(uuid "e7d11a23-c7b5-4e91-9609-3965e8f0e4af")
+		)
+		(pin "8"
+			(uuid "1ebaa8d4-3684-4a78-9099-44a011073fdb")
+		)
+		(pin "9"
+			(uuid "0ee388d1-42f4-4d90-a04c-e416baaeb659")
+		)
+		(instances
+			(project "FE_UFPR_4_0"
+				(path "/4ef35795-48f9-4a02-b555-d6208bed3cb8"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(global_label "+15V_ISO"
+		(at 304.8 209.54999999999998 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bdeb5e3a-fb17-4218-98c3-63d4597af25a")
+	)
+	(global_label "-15V_ISO"
+		(at 304.8 219.71 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b470a24b-4bb7-47f1-8ae5-e7214a0184f1")
+	)
+	(global_label "ISO_COM"
+		(at 317.5 219.71 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dcefa1f8-05a4-48e0-b36f-fee08ad12c10")
+	)
+	(global_label "ISO_COM"
+		(at 317.5 217.17 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e6fc2fbd-9233-4e98-8d50-28e5e99f00dd")
+	)
+	(global_label "ISO_COM"
+		(at 317.5 214.63 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "dd5d5d1e-1377-4280-a450-71f041204556")
+	)
+	(global_label "ISO_COM"
+		(at 317.5 212.09 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "65e4f990-55d4-4b59-a1b9-57c7061d8d27")
+	)
+	(global_label "ISO_COM"
+		(at 317.5 209.54999999999998 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "607efd43-e93d-4000-87c8-4236a5d7191e")
+	)
+	(label "LEM_A_M"
+		(at 304.8 212.09 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "22b31059-372e-4911-b1ab-3f3516aede20")
+	)
+	(label "LEM_B_M"
+		(at 304.8 214.63 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d2ca5530-99e6-4f08-afdf-2e6cd231f608")
+	)
+	(label "LEM_C_M"
+		(at 304.8 217.17 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "458d9fe6-ecaa-46fe-b223-5f2688ef9e44")
+	)
+	(label "SHIELD_LEM"
+		(at 304.8 222.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2f1195e6-f929-462a-8fa6-30d4d2649b87")
+	)
+	(no_connect
+		(at 317.5 222.25)
+		(uuid "75f25096-41cd-45f1-9232-14bb14585305")
+	)
+	(text "J3 REVISED IN S7: Micro-Fit 3.0 2x4 -> DEUTSCH DTM13-12PA-R005, 12-way right-angle, KEY A (consigned)\n  1  +15V_ISO      12  ISO_COM       S6 chose Micro-Fit only because TE's DTM13 drawing was\n  2  LEM_A_M       11  ISO_COM       believed to be login-gated. It is not: TE's DocumentDelivery\n  3  LEM_B_M       10  ISO_COM       endpoint serves the dimensioned customer drawing freely, so\n  4  LEM_C_M        9  ISO_COM       the footprint is now derived honestly and the team-standard\n  5  -15V_ISO       8  ISO_COM       connector the user specified is back on the board.\n  6  SHIELD_LEM     7  n/c\n  The 12-way's four spare ways are spent on ISO_COM so that EVERY rail and EVERY sensor output has\n  its return on the physically ADJACENT contact (1-12, 2-11, 3-10, 4-9, 5-8). The 2x4 could not do this.\n  KEYING: J3 is key A, J4 (encoder) is key B. A key-A plug cannot enter a key-B receptacle, so the\n  hazard CLAUDE.md flags -- +/-15 V mis-mated into an RM44AC -- is now prevented MECHANICALLY by the\n  connector itself rather than by way-count, and it survives any future re-pinning of either harness.\n  ** Cavity numbering is extrapolated from TE's 8-way drawing; confirm against the molded numbers. **"
+		(exclude_from_sim no)
+		(at 266.7 233.68 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "12c3acaf-6c84-4073-aa43-7e5b3fe4bf13")
 	)
 	(sheet_instances
 		(path "/"

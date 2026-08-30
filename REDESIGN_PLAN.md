@@ -13,11 +13,12 @@
 
 ```
 S1 Foundation ─► S2 Architecture ─► S3 Power ─► S4 Gate drive ─► S5 Module status
-   ✅              ✅                 ✅            ✅                ◄── next
+   ✅              ✅                 ✅            ✅                ✅
                        │                                               │
   BENCH DAY (before S5/S6/S7) ────────────► S6 Current sense ─► S7 Encoder
-                       │                                               │
+   (now confirm-only)  │                       ✅                  ✅
                        └────────► S8 Integration & pin-map freeze ◄────┘
+                                       ◄── next
                                             │
                           S9 Stackup & placement ─► S10 Routing: power/gate
                                             │               │
@@ -226,7 +227,47 @@ and the *default* jumper position is the internal sensor, which does cover ±312
 
 ---
 
-## S7 — Encoder front-end (RM44AC) + connector
+## S7 — Encoder front-end (RM44AC) + connector  ✅ **DONE (2026-08-30)**
+
+**Outcome:** `encoder` captured — **46 components, 16 nets, netlist verified node-by-node
+(16/16 exact, 0 mismatches)**, root ERC **66 = 62 `label_dangling` + 4 `isolated_pin_label`**,
+*down* from S6's 70 and containing no other violation class. Deliverable =
+[`S7_ENCODER_DESIGN.md`](S7_ENCODER_DESIGN.md).
+
+**The prerequisite the roadmap called mandatory was met, and it removed the roadmap's own preferred
+topology.** The RM44AC datasheet says the outputs are **single-ended** (2.2 ±0.2 Vpp on a 3/5·Vdd
+offset, 720 Ω internal series impedance), so "differential → INA receive" was never available; and
+the factory cable has **4 cores with no spare conductor**, so a Kelvin ground return is physically
+impossible rather than merely inconvenient. What survives of it — 3.4 mV of static cable drop — is
+removed by the ALIGN bias capture. Bench items #7–#9 now only confirm.
+
+**Deviations from plan, logged in `CLAUDE.md`:** the amplitude target moved **1.4 V → 1.278 V**
+(`RES_SINCOS_AMPL_CODE` 1911 → 1745). At 1.4 V nominal a legal max-amplitude encoder clips
+(peak code 4124 > 4095); sizing for the worst case costs 6 % of range and buys **85.2 % range use
+with clipping impossible anywhere in the 2.0–2.4 Vpp band**, against 3.0's 48 % *with* clipping.
+The "~1 kHz corner is safe" line in the plan was also wrong in its reasoning: at 1 sin/cos cycle per
+mechanical revolution a 1 kHz pole costs **57° electrical** at 6000 rpm. The pole is at **6.03 kHz**
+and the real requirement is that SIN and COS **match** — a matched lag is a delay the firmware
+already compensates, a mismatch is correctable by nothing.
+
+**The session's defining event was a user challenge, not a datasheet.** Offered Micro-Fit for the
+encoder, the user pointed out they had specified Deutsch. Re-testing S6's stated blocker took one
+HTTP request: TE's customer drawings are **not login-gated**. Both vehicle connectors are now
+board-mounted Deutsch — J3 (LEM) `DTM13-12PA-R005` **key A**, J4 (encoder) `DTM13-12PB-R005`
+**key B** — from one hand-derived footprint, because the two part numbers are dimensionally
+identical and differ only in the key. That also upgrades the ±15 V mis-mate protection from a
+way-count convention to a mechanical property of the connector. S6's J3 was reworked and re-verified
+pin-by-pin as part of this session.
+
+**Traps caught during capture:** (a) 33 **silent** `footprint_link_issues` — this library's parts are
+`R_0603_1608Metric`, not the `R_0603` the CLAUDE.md inventory abbreviates, and the mis-assigned parts
+place, wire and netlist perfectly while pointing at a footprint that does not exist; only
+`kicad-cli sch erc --severity-all` surfaced them. (b) The **DTM13 board-mount family exists only in
+8-way and 12-way**, found by probing TE's repository exhaustively — a 4-way would have been the
+obvious guess and does not exist.
+
+### Original plan (for reference)
+
 
 **Objective:** Rebuild the encoder subsystem from zero (3.0: channel B deleted, channel A half-reworked outside the board outline): hit **1.5 V bias / ~1.4 V amplitude** on SIN→ADCINA2, COS→ADCINB2, with matched anti-alias RCs, and select the vibration/noise-optimized connector.
 
