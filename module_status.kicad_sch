@@ -892,1852 +892,9 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "NTC / TEMPERATURE  (0-10 V)"
-		(exclude_from_sim no)
-		(at 240.03 96.52 0)
-		(effects
-			(font
-				(size 1.8 1.8)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "02ef5600-e990-4908-ac6b-b45e87095aa3")
-	)
-	(text "VBUS FRONT-END   DB37 pin 7, Kelvin return pin 11\nModule sensor: 6.4 / 6.5 / 6.6 V at 900 V, load max 5 mA.\nR57 2.20k 0.1% / R58 1.50k 0.1%  (Yageo RT0603B, 25 ppm, one family\n  so the ratio tracks over temperature).\n  gain 0.405405, Rth 892 R, module load 1.95 mA = 39 % of the limit.\n  3.000 V at the ADC = 1024.6 V of bus.  1000 V -> 2.928 V -> code 3998.\nR59 3.3k + C59 22nF C0G = anti-alias + charge bucket AT the ADC pin.\n  fc 1726 Hz;  S/H charge-share 2.8 codes;  DC error 2.6 codes.\n  The S/H sees the bucket, not the divider => 68 ns settling.\n  *** the 512-cycle ACQPS workaround can be dropped (~320 ns is ample) ***\nAll three documented 3.0 defects are fixed here:\n  (1) source impedance 34.5k -> 892 R + a bucket at the pin\n  (2) Kelvin return on its own DB37 pin, tied to GND at NT3 and nowhere\n      else - the -52 mV load-dependent offset came from sharing the\n      power return with 2.2 A of module aux current\n  (3) rescaled: VBUS_DIVIDER_RATIO 297.14 -> 341.538\nIf the sensor ever rails to 15 V the ADC clamp takes 0.63 mA (limit 2 mA)."
-		(exclude_from_sim no)
-		(at 338 205.36 0)
-		(effects
-			(font
-				(size 0.9 0.9)
-			)
-			(justify left bottom)
-		)
-		(uuid "04007b0a-6aa8-4b5f-9d5c-ac65571995f5")
-	)
-	(text "S10 LAYOUT NOTES (module status)\n1. R42-R46 (pull-ups) and C44-C48 (1nF) belong AT THE DB37 - they terminate the\n   harness where it enters.  Ra/Rb/Ca and U9-U11 group together at the far end.\n2. C58 at DB37 pins 7/11 and C60 at pin 29, each returned to its own reference.\n3. VBUS_SNS_RAW + VBUS_RTN route as a PAIR into the analog partition.  NT3 is the\n   ONLY GND tie for VBUS_RTN: keep it within a few mm of R58 and let no other\n   current share that copper.  This is what fixes 3.0's -52 mV Vbus offset.\n4. C59 / C61 (22nF buckets) hard against the BoosterPack ADC pins J3-27 / J3-24,\n   ground vias straight into the analog partition - they are the S/H charge source.\n5. C54-C56 within 2 mm of each 74LVC2G17 VCC/GND pair; C57 is the local 3V3 bulk.\n6. The five FLT_*_15V traces carry 13.5 V edges - keep them off the analog partition."
-		(exclude_from_sim no)
-		(at 105 264.6 0)
-		(effects
-			(font
-				(size 0.9 0.9)
-			)
-			(justify left bottom)
-		)
-		(uuid "5a64a402-47cb-43ba-a0a1-457d32fb304d")
-	)
-	(text "NTC / TEMPERATURE   DB37 pin 29 - the module's ONLY temperature output\nDatasheet: 10 V at T_NTC = 82 C, inverter section, load max 5 mA.\nThe optional-components table (p.3) shows only the inverter-section sensor\nfitted, so pin 29 is the NTC2 channel: the divider must hold off 10 V\ncontinuously (3.0 read pin 9 instead, which is a 15 V supply output).\nR60 12k / R61 4.7k -> gain 0.281437.  10.000 V -> 2.814 V = 93.8 % of the\n  3.0 V range; clips at 10.66 V of module output.  Load 0.60 mA.\nR62 3.3k + C61 22nF C0G -> fc 1083 Hz, the \"slow channel ~1 kHz\" target.\nReferenced to board GND, not to VBUS_RTN: keeping the Kelvin line single-\n  purpose is worth more than the ~1 % FS error a module-GND shift adds here.\nADC pin: ADCINC3 = BoosterPack site-1 J3-24 (Vbus is ADCINC2 = J3-27, same\n  header).  Suggested SOC: ADC-C SOC2, i.e. after the SOC1 (Vbus) EOC that\n  fires the 10 kHz ISR, so this slow channel never delays the control loop."
-		(exclude_from_sim no)
-		(at 214 227.52 0)
-		(effects
-			(font
-				(size 0.9 0.9)
-			)
-			(justify left bottom)
-		)
-		(uuid "7173d8a6-49e6-45ee-bea7-099ee5aea308")
-	)
-	(text "FIRMWARE HANDOFF (hw_control_v2.h) - written by S5\n  MODULE_FAULT_ACTIVE_LOW   1 -> 0      fault = HIGH; receiver chain is non-inverting\n  Input X-BAR trip polarity must be inverted to match (OSHT1-3, GPIO25/27/26)\n  VBUS_DIVIDER_RATIO      297.14 -> 341.538   V(bus) per V(ADC)\n  VBUS_VOLTS_PER_CODE     3.0 * 341.538 / 4096 = 0.250150 V/code, full scale 1024.6 V\n  VBUS_OFFSET_CODE        11.4 -> re-measure; the old value was a divider artefact\n  NTC channel             ADCINC3 (ADC-C ch3), BoosterPack J3-24; suggest ADC-C SOC2\n  NTC_VOLTS_PER_CODE      3.0 / 0.281437 / 4096 = 0.002602 V(module)/code\n                          10 V = 82 C; the channel clips at 10.66 V of module output\n  Vbus ACQPS              the 512-cycle S/H workaround is no longer needed\n  Sensor tolerance 6.4/6.5/6.6 V at 900 V is +/-1.5 % => trim VBUS_DIVIDER_RATIO\n  on the bench against a meter before trusting absolute bus volts."
-		(exclude_from_sim no)
-		(at 20.32 266.06 0)
-		(effects
-			(font
-				(size 0.9 0.9)
-			)
-			(justify left bottom)
-		)
-		(uuid "7de39dda-c18a-42e4-932a-0d66780b9c55")
-	)
-	(text "FAULT RECEIVERS  (5 x)  -  DB37 open-collector, FAULT = HIGH"
-		(exclude_from_sim no)
-		(at 74.93 15.24 0)
-		(effects
-			(font
-				(size 1.8 1.8)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "aab2b17c-cd4d-4695-aa29-f48c30ff26b5")
-	)
-	(text "+3V3 SUPPLY / DECOUPLING  -  U9-U11 power units"
-		(exclude_from_sim no)
-		(at 25.4 218.44 0)
-		(effects
-			(font
-				(size 1.8 1.8)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "ce91d27a-17ec-4a70-96ba-be7c0d320a49")
-	)
-	(text "FAULT RECEIVERS - 5 identical channels, DB37 pins 2 / 22 / 5 / 6 / 16\nModule output is open collector, \"logic low = no fault\" (datasheet p.2)\n=> FAULT = HIGH, sink <= 15 mA, <= 15 V.  Pull-up defines the HIGH level.\nChain: DB37 - Rpu 4.7k to +13V5_GATE - C 1nF to GND - Ra 10k - node _DIV\n       - Rb 4.7k and C 1nF to GND - 74LVC2G17 Schmitt - 3V3 GPIO.\nLevels at the DB37 pin:  no fault 0.15 V (module sinks 2.84 mA) / fault 10.23 V.\nReferred to that pin the receiver trips between 2.60 V and 7.32 V worst case\n  => 2.45 V of margin from the LOW state, 2.91 V from the HIGH state.\n  This is why the pull-up goes to 13.5 V and not to 5 V: the margin has to\n  absorb module-GND shift across the harness, not just board noise.\nAt the Schmitt: 3.27 V nominal when faulted, 3.16 V worst case, against\n  VT+ max 2.34 V at VCC 3.3 V => 0.82 V.  LVC inputs are rated to 5.5 V.\nIoff keeps the outputs high-Z if board +3V3 dies while the LaunchPad lives\n  (its own LDO runs off +5V), so the GPIO pull-up then reads FAULT.\nResponse 5.7 us typ / 8.9 us worst case (two 3.56 us poles).  The module\n  protects itself in 15 us and the PWM period is 100 us - this is the\n  reporting and X-BAR backstop path, not the primary protection.\nFAIL-SAFE: an unplugged DB37 floats all five lines high => all read FAULT.\nLoad 14.2 mA total on +13V5_GATE; P(Rpu) 38 mW each, 0603 at 38 %.\nNo fault LEDs by design: these lines drive a hardware trip and are not\n  loaded with anything optional."
-		(exclude_from_sim no)
-		(at 214 175.2 0)
-		(effects
-			(font
-				(size 0.9 0.9)
-			)
-			(justify left bottom)
-		)
-		(uuid "d88d7086-cff1-4383-8dc7-796aca44820e")
-	)
-	(text "VBUS SENSE  (Kelvin)"
-		(exclude_from_sim no)
-		(at 240.03 31.75 0)
-		(effects
-			(font
-				(size 1.8 1.8)
-				(bold yes)
-			)
-			(justify left bottom)
-		)
-		(uuid "e35aff76-ebe9-4297-9278-678ffa49b7bf")
-	)
-	(text "MODULE ERROR TABLE - datasheet p.6.  WHICH PIN ASSERTS FOR WHICH FAULT\n                                  HB A   HB B   HB C   Temp   Volt\n                                  p2     p22    p5     p6     p16\n  Error driver core HB A           X\n  Error driver core HB B                  X\n  Error driver core HB C                         X\n  Overcurrent  HB A / HB B / HB C  X      X      X\n  Overtemperature output stage     X      X      X      X\n  Overtemperature PCB                                   X\n  Overvoltage DC-link (option)     X      X      X             X\n  Undervoltage power supply                                    X\n\n=> OVERCURRENT IS NOT PER-PHASE.  An OC in any leg asserts all three HB pins,\n   so FLT_OC_A/B/C cannot identify the faulting phase.  Only \"error driver\n   core\" is unique to one pin.  Firmware decode:\n     exactly one of A/B/C   -> driver-core fault in that half-bridge\n     A+B+C only             -> overcurrent, leg unknown\n     A+B+C + Temp           -> overtemperature output stage\n     A+B+C + Volt           -> DC-link overvoltage\n     Temp only              -> overtemperature PCB\n     Volt only              -> supply undervoltage\nDatasheet note: \"Over temperature shut down must be realized by customer\"\n=> the OT trip is OUR job - FLT_OT (pin 6) plus the NTC channel below."
-		(exclude_from_sim no)
-		(at 338 144.12 0)
-		(effects
-			(font
-				(size 0.9 0.9)
-			)
-			(justify left bottom)
-		)
-		(uuid "f8dad216-b037-4c7f-8dee-54dd2aed5c5e")
-	)
-	(no_connect
-		(at 177.8 190.5)
-		(uuid "6eb106ec-2733-4792-a0e3-982a47527972")
-	)
-	(wire
-		(pts
-			(xy 266.7 127) (xy 266.7 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "85a55a5b-0e67-40d5-9219-557a9c44655a")
-	)
-	(wire
-		(pts
-			(xy 266.7 62.23) (xy 266.7 49.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a2e01009-98a9-4989-ae24-cb765ee2f02c")
-	)
-	(wire
-		(pts
-			(xy 254 40.64) (xy 247.65 52.07)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ddc6f4e7-d2d1-4cab-b5cb-0b97996d5777")
-	)
-	(wire
-		(pts
-			(xy 254 105.41) (xy 247.65 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f0ae6f2a-75ad-41fe-a66a-a27b93879f2b")
-	)
-	(label "FLT_OC_A_15V"
-		(at 95.25 24.13 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "0a3272e2-7466-4007-b469-a4f0067c7a4c")
-	)
-	(label "FLT_OC_C_15V"
-		(at 95.25 85.09 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "10656c5d-4588-4c41-a41f-52a4853f21d9")
-	)
-	(label "NTC_1_DIV"
-		(at 266.7 114.3 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "209a4056-80a2-4cba-8309-7a43589d7697")
-	)
-	(label "FLT_OC_C_15V"
-		(at 81.28 92.71 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "222d764a-b3eb-4501-bfd1-a8792f985d30")
-	)
-	(label "VBUS_SNS_RAW"
-		(at 266.7 41.91 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "227d0f6d-c39a-4e14-978f-828a56405283")
-	)
-	(label "FLT_OT_15V"
-		(at 104.14 129.54 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "242e6a68-2cf6-4937-b2cf-07e814aa0ff0")
-	)
-	(label "FLT_OC_A_15V"
-		(at 104.14 38.1 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "2a1f29b3-90d5-446e-a758-cf647a61d89f")
-	)
-	(label "FLT_OC_B_DIV"
-		(at 111.76 68.58 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "2e18dd77-bf6e-4b91-9194-5a3eaa3fac49")
-	)
-	(label "FLT_OC_B_DIV"
-		(at 120.65 74.93 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "2f960390-c628-4891-80da-8e2b288ac5de")
-	)
-	(label "FLT_OT_DIV"
-		(at 111.76 129.54 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "2fe8e395-bc2a-4c12-a8ed-0681b80ec698")
-	)
-	(label "FLT_OT_15V"
-		(at 95.25 115.57 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "31d57c5f-d7e2-4fac-8e4f-51c4291a229f")
-	)
-	(label "FLT_OT_DIV"
-		(at 120.65 135.89 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "34f83478-5be0-48e3-924c-aeeb227caaa2")
-	)
-	(label "FLT_OC_B_3V3"
-		(at 177.8 68.58 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "36534b48-d3f5-4a71-b003-2c01b4def789")
-	)
-	(label "VBUS_SNS_RAW"
-		(at 247.65 52.07 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "3a38025d-d6b9-4c39-8e59-3444147a80ff")
-	)
-	(label "VBUS_DIV"
-		(at 281.94 55.88 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "3aa2656b-b349-4ae0-ad9f-a4b81210eb46")
-	)
-	(label "FLT_OC_A_DIV"
-		(at 120.65 44.45 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "3c72c693-5eea-4469-a799-45b4540c98f4")
-	)
-	(label "FLT_OV_3V3"
-		(at 203.2 160.02 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "3dd8044c-469f-480a-bc65-67660c69feda")
-	)
-	(label "FLT_OC_C_DIV"
-		(at 111.76 99.06 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "3f2cd369-f561-40cb-94ef-1ec05f0a5ed0")
-	)
-	(label "FLT_OC_C_DIV"
-		(at 133.35 105.41 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "40f475b5-0c50-4159-bbcd-bb3552ffcfcb")
-	)
-	(label "FLT_OV_DIV"
-		(at 111.76 160.02 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "4132503f-9cb1-468d-8c29-53350ae08f83")
-	)
-	(label "FLT_OC_B_15V"
-		(at 104.14 68.58 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "42f0decb-58a6-42ce-a9be-91868ec26789")
-	)
-	(label "VBUS_DIV"
-		(at 266.7 49.53 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "433bb088-c686-4f87-98da-f742495cf889")
-	)
-	(label "FLT_OV_15V"
-		(at 81.28 153.67 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "43a943b3-220c-40cd-b82c-adf2520212cd")
-	)
-	(label "NTC_1_ADC"
-		(at 304.8 127 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "4af0c122-709b-4aab-ac22-e91c9f7b734d")
-	)
-	(label "FLT_OC_C_DIV"
-		(at 120.65 105.41 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "51beb894-65c0-4c00-9e68-2518c9687844")
-	)
-	(label "VBUS_ADC"
-		(at 304.8 62.23 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "5697e073-e73d-4521-a325-60663dc46c1e")
-	)
-	(label "NTC_1_RAW"
-		(at 266.7 106.68 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "577318b4-ef26-4d89-af54-eadc961bd6f3")
-	)
-	(label "FLT_OC_B_15V"
-		(at 81.28 62.23 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "587273c7-ea9c-45a8-9d1a-7a1ee27701fc")
-	)
-	(label "FLT_OC_A_DIV"
-		(at 149.86 38.1 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "5f694b51-6933-473f-8ddd-26f47ed3b54b")
-	)
-	(label "FLT_OV_DIV"
-		(at 133.35 166.37 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "64e96a41-a5da-4086-a500-f643940ffdda")
-	)
-	(label "FLT_OT_15V"
-		(at 81.28 123.19 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "670a12ff-39e2-42c6-b6fd-1d85648d0cac")
-	)
-	(label "FLT_OC_B_3V3"
-		(at 203.2 68.58 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "67c7fb0b-135c-4910-961c-e50d58bcfbab")
-	)
-	(label "VBUS_RTN"
-		(at 266.7 69.85 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "82830336-2c97-44ac-837e-b07ab56018dd")
-	)
-	(label "FLT_OC_B_15V"
-		(at 95.25 54.61 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "83834415-d356-4bd9-bae4-cdecea0dbe94")
-	)
-	(label "FLT_OC_A_15V"
-		(at 81.28 31.75 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "881be651-3429-4fcc-8c60-fae52e334201")
-	)
-	(label "FLT_OT_DIV"
-		(at 133.35 135.89 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "8f16cab9-d0a1-4b1c-83c6-008aad40eb2f")
-	)
-	(label "FLT_OC_B_DIV"
-		(at 149.86 68.58 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "9200cc37-274e-45d8-8272-a023ea821e05")
-	)
-	(label "FLT_OT_3V3"
-		(at 203.2 129.54 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "9db8a033-6997-43d9-913a-e83fd9ff2ede")
-	)
-	(label "FLT_OV_DIV"
-		(at 120.65 166.37 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a1ecd68c-e11e-4d87-84a6-28b2f5b5afbd")
-	)
-	(label "FLT_OV_3V3"
-		(at 177.8 160.02 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "a9b1eb37-779e-462d-94c5-a2848a80f55d")
-	)
-	(label "VBUS_RTN"
-		(at 264.16 88.9 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ad65dfcf-459f-40f3-bf15-ff6917142c80")
-	)
-	(label "VBUS_ADC"
-		(at 317.5 55.88 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ae18ac58-ced4-47f4-9ba2-f14adf32de8c")
-	)
-	(label "FLT_OV_15V"
-		(at 95.25 146.05 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "b3f2266e-1c82-4ba7-a964-4a3cc5c5e039")
-	)
-	(label "NTC_1_ADC"
-		(at 317.5 120.65 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "b5535e92-3285-48d5-b8b1-181b51219613")
-	)
-	(label "FLT_OC_A_15V"
-		(at 68.58 38.1 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "b62bdf42-61c2-4c71-b53b-835130a8c9a8")
-	)
-	(label "VBUS_RTN"
-		(at 254 78.74 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "b95fefb8-d655-4b90-9a77-fae0c17372f2")
-	)
-	(label "VBUS_ADC"
-		(at 289.56 55.88 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "b9b48ecd-2a22-41c3-8dc0-5556a04fa210")
-	)
-	(label "VBUS_RTN"
-		(at 247.65 59.69 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "bd088147-97b0-41a9-ad0e-8aab609eb168")
-	)
-	(label "FLT_OC_A_3V3"
-		(at 177.8 38.1 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c73d3520-bf7b-4f4f-bbf1-b2c0800741dc")
-	)
-	(label "FLT_OV_DIV"
-		(at 149.86 160.02 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "cd0366ee-fdc8-42de-a7e4-02b0a9828755")
-	)
-	(label "FLT_OC_C_DIV"
-		(at 149.86 99.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "cde2f5de-fd9b-4bf5-8120-e8f3d06a9b6d")
-	)
-	(label "NTC_1_ADC"
-		(at 289.56 120.65 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "cf17601f-5ff9-400f-a682-d99b2995a895")
-	)
-	(label "FLT_OC_C_3V3"
-		(at 203.2 99.06 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "d10944e0-6ba7-47f0-9ef2-8f372e4807b7")
-	)
-	(label "FLT_OC_C_3V3"
-		(at 177.8 99.06 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "da2f1fe7-92f5-49ec-9024-b3207cd92aee")
-	)
-	(label "FLT_OT_DIV"
-		(at 149.86 129.54 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "da79aab7-034d-4ba3-9029-591f81337450")
-	)
-	(label "FLT_OC_A_DIV"
-		(at 111.76 38.1 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "dcb30616-ff4c-4960-bdbf-3cb8e953cee5")
-	)
-	(label "FLT_OV_15V"
-		(at 104.14 160.02 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "dcddda54-448e-4435-83a5-20ff0ba97306")
-	)
-	(label "FLT_OC_C_15V"
-		(at 104.14 99.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "e085d057-ea45-4d5f-b043-832a7a6b63d3")
-	)
-	(label "NTC_1_RAW"
-		(at 247.65 116.84 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e5447047-a832-490d-b99d-3e351f395279")
-	)
-	(label "FLT_OC_B_DIV"
-		(at 133.35 74.93 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "ecd1f86d-32fd-44f0-a144-a48a8d224aa0")
-	)
-	(label "FLT_OT_3V3"
-		(at 177.8 129.54 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "ed91a0fe-d8b3-403a-8313-a8d2f9d4ce0e")
-	)
-	(label "FLT_OC_A_DIV"
-		(at 133.35 44.45 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "f15a711f-59a0-4ad3-9cab-7a24edb6f345")
-	)
-	(label "NTC_1_DIV"
-		(at 281.94 120.65 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "f7168733-3714-4c1d-9a58-5d6d2fc25b99")
-	)
-	(label "FLT_OC_A_3V3"
-		(at 203.2 38.1 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "fe1acd44-1e93-4879-a0bc-229a507c98c6")
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 304.8 134.62 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "02425e83-15df-444f-8d32-46cdf8faec68")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 304.8 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 95.25 62.23 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "02836457-846d-474e-9f13-c5e9b36d2321")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 95.25 62.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 95.25 123.19 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "0999810a-b1f7-4c66-a5eb-2b3b4bad9d83")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 95.25 123.19 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3"
-		(shape bidirectional)
-		(at 88.9 228.6 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "0aae9869-7514-43cf-87b4-e6aa42fd870c")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 88.9 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 304.8 69.85 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "1f331137-fceb-4e39-9334-cd42ce4377fd")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 304.8 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 165.1 242.57 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "21215b85-87c8-4d65-9bfc-c3c3974e1837")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 165.1 242.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 247.65 124.46 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "265816c1-0a3e-4fa0-a734-ea0675201f25")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 247.65 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 120.65 173.99 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "343a0609-9acc-432f-b44f-6f1968faad7e")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 120.65 173.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 120.65 113.03 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "35391201-947c-44e1-9ec5-58446ff632e2")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 120.65 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 190.5 236.22 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "36c273dd-e10c-4e0a-8334-a5ce13dda4eb")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 190.5 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3"
-		(shape bidirectional)
-		(at 165.1 222.25 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "4203ebeb-c9b0-454f-8a58-9e14ff56a8db")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 165.1 222.25 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 95.25 153.67 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "45f1d068-ba73-4b35-8842-f9ebb373f574")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 95.25 153.67 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 149.86 190.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "4b121012-b5c2-4eb2-993a-93735732d9de")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 149.86 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 120.65 82.55 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "4b44daed-7277-445e-8f7f-a2c7cafe5450")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 120.65 82.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+13V5_GATE"
-		(shape bidirectional)
-		(at 81.28 24.13 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "5ae6cb00-7d97-4933-9f63-92ae8c7b40c4")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 81.28 24.13 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3"
-		(shape bidirectional)
-		(at 139.7 228.6 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "5f2c1c7d-0d63-4598-9ce7-be285437a1f5")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 139.7 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 120.65 52.07 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "662868b3-2490-4c44-a1b5-654280c84bec")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 120.65 52.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 63.5 242.57 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "67256e59-a60f-4ca1-a897-3e62d1584191")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 63.5 242.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3"
-		(shape bidirectional)
-		(at 190.5 228.6 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "6e0c1c59-2535-4a51-bf35-f4ba30672fb8")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 190.5 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+13V5_GATE"
-		(shape bidirectional)
-		(at 81.28 115.57 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "73a86b84-9de2-40c0-b6c2-0d10e0032b62")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 81.28 115.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 95.25 92.71 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "783e9c65-ce27-4e7e-bb8e-95d5ea051e1e")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 95.25 92.71 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3"
-		(shape bidirectional)
-		(at 114.3 222.25 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "7973cbe2-bfc5-410d-bf70-98619af4840f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 114.3 222.25 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3"
-		(shape bidirectional)
-		(at 25.4 228.6 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "7adf0b74-50d7-4012-b2f3-d8b58c0da28b")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 25.4 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+13V5_GATE"
-		(shape bidirectional)
-		(at 81.28 146.05 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "822c8a56-47cf-44d7-b47e-3f82cf598a61")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 81.28 146.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 25.4 236.22 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "8be6fae2-a1ac-41bf-bdca-bc4e50336933")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 25.4 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 114.3 242.57 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "911c48a2-141f-4731-bc37-1b5243a93c79")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 114.3 242.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+13V5_GATE"
-		(shape bidirectional)
-		(at 81.28 54.61 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "91233685-72c4-4bcf-bdce-1f65dd36ef80")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 81.28 54.61 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 133.35 82.55 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "9144611b-217d-4684-98e1-d411d1682299")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 133.35 82.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 95.25 31.75 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "93c6ffff-cf11-48ad-b987-dc28aa57a80e")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 95.25 31.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 139.7 236.22 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ab00b6e5-a16d-4593-94f0-8c487df3b659")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 139.7 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 133.35 173.99 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "bb6a2c46-3b55-457b-8f07-73f01bfa3a92")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 133.35 173.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 133.35 52.07 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "be90aa6c-c210-4863-8c36-fa7aa2d2bebe")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 133.35 52.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3"
-		(shape bidirectional)
-		(at 63.5 222.25 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "ccb0fc14-0e63-4aa4-8b07-0cb8a1b383b5")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 63.5 222.25 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 88.9 236.22 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ce4ac011-3e95-4228-b002-2bc5f0900808")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 88.9 236.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 269.24 88.9 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "d88dcb97-c5a5-40db-85bb-aa22f81ed4ab")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 269.24 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+13V5_GATE"
-		(shape bidirectional)
-		(at 81.28 85.09 270)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e13c2572-af96-4deb-aecd-e472cc567642")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 81.28 85.09 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 133.35 113.03 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "e5515c2c-7c55-462c-bbc0-063b682d305e")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 133.35 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 120.65 143.51 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "e61a47c7-3c3a-4976-b5f8-25e5ee885db1")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 120.65 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 133.35 143.51 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ebc871d5-35be-4de2-8fd1-d6b36e596947")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 133.35 143.51 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND"
-		(shape bidirectional)
-		(at 266.7 134.62 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "ee17d307-1d2f-497b-bb2c-5f503cb92f01")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 266.7 134.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(hierarchical_label "FLT_OC_B_3V3"
-		(shape output)
-		(at 384.81 48.26 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "08da61f7-5f2b-473e-bd07-ec7d9b188ca5")
-	)
-	(hierarchical_label "FLT_OT_3V3"
-		(shape output)
-		(at 384.81 63.5 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "1a986840-5d29-4489-b885-602cbf796c76")
-	)
-	(hierarchical_label "FLT_OC_B_15V"
-		(shape input)
-		(at 40.64 48.26 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "21e52595-fbb8-44da-9789-39c2755f04f9")
-	)
-	(hierarchical_label "FLT_OV_15V"
-		(shape input)
-		(at 40.64 71.12 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "3031dd18-a708-4f55-bbd3-bdc719d2b92d")
-	)
-	(hierarchical_label "FLT_OC_C_3V3"
-		(shape output)
-		(at 384.81 55.88 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "3c285228-8774-4e9d-969a-55f209defe06")
-	)
-	(hierarchical_label "VBUS_ADC"
-		(shape output)
-		(at 384.81 86.36 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "4e8d50fd-dca4-45d7-a4b4-a5631e086681")
-	)
-	(hierarchical_label "NTC_1_RAW"
-		(shape input)
-		(at 40.64 109.22 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "624e449e-89c9-48e0-9a3b-ede69d59d1b6")
-	)
-	(hierarchical_label "VBUS_SNS_RAW"
-		(shape input)
-		(at 40.64 86.36 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "780934dd-5af3-4056-8c19-4243aefc07cb")
-	)
-	(hierarchical_label "VBUS_RTN"
-		(shape bidirectional)
-		(at 40.64 93.98 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "c65d30fc-4bdc-4366-b152-001a5dc1c406")
-	)
-	(hierarchical_label "FLT_OC_C_15V"
-		(shape input)
-		(at 40.64 55.88 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "cc7430f7-e535-42a4-9982-ae7a486020ae")
-	)
-	(hierarchical_label "FLT_OT_15V"
-		(shape input)
-		(at 40.64 63.5 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "d8a4a85d-c3fc-4cdb-9b4d-486d5135c4db")
-	)
-	(hierarchical_label "FLT_OC_A_15V"
-		(shape input)
-		(at 40.64 40.64 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "df7525d5-903b-4d1f-a2ba-cb0d2d7fe6a2")
-	)
-	(hierarchical_label "FLT_OC_A_3V3"
-		(shape output)
-		(at 384.81 40.64 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "e1d8a105-f1b4-489e-b1d1-391e79499aee")
-	)
-	(hierarchical_label "FLT_OV_3V3"
-		(shape output)
-		(at 384.81 71.12 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "e858a0b4-1988-4dc6-a1d1-cbfcafa225ae")
-	)
-	(hierarchical_label "NTC_1_ADC"
-		(shape output)
-		(at 384.81 101.6 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "fac3da68-84d9-4495-9978-a76c20008f70")
-	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:74LVC2G17")
-		(at 165.1 38.1 0)
+		(at 125.73 38.1 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2747,7 +904,7 @@
 		(dnp no)
 		(uuid "00dac94d-f3d3-4afb-b90f-fa62fc4cc1c2")
 		(property "Reference" "U9"
-			(at 63.5 246.38 0)
+			(at 125.73 29.21 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2757,7 +914,7 @@
 			)
 		)
 		(property "Value" "SN74LVC2G17DBVR"
-			(at 63.5 247.65 0)
+			(at 125.73 49.53 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2767,7 +924,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:SOT-23-6"
-			(at 165.1 38.1 0)
+			(at 125.73 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2778,7 +935,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
-			(at 165.1 38.1 0)
+			(at 125.73 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2789,7 +946,7 @@
 			)
 		)
 		(property "Description" "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS"
-			(at 165.1 38.1 0)
+			(at 125.73 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2800,7 +957,7 @@
 			)
 		)
 		(property "LCSC" "C10429"
-			(at 165.1 38.1 0)
+			(at 125.73 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2839,7 +996,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 285.75 55.88 90)
+		(at 248.92 76.2 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2849,7 +1006,7 @@
 		(dnp no)
 		(uuid "05f0d6bc-3e16-435c-b335-3c0897a177a6")
 		(property "Reference" "R59"
-			(at 285.75 53.34 0)
+			(at 248.92 70.358 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2859,7 +1016,7 @@
 			)
 		)
 		(property "Value" "3.3k"
-			(at 285.75 52.07 0)
+			(at 248.92 73.279 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2869,7 +1026,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 285.75 57.658 90)
+			(at 248.92 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2880,7 +1037,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 285.75 55.88 0)
+			(at 248.92 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2891,7 +1048,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 285.75 55.88 0)
+			(at 248.92 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2902,7 +1059,7 @@
 			)
 		)
 		(property "LCSC" "C22978"
-			(at 285.75 55.88 0)
+			(at 248.92 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2929,7 +1086,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 247.65 55.88 0)
+		(at 209.55 80.01 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2939,7 +1096,7 @@
 		(dnp no)
 		(uuid "095a1b00-dbc3-4a16-a304-8c03f3db1c44")
 		(property "Reference" "C58"
-			(at 251.46 55.88 0)
+			(at 212.852 78.74 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2950,7 +1107,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 252.73 57.15 0)
+			(at 212.852 81.915 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2961,7 +1118,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 248.615 52.07 0)
+			(at 209.55 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2972,7 +1129,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 247.65 55.88 0)
+			(at 209.55 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2983,7 +1140,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 247.65 55.88 0)
+			(at 209.55 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2994,7 +1151,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 247.65 55.88 0)
+			(at 209.55 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3021,7 +1178,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:74LVC2G17")
-		(at 165.1 129.54 0)
+		(at 125.73 129.54 0)
 		(unit 2)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3031,7 +1188,7 @@
 		(dnp no)
 		(uuid "09698395-5d50-4b70-afa1-138fa587dbff")
 		(property "Reference" "U10"
-			(at 163.83 137.16 0)
+			(at 125.73 120.65 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3041,7 +1198,7 @@
 			)
 		)
 		(property "Value" "SN74LVC2G17DBVR"
-			(at 167.64 121.92 0)
+			(at 125.73 140.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3051,7 +1208,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:SOT-23-6"
-			(at 165.1 129.54 0)
+			(at 125.73 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3062,7 +1219,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
-			(at 165.1 129.54 0)
+			(at 125.73 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3073,7 +1230,7 @@
 			)
 		)
 		(property "Description" "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS"
-			(at 165.1 129.54 0)
+			(at 125.73 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3112,7 +1269,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 247.65 120.65 0)
+		(at 209.55 118.11 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3122,7 +1279,7 @@
 		(dnp no)
 		(uuid "0e64c60a-625a-4626-b134-4535ecbc6e0c")
 		(property "Reference" "C60"
-			(at 251.46 120.65 0)
+			(at 212.852 116.84 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3133,7 +1290,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 252.73 121.92 0)
+			(at 212.852 120.015 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3144,7 +1301,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 248.615 116.84 0)
+			(at 209.55 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3155,7 +1312,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 247.65 120.65 0)
+			(at 209.55 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3166,7 +1323,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 247.65 120.65 0)
+			(at 209.55 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3177,7 +1334,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 247.65 120.65 0)
+			(at 209.55 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3204,7 +1361,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 95.25 149.86 0)
+		(at 45.72 163.83 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3214,7 +1371,7 @@
 		(dnp no)
 		(uuid "0ea6a547-78f8-4a4d-8e17-4ff0bb257fbd")
 		(property "Reference" "C48"
-			(at 99.06 149.86 0)
+			(at 49.022 162.56 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3225,7 +1382,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 100.33 151.13 0)
+			(at 49.022 165.735 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3236,7 +1393,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 96.215 146.05 0)
+			(at 45.72 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3247,7 +1404,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 95.25 149.86 0)
+			(at 45.72 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3258,7 +1415,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 95.25 149.86 0)
+			(at 45.72 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3269,7 +1426,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 95.25 149.86 0)
+			(at 45.72 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3296,7 +1453,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:74LVC2G17")
-		(at 165.1 190.5 0)
+		(at 125.73 182.88 0)
 		(unit 2)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3306,7 +1463,7 @@
 		(dnp no)
 		(uuid "12b63047-dfd8-4223-8819-a2d6a620d3f6")
 		(property "Reference" "U11"
-			(at 163.83 198.12 0)
+			(at 125.73 173.99 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3316,7 +1473,7 @@
 			)
 		)
 		(property "Value" "SN74LVC2G17DBVR"
-			(at 167.64 182.88 0)
+			(at 125.73 194.31 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3326,7 +1483,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:SOT-23-6"
-			(at 165.1 190.5 0)
+			(at 125.73 182.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3337,7 +1494,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
-			(at 165.1 190.5 0)
+			(at 125.73 182.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3348,7 +1505,7 @@
 			)
 		)
 		(property "Description" "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS"
-			(at 165.1 190.5 0)
+			(at 125.73 182.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3387,7 +1544,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 81.28 149.86 0)
+		(at 33.02 156.21 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3397,7 +1554,7 @@
 		(dnp no)
 		(uuid "1899d81a-bbb9-4f65-a18d-c88240bd5810")
 		(property "Reference" "R46"
-			(at 85.09 149.86 0)
+			(at 36.322 154.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3407,7 +1564,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 85.09 151.13 0)
+			(at 36.322 158.115 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3417,7 +1574,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 79.502 149.86 90)
+			(at 33.02 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3428,7 +1585,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 149.86 0)
+			(at 33.02 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3439,7 +1596,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 81.28 149.86 0)
+			(at 33.02 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3450,7 +1607,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 81.28 149.86 0)
+			(at 33.02 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3477,7 +1634,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 203.2 38.1 0)
+		(at 152.4 38.1 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3487,7 +1644,7 @@
 		(dnp no)
 		(uuid "23dd3967-818d-4af3-ae9a-7674ef9d8c54")
 		(property "Reference" "TP24"
-			(at 203.2 17.78 0)
+			(at 151.13 31.75 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3497,7 +1654,7 @@
 			)
 		)
 		(property "Value" "TP_FLT_OC_A"
-			(at 203.2 16.51 0)
+			(at 151.13 34.29 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3507,7 +1664,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 208.28 38.1 0)
+			(at 152.4 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3518,7 +1675,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 208.28 38.1 0)
+			(at 152.4 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3529,7 +1686,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 203.2 38.1 0)
+			(at 152.4 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3540,7 +1697,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 203.2 38.1 0)
+			(at 152.4 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3564,7 +1721,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 68.58 38.1 0)
+		(at 58.42 38.1 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3574,7 +1731,7 @@
 		(dnp no)
 		(uuid "30e3734f-e82e-49ab-95ba-9ac40a85a1d6")
 		(property "Reference" "TP29"
-			(at 68.58 17.78 0)
+			(at 57.15 31.75 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3584,7 +1741,7 @@
 			)
 		)
 		(property "Value" "TP_FLT_OC_A_15V"
-			(at 68.58 16.51 0)
+			(at 57.15 34.29 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3594,7 +1751,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 73.66 38.1 0)
+			(at 58.42 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3605,7 +1762,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 73.66 38.1 0)
+			(at 58.42 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3616,7 +1773,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 68.58 38.1 0)
+			(at 58.42 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3627,7 +1784,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 81.28 17.78 0)
+			(at 58.42 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3651,7 +1808,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 95.25 119.38 0)
+		(at 45.72 133.35 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3661,7 +1818,7 @@
 		(dnp no)
 		(uuid "31d44047-6cc5-469b-a6cc-12ea8fb1388b")
 		(property "Reference" "C47"
-			(at 99.06 119.38 0)
+			(at 49.022 132.08 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3672,7 +1829,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 100.33 120.65 0)
+			(at 49.022 135.255 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3683,7 +1840,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 96.215 115.57 0)
+			(at 45.72 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3694,7 +1851,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 95.25 119.38 0)
+			(at 45.72 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3705,7 +1862,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 95.25 119.38 0)
+			(at 45.72 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3716,7 +1873,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 95.25 119.38 0)
+			(at 45.72 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3743,7 +1900,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 120.65 170.18 0)
+		(at 91.44 163.83 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3753,7 +1910,7 @@
 		(dnp no)
 		(uuid "346c4283-9009-4aac-9b48-e2898611af89")
 		(property "Reference" "R56"
-			(at 124.46 170.18 0)
+			(at 94.742 162.56 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3763,7 +1920,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 124.46 171.45 0)
+			(at 94.742 165.735 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3773,7 +1930,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 118.872 170.18 90)
+			(at 91.44 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3784,7 +1941,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 120.65 170.18 0)
+			(at 91.44 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3795,7 +1952,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 120.65 170.18 0)
+			(at 91.44 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3806,7 +1963,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 120.65 170.18 0)
+			(at 91.44 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3833,7 +1990,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 81.28 119.38 0)
+		(at 33.02 125.73 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3843,7 +2000,7 @@
 		(dnp no)
 		(uuid "352ba855-dbac-42c2-aacb-4b2b88dd82c6")
 		(property "Reference" "R45"
-			(at 85.09 119.38 0)
+			(at 36.322 124.46 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3853,7 +2010,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 85.09 120.65 0)
+			(at 36.322 127.635 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3863,7 +2020,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 79.502 119.38 90)
+			(at 33.02 125.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3874,7 +2031,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 119.38 0)
+			(at 33.02 125.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3885,7 +2042,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 81.28 119.38 0)
+			(at 33.02 125.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3896,7 +2053,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 81.28 119.38 0)
+			(at 33.02 125.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3923,7 +2080,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 107.95 68.58 90)
+		(at 80.01 68.58 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3933,7 +2090,7 @@
 		(dnp no)
 		(uuid "35f33e46-788d-4b15-ab27-74165b5e3222")
 		(property "Reference" "R48"
-			(at 107.95 66.04 0)
+			(at 80.01 62.738 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3943,7 +2100,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 107.95 64.77 0)
+			(at 80.01 65.659 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3953,7 +2110,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 107.95 70.358 90)
+			(at 80.01 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3964,7 +2121,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 107.95 68.58 0)
+			(at 80.01 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3975,7 +2132,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 107.95 68.58 0)
+			(at 80.01 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3986,7 +2143,7 @@
 			)
 		)
 		(property "LCSC" "C25804"
-			(at 107.95 68.58 0)
+			(at 80.01 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4013,7 +2170,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 81.28 27.94 0)
+		(at 33.02 34.29 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4023,7 +2180,7 @@
 		(dnp no)
 		(uuid "37ad16cf-0a07-49b6-a69c-c8eae883e7e7")
 		(property "Reference" "R42"
-			(at 85.09 27.94 0)
+			(at 36.322 33.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4033,7 +2190,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 85.09 29.21 0)
+			(at 36.322 36.195 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4043,7 +2200,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 79.502 27.94 90)
+			(at 33.02 34.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4054,7 +2211,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 27.94 0)
+			(at 33.02 34.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4065,7 +2222,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 81.28 27.94 0)
+			(at 33.02 34.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4076,7 +2233,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 81.28 27.94 0)
+			(at 33.02 34.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4103,7 +2260,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 120.65 109.22 0)
+		(at 91.44 102.87 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4113,7 +2270,7 @@
 		(dnp no)
 		(uuid "3948206e-467a-4e88-84d9-474b5ecdcdef")
 		(property "Reference" "R54"
-			(at 124.46 109.22 0)
+			(at 94.742 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4123,7 +2280,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 124.46 110.49 0)
+			(at 94.742 104.775 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4133,7 +2290,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 118.872 109.22 90)
+			(at 91.44 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4144,7 +2301,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 120.65 109.22 0)
+			(at 91.44 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4155,7 +2312,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 120.65 109.22 0)
+			(at 91.44 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4166,7 +2323,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 120.65 109.22 0)
+			(at 91.44 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4193,7 +2350,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 120.65 78.74 0)
+		(at 91.44 72.39 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4203,7 +2360,7 @@
 		(dnp no)
 		(uuid "4357562e-6e25-4fb7-b4d7-7239f61fa73a")
 		(property "Reference" "R53"
-			(at 124.46 78.74 0)
+			(at 94.742 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4213,7 +2370,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 124.46 80.01 0)
+			(at 94.742 74.295 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4223,7 +2380,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 118.872 78.74 90)
+			(at 91.44 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4234,7 +2391,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 120.65 78.74 0)
+			(at 91.44 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4245,7 +2402,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 120.65 78.74 0)
+			(at 91.44 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4256,7 +2413,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 120.65 78.74 0)
+			(at 91.44 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4283,7 +2440,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 133.35 78.74 0)
+		(at 102.87 72.39 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4293,7 +2450,7 @@
 		(dnp no)
 		(uuid "44c163a2-1838-41aa-b2fd-986d7098ea0f")
 		(property "Reference" "C50"
-			(at 137.16 78.74 0)
+			(at 106.172 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4304,7 +2461,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 138.43 80.01 0)
+			(at 106.172 74.295 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4315,7 +2472,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 134.315 74.93 0)
+			(at 102.87 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4326,7 +2483,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 133.35 78.74 0)
+			(at 102.87 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4337,7 +2494,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 133.35 78.74 0)
+			(at 102.87 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4348,7 +2505,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 133.35 78.74 0)
+			(at 102.87 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4375,7 +2532,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:74LVC2G17")
-		(at 63.5 232.41 0)
+		(at 177.8 40.64 0)
 		(unit 3)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4385,7 +2542,7 @@
 		(dnp no)
 		(uuid "45ed72fc-0d8a-4c30-99c7-ed2bb606bddb")
 		(property "Reference" "U9"
-			(at 62.23 240.03 0)
+			(at 171.45 40.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4395,7 +2552,7 @@
 			)
 		)
 		(property "Value" "SN74LVC2G17DBVR"
-			(at 66.04 224.79 0)
+			(at 177.8 54.61 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4405,7 +2562,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:SOT-23-6"
-			(at 63.5 232.41 0)
+			(at 177.8 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4416,7 +2573,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
-			(at 63.5 232.41 0)
+			(at 177.8 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4427,7 +2584,7 @@
 			)
 		)
 		(property "Description" "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS"
-			(at 63.5 232.41 0)
+			(at 177.8 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4466,7 +2623,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:74LVC2G17")
-		(at 165.1 68.58 0)
+		(at 125.73 68.58 0)
 		(unit 2)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4476,7 +2633,7 @@
 		(dnp no)
 		(uuid "4667ff5f-a588-41e5-aa07-de72ca7224eb")
 		(property "Reference" "U9"
-			(at 163.83 76.2 0)
+			(at 125.73 59.69 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4486,7 +2643,7 @@
 			)
 		)
 		(property "Value" "SN74LVC2G17DBVR"
-			(at 167.64 60.96 0)
+			(at 125.73 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4496,7 +2653,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:SOT-23-6"
-			(at 165.1 68.58 0)
+			(at 125.73 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4507,7 +2664,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
-			(at 165.1 68.58 0)
+			(at 125.73 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4518,7 +2675,7 @@
 			)
 		)
 		(property "Description" "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS"
-			(at 165.1 68.58 0)
+			(at 125.73 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4557,7 +2714,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 107.95 38.1 90)
+		(at 80.01 38.1 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4567,7 +2724,7 @@
 		(dnp no)
 		(uuid "49803329-7816-4cc2-be26-9244740b9ff9")
 		(property "Reference" "R47"
-			(at 107.95 34.29 0)
+			(at 80.01 32.258 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4577,7 +2734,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 107.95 33.02 0)
+			(at 80.01 35.179 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4587,7 +2744,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 107.95 39.878 90)
+			(at 80.01 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4598,7 +2755,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 107.95 38.1 0)
+			(at 80.01 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4609,7 +2766,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 107.95 38.1 0)
+			(at 80.01 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4620,7 +2777,7 @@
 			)
 		)
 		(property "LCSC" "C25804"
-			(at 107.95 38.1 0)
+			(at 80.01 38.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4647,7 +2804,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 203.2 99.06 0)
+		(at 152.4 99.06 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4657,7 +2814,7 @@
 		(dnp no)
 		(uuid "4f56620e-dc1f-4bfb-ab39-54650dffc316")
 		(property "Reference" "TP26"
-			(at 203.2 78.74 0)
+			(at 151.13 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4667,7 +2824,7 @@
 			)
 		)
 		(property "Value" "TP_FLT_OC_C"
-			(at 203.2 77.47 0)
+			(at 151.13 95.25 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4677,7 +2834,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 208.28 99.06 0)
+			(at 152.4 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4688,7 +2845,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 208.28 99.06 0)
+			(at 152.4 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4699,7 +2856,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 203.2 99.06 0)
+			(at 152.4 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4710,7 +2867,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 203.2 99.06 0)
+			(at 152.4 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4734,7 +2891,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 107.95 129.54 90)
+		(at 80.01 129.54 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4744,7 +2901,7 @@
 		(dnp no)
 		(uuid "529fcd58-cd1b-4709-a1a9-e555e11ceccb")
 		(property "Reference" "R50"
-			(at 107.95 125.73 0)
+			(at 80.01 123.698 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4754,7 +2911,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 107.95 124.46 0)
+			(at 80.01 126.619 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4764,7 +2921,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 107.95 131.318 90)
+			(at 80.01 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4775,7 +2932,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 107.95 129.54 0)
+			(at 80.01 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4786,7 +2943,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 107.95 129.54 0)
+			(at 80.01 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4797,7 +2954,7 @@
 			)
 		)
 		(property "LCSC" "C25804"
-			(at 107.95 129.54 0)
+			(at 80.01 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4824,7 +2981,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:74LVC2G17")
-		(at 165.1 160.02 0)
+		(at 125.73 160.02 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4834,7 +2991,7 @@
 		(dnp no)
 		(uuid "5f47088b-11db-4d64-b7d3-cca6beb0f904")
 		(property "Reference" "U11"
-			(at 165.1 157.48 0)
+			(at 125.73 151.13 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4844,7 +3001,7 @@
 			)
 		)
 		(property "Value" "SN74LVC2G17DBVR"
-			(at 165.1 156.21 0)
+			(at 125.73 171.45 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4854,7 +3011,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:SOT-23-6"
-			(at 165.1 160.02 0)
+			(at 125.73 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4865,7 +3022,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
-			(at 165.1 160.02 0)
+			(at 125.73 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4876,7 +3033,7 @@
 			)
 		)
 		(property "Description" "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS"
-			(at 165.1 160.02 0)
+			(at 125.73 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4887,7 +3044,7 @@
 			)
 		)
 		(property "LCSC" "C10429"
-			(at 165.1 160.02 0)
+			(at 125.73 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4926,7 +3083,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 95.25 88.9 0)
+		(at 45.72 102.87 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4936,7 +3093,7 @@
 		(dnp no)
 		(uuid "63905982-35e4-4cde-989b-c72f9fd1c964")
 		(property "Reference" "C46"
-			(at 99.06 88.9 0)
+			(at 49.022 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4947,7 +3104,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 100.33 90.17 0)
+			(at 49.022 104.775 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4958,7 +3115,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 96.215 85.09 0)
+			(at 45.72 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4969,7 +3126,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 95.25 88.9 0)
+			(at 45.72 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4980,7 +3137,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 95.25 88.9 0)
+			(at 45.72 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4991,7 +3148,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 95.25 88.9 0)
+			(at 45.72 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5018,7 +3175,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 254 105.41 0)
+		(at 200.66 114.3 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5028,7 +3185,7 @@
 		(dnp no)
 		(uuid "6e123386-7218-4540-b4d0-6352d9d1442e")
 		(property "Reference" "TP22"
-			(at 254 101.6 0)
+			(at 199.39 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5038,7 +3195,7 @@
 			)
 		)
 		(property "Value" "TP_NTC_RAW"
-			(at 254 100.33 0)
+			(at 199.39 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5048,7 +3205,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 259.08 105.41 0)
+			(at 200.66 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5059,7 +3216,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 259.08 105.41 0)
+			(at 200.66 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5070,7 +3227,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 254 105.41 0)
+			(at 200.66 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5081,7 +3238,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 254 105.41 0)
+			(at 200.66 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5105,7 +3262,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:74LVC2G17")
-		(at 165.1 99.06 0)
+		(at 125.73 99.06 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5115,7 +3272,7 @@
 		(dnp no)
 		(uuid "6fd59389-4a77-49ec-911b-22b3a5585262")
 		(property "Reference" "U10"
-			(at 114.3 246.38 0)
+			(at 125.73 90.17 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5125,7 +3282,7 @@
 			)
 		)
 		(property "Value" "SN74LVC2G17DBVR"
-			(at 114.3 247.65 0)
+			(at 125.73 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5135,7 +3292,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:SOT-23-6"
-			(at 165.1 99.06 0)
+			(at 125.73 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5146,7 +3303,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
-			(at 165.1 99.06 0)
+			(at 125.73 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5157,7 +3314,7 @@
 			)
 		)
 		(property "Description" "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS"
-			(at 165.1 99.06 0)
+			(at 125.73 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5168,7 +3325,7 @@
 			)
 		)
 		(property "LCSC" "C10429"
-			(at 165.1 99.06 0)
+			(at 125.73 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5207,7 +3364,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 95.25 27.94 0)
+		(at 45.72 41.91 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5217,7 +3374,7 @@
 		(dnp no)
 		(uuid "714289f9-6435-4517-b85b-2f8301304dc4")
 		(property "Reference" "C44"
-			(at 99.06 27.94 0)
+			(at 49.022 40.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5228,7 +3385,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 100.33 29.21 0)
+			(at 49.022 43.815 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5239,7 +3396,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 96.215 24.13 0)
+			(at 45.72 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5250,7 +3407,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 95.25 27.94 0)
+			(at 45.72 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5261,7 +3418,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 95.25 27.94 0)
+			(at 45.72 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5272,7 +3429,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 95.25 27.94 0)
+			(at 45.72 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5299,7 +3456,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 133.35 139.7 0)
+		(at 102.87 133.35 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5309,7 +3466,7 @@
 		(dnp no)
 		(uuid "8264ce48-7dab-460a-b36a-b3395ee7955d")
 		(property "Reference" "C52"
-			(at 137.16 139.7 0)
+			(at 106.172 132.08 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5320,7 +3477,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 138.43 140.97 0)
+			(at 106.172 135.255 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5331,7 +3488,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 134.315 135.89 0)
+			(at 102.87 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5342,7 +3499,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 133.35 139.7 0)
+			(at 102.87 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5353,7 +3510,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 133.35 139.7 0)
+			(at 102.87 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5364,7 +3521,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 133.35 139.7 0)
+			(at 102.87 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5391,7 +3548,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 254 78.74 0)
+		(at 219.71 83.82 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5401,7 +3558,7 @@
 		(dnp no)
 		(uuid "83221f93-4b1a-4871-9913-508db67c0193")
 		(property "Reference" "TP21"
-			(at 254 63.5 0)
+			(at 218.44 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5411,7 +3568,7 @@
 			)
 		)
 		(property "Value" "TP_VBUS_RTN"
-			(at 254 62.23 0)
+			(at 218.44 90.17 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5421,7 +3578,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 259.08 78.74 0)
+			(at 219.71 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5432,7 +3589,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 259.08 78.74 0)
+			(at 219.71 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5443,7 +3600,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 254 78.74 0)
+			(at 219.71 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5454,7 +3611,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 254 78.74 0)
+			(at 219.71 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5478,7 +3635,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 317.5 55.88 0)
+		(at 271.78 76.2 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5488,7 +3645,7 @@
 		(dnp no)
 		(uuid "87508050-3432-4c52-a84f-f309610bf647")
 		(property "Reference" "TP20"
-			(at 317.5 40.64 0)
+			(at 270.51 69.85 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5498,7 +3655,7 @@
 			)
 		)
 		(property "Value" "TP_VBUS_ADC"
-			(at 317.5 39.37 0)
+			(at 270.51 72.39 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5508,7 +3665,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 322.58 55.88 0)
+			(at 271.78 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5519,7 +3676,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 322.58 55.88 0)
+			(at 271.78 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5530,7 +3687,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 317.5 55.88 0)
+			(at 271.78 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5541,7 +3698,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 317.5 55.88 0)
+			(at 271.78 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5565,7 +3722,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:74LVC2G17")
-		(at 114.3 232.41 0)
+		(at 203.2 40.64 0)
 		(unit 3)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5575,7 +3732,7 @@
 		(dnp no)
 		(uuid "88bfbfd4-7bf3-4ed9-9e68-2cf55e283638")
 		(property "Reference" "U10"
-			(at 113.03 240.03 0)
+			(at 196.85 40.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5585,7 +3742,7 @@
 			)
 		)
 		(property "Value" "SN74LVC2G17DBVR"
-			(at 116.84 224.79 0)
+			(at 203.2 54.61 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5595,7 +3752,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:SOT-23-6"
-			(at 114.3 232.41 0)
+			(at 203.2 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5606,7 +3763,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
-			(at 114.3 232.41 0)
+			(at 203.2 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5617,7 +3774,7 @@
 			)
 		)
 		(property "Description" "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS"
-			(at 114.3 232.41 0)
+			(at 203.2 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5656,7 +3813,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 133.35 109.22 0)
+		(at 102.87 102.87 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5666,7 +3823,7 @@
 		(dnp no)
 		(uuid "88c51ced-fd85-4741-a391-61be3be4e91d")
 		(property "Reference" "C51"
-			(at 137.16 109.22 0)
+			(at 106.172 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5677,7 +3834,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 138.43 110.49 0)
+			(at 106.172 104.775 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5688,7 +3845,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 134.315 105.41 0)
+			(at 102.87 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5699,7 +3856,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 133.35 109.22 0)
+			(at 102.87 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5710,7 +3867,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 133.35 109.22 0)
+			(at 102.87 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5721,7 +3878,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 133.35 109.22 0)
+			(at 102.87 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5748,7 +3905,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 190.5 232.41 0)
+		(at 279.4 40.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5758,7 +3915,7 @@
 		(dnp no)
 		(uuid "91a50c9e-2f0e-4a25-a444-00f3d6a16f8b")
 		(property "Reference" "C56"
-			(at 194.31 232.41 0)
+			(at 282.702 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5769,7 +3926,7 @@
 			)
 		)
 		(property "Value" "100nF 50V"
-			(at 196.85 233.68 0)
+			(at 282.702 42.545 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5780,7 +3937,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 191.465 228.6 0)
+			(at 279.4 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5791,7 +3948,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 190.5 232.41 0)
+			(at 279.4 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5802,7 +3959,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 190.5 232.41 0)
+			(at 279.4 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5813,7 +3970,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 190.5 232.41 0)
+			(at 279.4 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5840,7 +3997,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 25.4 232.41 0)
+		(at 292.1 40.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5850,7 +4007,7 @@
 		(dnp no)
 		(uuid "990837ff-fef7-473f-af63-2078673f5108")
 		(property "Reference" "C57"
-			(at 29.21 232.41 0)
+			(at 295.402 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5861,7 +4018,7 @@
 			)
 		)
 		(property "Value" "1uF 50V"
-			(at 30.48 233.68 0)
+			(at 295.402 42.545 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5872,7 +4029,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0805_2012Metric"
-			(at 26.37 228.6 0)
+			(at 292.1 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5883,7 +4040,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 25.4 232.41 0)
+			(at 292.1 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5894,7 +4051,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 25.4 232.41 0)
+			(at 292.1 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5905,7 +4062,7 @@
 			)
 		)
 		(property "LCSC" "C28323"
-			(at 215.9 232.41 0)
+			(at 292.1 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5932,7 +4089,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:NetTie_2")
-		(at 266.7 88.9 0)
+		(at 241.3 83.82 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5942,7 +4099,7 @@
 		(dnp no)
 		(uuid "9c65a82e-3f86-4d37-8df3-c89f47de11fc")
 		(property "Reference" "NT3"
-			(at 266.7 86.36 0)
+			(at 241.3 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5952,7 +4109,7 @@
 			)
 		)
 		(property "Value" "VBUS_RTN_TIE"
-			(at 266.7 85.09 0)
+			(at 241.3 88.265 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5962,7 +4119,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:NetTie-2_SMD_Pad0.5mm"
-			(at 266.7 88.9 0)
+			(at 241.3 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5973,7 +4130,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 266.7 88.9 0)
+			(at 241.3 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5984,7 +4141,7 @@
 			)
 		)
 		(property "Description" "Net tie, 2 pins"
-			(at 266.7 88.9 0)
+			(at 241.3 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5995,7 +4152,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 266.7 88.9 0)
+			(at 241.3 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6022,7 +4179,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 120.65 48.26 0)
+		(at 91.44 41.91 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6032,7 +4189,7 @@
 		(dnp no)
 		(uuid "a39077db-9c63-4da8-a159-c01e013f511b")
 		(property "Reference" "R52"
-			(at 124.46 48.26 0)
+			(at 94.742 40.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6042,7 +4199,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 124.46 49.53 0)
+			(at 94.742 43.815 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6052,7 +4209,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 118.872 48.26 90)
+			(at 91.44 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6063,7 +4220,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 120.65 48.26 0)
+			(at 91.44 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6074,7 +4231,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 120.65 48.26 0)
+			(at 91.44 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6085,7 +4242,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 120.65 48.26 0)
+			(at 91.44 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6112,7 +4269,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 304.8 66.04 0)
+		(at 261.62 80.01 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6122,7 +4279,7 @@
 		(dnp no)
 		(uuid "a7589f3f-6a2f-46fc-845f-fef54443772b")
 		(property "Reference" "C59"
-			(at 308.61 66.04 0)
+			(at 264.922 78.74 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6133,7 +4290,7 @@
 			)
 		)
 		(property "Value" "22nF C0G"
-			(at 309.88 67.31 0)
+			(at 264.922 81.915 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6144,7 +4301,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0805_2012Metric"
-			(at 305.765 62.23 0)
+			(at 261.62 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6155,7 +4312,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 304.8 66.04 0)
+			(at 261.62 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6166,7 +4323,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 304.8 66.04 0)
+			(at 261.62 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6177,7 +4334,7 @@
 			)
 		)
 		(property "LCSC" "C77069"
-			(at 304.8 66.04 0)
+			(at 261.62 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6204,7 +4361,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 88.9 232.41 0)
+		(at 254 40.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6214,7 +4371,7 @@
 		(dnp no)
 		(uuid "ab945d09-ed07-4b86-a93c-caee6973eaca")
 		(property "Reference" "C54"
-			(at 92.71 232.41 0)
+			(at 257.302 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6225,7 +4382,7 @@
 			)
 		)
 		(property "Value" "100nF 50V"
-			(at 95.25 233.68 0)
+			(at 257.302 42.545 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6236,7 +4393,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 89.865 228.6 0)
+			(at 254 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6247,7 +4404,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 88.9 232.41 0)
+			(at 254 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6258,7 +4415,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 88.9 232.41 0)
+			(at 254 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6269,7 +4426,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 88.9 232.41 0)
+			(at 254 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6296,7 +4453,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 133.35 170.18 0)
+		(at 102.87 163.83 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6306,7 +4463,7 @@
 		(dnp no)
 		(uuid "afecea45-f4f4-4703-9ce8-12a0bad51692")
 		(property "Reference" "C53"
-			(at 137.16 170.18 0)
+			(at 106.172 162.56 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6317,7 +4474,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 138.43 171.45 0)
+			(at 106.172 165.735 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6328,7 +4485,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 134.315 166.37 0)
+			(at 102.87 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6339,7 +4496,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 133.35 170.18 0)
+			(at 102.87 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6350,7 +4507,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 133.35 170.18 0)
+			(at 102.87 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6361,7 +4518,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 133.35 170.18 0)
+			(at 102.87 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6388,7 +4545,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:74LVC2G17")
-		(at 165.1 232.41 0)
+		(at 228.6 40.64 0)
 		(unit 3)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6398,7 +4555,7 @@
 		(dnp no)
 		(uuid "b0d6cf35-f94f-4cc5-96a6-582a9d44b038")
 		(property "Reference" "U11"
-			(at 163.83 240.03 0)
+			(at 222.25 40.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6408,7 +4565,7 @@
 			)
 		)
 		(property "Value" "SN74LVC2G17DBVR"
-			(at 167.64 224.79 0)
+			(at 228.6 54.61 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6418,7 +4575,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:SOT-23-6"
-			(at 165.1 232.41 0)
+			(at 228.6 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6429,7 +4586,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf"
-			(at 165.1 232.41 0)
+			(at 228.6 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6440,7 +4597,7 @@
 			)
 		)
 		(property "Description" "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS"
-			(at 165.1 232.41 0)
+			(at 228.6 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6479,7 +4636,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 139.7 232.41 0)
+		(at 266.7 40.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6489,7 +4646,7 @@
 		(dnp no)
 		(uuid "bc3419e4-4b13-4605-86a4-f943a7f7d5fa")
 		(property "Reference" "C55"
-			(at 143.51 232.41 0)
+			(at 270.002 39.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6500,7 +4657,7 @@
 			)
 		)
 		(property "Value" "100nF 50V"
-			(at 146.05 233.68 0)
+			(at 270.002 42.545 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6511,7 +4668,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 140.665 228.6 0)
+			(at 266.7 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6522,7 +4679,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 139.7 232.41 0)
+			(at 266.7 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6533,7 +4690,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 139.7 232.41 0)
+			(at 266.7 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6544,7 +4701,7 @@
 			)
 		)
 		(property "LCSC" "C14663"
-			(at 139.7 232.41 0)
+			(at 266.7 40.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6571,7 +4728,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 266.7 110.49 0)
+		(at 219.71 114.3 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6581,7 +4738,7 @@
 		(dnp no)
 		(uuid "bccbe01d-2763-47b9-afba-9661b05eabd4")
 		(property "Reference" "R60"
-			(at 270.51 110.49 0)
+			(at 219.71 108.458 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6591,7 +4748,7 @@
 			)
 		)
 		(property "Value" "12k"
-			(at 270.51 111.76 0)
+			(at 219.71 111.379 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6601,7 +4758,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 264.922 110.49 90)
+			(at 219.71 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6612,7 +4769,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 266.7 110.49 0)
+			(at 219.71 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6623,7 +4780,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 266.7 110.49 0)
+			(at 219.71 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6634,7 +4791,7 @@
 			)
 		)
 		(property "LCSC" "C22790"
-			(at 266.7 110.49 0)
+			(at 219.71 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6661,7 +4818,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 107.95 160.02 90)
+		(at 80.01 160.02 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6671,7 +4828,7 @@
 		(dnp no)
 		(uuid "c02f0f58-ba60-4545-a086-f26bdf591469")
 		(property "Reference" "R51"
-			(at 107.95 157.48 0)
+			(at 80.01 154.178 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6681,7 +4838,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 107.95 156.21 0)
+			(at 80.01 157.099 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6691,7 +4848,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 107.95 161.798 90)
+			(at 80.01 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6702,7 +4859,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 107.95 160.02 0)
+			(at 80.01 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6713,7 +4870,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 107.95 160.02 0)
+			(at 80.01 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6724,7 +4881,7 @@
 			)
 		)
 		(property "LCSC" "C25804"
-			(at 107.95 160.02 0)
+			(at 80.01 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6751,7 +4908,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 285.75 120.65 90)
+		(at 248.92 114.3 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6761,7 +4918,7 @@
 		(dnp no)
 		(uuid "c172c3f4-f466-4ffa-8021-50c4682c7654")
 		(property "Reference" "R62"
-			(at 285.75 116.84 0)
+			(at 248.92 108.458 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6771,7 +4928,7 @@
 			)
 		)
 		(property "Value" "3.3k"
-			(at 285.75 115.57 0)
+			(at 248.92 111.379 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6781,7 +4938,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 285.75 122.428 90)
+			(at 248.92 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6792,7 +4949,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 285.75 120.65 0)
+			(at 248.92 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6803,7 +4960,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 285.75 120.65 0)
+			(at 248.92 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6814,7 +4971,7 @@
 			)
 		)
 		(property "LCSC" "C22978"
-			(at 285.75 120.65 0)
+			(at 248.92 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6841,7 +4998,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 203.2 68.58 0)
+		(at 152.4 68.58 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6851,7 +5008,7 @@
 		(dnp no)
 		(uuid "c1b17257-1d3c-4496-85dc-d5fc0f81e419")
 		(property "Reference" "TP25"
-			(at 203.2 48.26 0)
+			(at 151.13 62.23 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6861,7 +5018,7 @@
 			)
 		)
 		(property "Value" "TP_FLT_OC_B"
-			(at 203.2 46.99 0)
+			(at 151.13 64.77 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6871,7 +5028,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 208.28 68.58 0)
+			(at 152.4 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6882,7 +5039,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 208.28 68.58 0)
+			(at 152.4 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6893,7 +5050,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 203.2 68.58 0)
+			(at 152.4 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6904,7 +5061,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 203.2 68.58 0)
+			(at 152.4 68.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6928,7 +5085,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 317.5 120.65 0)
+		(at 271.78 114.3 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6938,7 +5095,7 @@
 		(dnp no)
 		(uuid "c9e3c9ab-0cab-407b-b465-00609d16e0ac")
 		(property "Reference" "TP23"
-			(at 317.5 104.14 0)
+			(at 270.51 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6948,7 +5105,7 @@
 			)
 		)
 		(property "Value" "TP_NTC_ADC"
-			(at 317.5 102.87 0)
+			(at 270.51 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6958,7 +5115,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 322.58 120.65 0)
+			(at 271.78 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6969,7 +5126,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 322.58 120.65 0)
+			(at 271.78 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6980,7 +5137,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 317.5 120.65 0)
+			(at 271.78 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6991,7 +5148,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 317.5 120.65 0)
+			(at 271.78 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7015,7 +5172,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 120.65 139.7 0)
+		(at 91.44 133.35 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7025,7 +5182,7 @@
 		(dnp no)
 		(uuid "cf390ba3-8d8e-42ec-902e-c731e27eb0cf")
 		(property "Reference" "R55"
-			(at 124.46 139.7 0)
+			(at 94.742 132.08 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7035,7 +5192,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 124.46 140.97 0)
+			(at 94.742 135.255 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7045,7 +5202,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 118.872 139.7 90)
+			(at 91.44 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7056,7 +5213,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 120.65 139.7 0)
+			(at 91.44 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7067,7 +5224,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 120.65 139.7 0)
+			(at 91.44 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7078,7 +5235,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 120.65 139.7 0)
+			(at 91.44 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7105,7 +5262,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 254 40.64 0)
+		(at 200.66 76.2 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7115,7 +5272,7 @@
 		(dnp no)
 		(uuid "cf9ca856-4ba5-4f9b-9387-0d6766ae597c")
 		(property "Reference" "TP19"
-			(at 254 36.83 0)
+			(at 199.39 69.85 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7125,7 +5282,7 @@
 			)
 		)
 		(property "Value" "TP_VBUS_RAW"
-			(at 254 35.56 0)
+			(at 199.39 72.39 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7135,7 +5292,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 259.08 40.64 0)
+			(at 200.66 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7146,7 +5303,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 259.08 40.64 0)
+			(at 200.66 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7157,7 +5314,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 254 40.64 0)
+			(at 200.66 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7168,7 +5325,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 254 40.64 0)
+			(at 200.66 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7192,7 +5349,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 107.95 99.06 90)
+		(at 80.01 99.06 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7202,7 +5359,7 @@
 		(dnp no)
 		(uuid "d5119bbb-0e87-47b2-94eb-3b1ed586a989")
 		(property "Reference" "R49"
-			(at 107.95 96.52 0)
+			(at 80.01 93.218 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7212,7 +5369,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 107.95 95.25 0)
+			(at 80.01 96.139 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7222,7 +5379,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 107.95 100.838 90)
+			(at 80.01 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7233,7 +5390,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 107.95 99.06 0)
+			(at 80.01 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7244,7 +5401,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 107.95 99.06 0)
+			(at 80.01 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7255,7 +5412,7 @@
 			)
 		)
 		(property "LCSC" "C25804"
-			(at 107.95 99.06 0)
+			(at 80.01 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7282,7 +5439,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 266.7 45.72 0)
+		(at 219.71 76.2 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7292,7 +5449,7 @@
 		(dnp no)
 		(uuid "e2428c94-c7dc-4fd7-8539-af6a9b161e6b")
 		(property "Reference" "R57"
-			(at 270.51 45.72 0)
+			(at 219.71 70.358 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7302,7 +5459,7 @@
 			)
 		)
 		(property "Value" "2.20k 0.1%"
-			(at 273.05 46.99 0)
+			(at 219.71 73.279 270)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7312,7 +5469,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 264.922 45.72 90)
+			(at 219.71 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7323,7 +5480,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 266.7 45.72 0)
+			(at 219.71 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7334,7 +5491,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 266.7 45.72 0)
+			(at 219.71 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7345,7 +5502,7 @@
 			)
 		)
 		(property "LCSC" "C861295"
-			(at 266.7 45.72 0)
+			(at 219.71 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7372,7 +5529,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 266.7 66.04 0)
+		(at 228.6 80.01 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7382,7 +5539,7 @@
 		(dnp no)
 		(uuid "eac9444e-443a-432c-9fa3-d75ca6fbb8c1")
 		(property "Reference" "R58"
-			(at 270.51 66.04 0)
+			(at 231.902 78.74 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7392,7 +5549,7 @@
 			)
 		)
 		(property "Value" "1.50k 0.1%"
-			(at 273.05 67.31 0)
+			(at 231.902 81.915 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7402,7 +5559,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 264.922 66.04 90)
+			(at 228.6 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7413,7 +5570,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 266.7 66.04 0)
+			(at 228.6 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7424,7 +5581,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 266.7 66.04 0)
+			(at 228.6 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7435,7 +5592,7 @@
 			)
 		)
 		(property "LCSC" "C705741"
-			(at 266.7 66.04 0)
+			(at 228.6 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7462,7 +5619,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 81.28 58.42 0)
+		(at 33.02 64.77 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7472,7 +5629,7 @@
 		(dnp no)
 		(uuid "ecff252c-ea51-4fb7-be01-ca38b17a898f")
 		(property "Reference" "R43"
-			(at 85.09 58.42 0)
+			(at 36.322 63.5 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7482,7 +5639,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 85.09 59.69 0)
+			(at 36.322 66.675 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7492,7 +5649,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 79.502 58.42 90)
+			(at 33.02 64.77 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7503,7 +5660,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 58.42 0)
+			(at 33.02 64.77 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7514,7 +5671,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 81.28 58.42 0)
+			(at 33.02 64.77 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7525,7 +5682,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 81.28 58.42 0)
+			(at 33.02 64.77 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7552,7 +5709,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 95.25 58.42 0)
+		(at 45.72 72.39 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7562,7 +5719,7 @@
 		(dnp no)
 		(uuid "f11d2575-2682-46e0-bb3c-2c73830f4110")
 		(property "Reference" "C45"
-			(at 99.06 58.42 0)
+			(at 49.022 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7573,7 +5730,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 100.33 59.69 0)
+			(at 49.022 74.295 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7584,7 +5741,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 96.215 54.61 0)
+			(at 45.72 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7595,7 +5752,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 95.25 58.42 0)
+			(at 45.72 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7606,7 +5763,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 95.25 58.42 0)
+			(at 45.72 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7617,7 +5774,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 95.25 58.42 0)
+			(at 45.72 72.39 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7644,7 +5801,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 203.2 160.02 0)
+		(at 152.4 160.02 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7654,7 +5811,7 @@
 		(dnp no)
 		(uuid "f2748e73-5494-4215-8fda-ace45b331513")
 		(property "Reference" "TP28"
-			(at 203.2 142.24 0)
+			(at 151.13 153.67 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7664,7 +5821,7 @@
 			)
 		)
 		(property "Value" "TP_FLT_OV"
-			(at 203.2 140.97 0)
+			(at 151.13 156.21 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7674,7 +5831,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 208.28 160.02 0)
+			(at 152.4 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7685,7 +5842,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 208.28 160.02 0)
+			(at 152.4 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7696,7 +5853,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 203.2 160.02 0)
+			(at 152.4 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7707,7 +5864,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 203.2 160.02 0)
+			(at 152.4 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7731,7 +5888,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 266.7 130.81 0)
+		(at 233.68 118.11 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7741,7 +5898,7 @@
 		(dnp no)
 		(uuid "f37488c8-bd4b-40e8-9c2e-c231315e46be")
 		(property "Reference" "R61"
-			(at 270.51 130.81 0)
+			(at 236.982 116.84 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7751,7 +5908,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 270.51 132.08 0)
+			(at 236.982 120.015 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7761,7 +5918,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 264.922 130.81 90)
+			(at 233.68 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7772,7 +5929,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 266.7 130.81 0)
+			(at 233.68 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7783,7 +5940,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 266.7 130.81 0)
+			(at 233.68 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7794,7 +5951,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 266.7 130.81 0)
+			(at 233.68 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7821,7 +5978,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 203.2 129.54 0)
+		(at 152.4 129.54 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7831,7 +5988,7 @@
 		(dnp no)
 		(uuid "fa00cff1-416c-4f88-88f7-c1fd11224677")
 		(property "Reference" "TP27"
-			(at 203.2 111.76 0)
+			(at 151.13 123.19 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7841,7 +5998,7 @@
 			)
 		)
 		(property "Value" "TP_FLT_OT"
-			(at 203.2 110.49 0)
+			(at 151.13 125.73 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7851,7 +6008,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 208.28 129.54 0)
+			(at 152.4 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7862,7 +6019,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 208.28 129.54 0)
+			(at 152.4 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7873,7 +6030,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 203.2 129.54 0)
+			(at 152.4 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7884,7 +6041,7 @@
 			)
 		)
 		(property "LCSC" "NOFIT"
-			(at 203.2 129.54 0)
+			(at 152.4 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7908,7 +6065,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:R")
-		(at 81.28 88.9 0)
+		(at 33.02 95.25 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7918,7 +6075,7 @@
 		(dnp no)
 		(uuid "fa1b42da-b719-49bd-b046-aa389ef84981")
 		(property "Reference" "R44"
-			(at 85.09 88.9 0)
+			(at 36.322 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7928,7 +6085,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 85.09 90.17 0)
+			(at 36.322 97.155 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7938,7 +6095,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:R_0603_1608Metric"
-			(at 79.502 88.9 90)
+			(at 33.02 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7949,7 +6106,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 88.9 0)
+			(at 33.02 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7960,7 +6117,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 81.28 88.9 0)
+			(at 33.02 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7971,7 +6128,7 @@
 			)
 		)
 		(property "LCSC" "C23162"
-			(at 81.28 88.9 0)
+			(at 33.02 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7998,7 +6155,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 304.8 130.81 0)
+		(at 261.62 118.11 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8008,7 +6165,7 @@
 		(dnp no)
 		(uuid "fab863d8-95f4-4595-9dbf-a3074a593968")
 		(property "Reference" "C61"
-			(at 308.61 130.81 0)
+			(at 264.922 116.84 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8019,7 +6176,7 @@
 			)
 		)
 		(property "Value" "22nF C0G"
-			(at 309.88 132.08 0)
+			(at 264.922 120.015 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8030,7 +6187,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0805_2012Metric"
-			(at 305.765 127 0)
+			(at 261.62 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8041,7 +6198,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 304.8 130.81 0)
+			(at 261.62 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8052,7 +6209,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 304.8 130.81 0)
+			(at 261.62 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8063,7 +6220,7 @@
 			)
 		)
 		(property "LCSC" "C77069"
-			(at 304.8 130.81 0)
+			(at 261.62 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8090,7 +6247,7 @@
 	)
 	(symbol
 		(lib_id "FE_UFPR_4_0:C")
-		(at 133.35 48.26 0)
+		(at 102.87 41.91 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8100,7 +6257,7 @@
 		(dnp no)
 		(uuid "fce32d5f-e7cd-4cae-8154-c884befd729c")
 		(property "Reference" "C49"
-			(at 137.16 48.26 0)
+			(at 106.172 40.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8111,7 +6268,7 @@
 			)
 		)
 		(property "Value" "1nF C0G"
-			(at 138.43 49.53 0)
+			(at 106.172 43.815 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8122,7 +6279,7 @@
 			)
 		)
 		(property "Footprint" "FE_UFPR_4_0:C_0603_1608Metric"
-			(at 134.315 44.45 0)
+			(at 102.87 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8133,7 +6290,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 133.35 48.26 0)
+			(at 102.87 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8144,7 +6301,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 133.35 48.26 0)
+			(at 102.87 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8155,7 +6312,7 @@
 			)
 		)
 		(property "LCSC" "C106246"
-			(at 133.35 48.26 0)
+			(at 102.87 41.91 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8179,6 +6336,1635 @@
 				)
 			)
 		)
+	)
+	(text "FAULT RECEIVERS  (5 x)  -  DB37 open-collector, FAULT = HIGH"
+		(exclude_from_sim no)
+		(at 15.24 26.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "6d46c44e-8d68-46fd-aab1-6b7d41f89e3b")
+	)
+	(text "+3V3 SUPPLY / DECOUPLING  -  U9-U11 power units"
+		(exclude_from_sim no)
+		(at 190.5 22.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "89523d1d-e693-4cd1-9541-0efee430dea9")
+	)
+	(text "VBUS SENSE  (Kelvin)"
+		(exclude_from_sim no)
+		(at 190.5 66.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "c08a9a35-ecd9-4ac4-840f-627067241b16")
+	)
+	(text "NTC / TEMPERATURE  (0-10 V)"
+		(exclude_from_sim no)
+		(at 190.5 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "b1bccd7e-a41c-4f35-8bbc-102c85ff7019")
+	)
+	(text "VBUS FRONT-END   DB37 pin 7, Kelvin return pin 11\nModule sensor: 6.4 / 6.5 / 6.6 V at 900 V, load max 5 mA.\nR57 2.20k 0.1% / R58 1.50k 0.1%  (Yageo RT0603B, 25 ppm, one family\n  so the ratio tracks over temperature).\n  gain 0.405405, Rth 892 R, module load 1.95 mA = 39 % of the limit.\n  3.000 V at the ADC = 1024.6 V of bus.  1000 V -> 2.928 V -> code 3998.\nR59 3.3k + C59 22nF C0G = anti-alias + charge bucket AT the ADC pin.\n  fc 1726 Hz;  S/H charge-share 2.8 codes;  DC error 2.6 codes.\n  The S/H sees the bucket, not the divider => 68 ns settling.\n  *** the 512-cycle ACQPS workaround can be dropped (~320 ns is ample) ***\nAll three documented 3.0 defects are fixed here:\n  (1) source impedance 34.5k -> 892 R + a bucket at the pin\n  (2) Kelvin return on its own DB37 pin, tied to GND at NT3 and nowhere\n      else - the -52 mV load-dependent offset came from sharing the\n      power return with 2.2 A of module aux current\n  (3) rescaled: VBUS_DIVIDER_RATIO 297.14 -> 341.538\nIf the sensor ever rails to 15 V the ADC clamp takes 0.63 mA (limit 2 mA)."
+		(exclude_from_sim no)
+		(at 311.15 26.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "b9e766aa-56a6-4ebb-a89d-7369a9948fbe")
+	)
+	(text "NTC / TEMPERATURE   DB37 pin 29 - the module's ONLY temperature output\nDatasheet: 10 V at T_NTC = 82 C, inverter section, load max 5 mA.\nThe optional-components table (p.3) shows only the inverter-section sensor\nfitted, so pin 29 is the NTC2 channel: the divider must hold off 10 V\ncontinuously (3.0 read pin 9 instead, which is a 15 V supply output).\nR60 12k / R61 4.7k -> gain 0.281437.  10.000 V -> 2.814 V = 93.8 % of the\n  3.0 V range; clips at 10.66 V of module output.  Load 0.60 mA.\nR62 3.3k + C61 22nF C0G -> fc 1083 Hz, the \"slow channel ~1 kHz\" target.\nReferenced to board GND, not to VBUS_RTN: keeping the Kelvin line single-\n  purpose is worth more than the ~1 % FS error a module-GND shift adds here.\nADC pin: ADCINC3 = BoosterPack site-1 J3-24 (Vbus is ADCINC2 = J3-27, same\n  header).  Suggested SOC: ADC-C SOC2, i.e. after the SOC1 (Vbus) EOC that\n  fires the 10 kHz ISR, so this slow channel never delays the control loop."
+		(exclude_from_sim no)
+		(at 311.15 62.97 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "07a10817-ac1f-404e-b432-15b71adf0a60")
+	)
+	(text "FIRMWARE HANDOFF (hw_control_v2.h) - written by S5\n  MODULE_FAULT_ACTIVE_LOW   1 -> 0      fault = HIGH; receiver chain is non-inverting\n  Input X-BAR trip polarity must be inverted to match (OSHT1-3, GPIO25/27/26)\n  VBUS_DIVIDER_RATIO      297.14 -> 341.538   V(bus) per V(ADC)\n  VBUS_VOLTS_PER_CODE     3.0 * 341.538 / 4096 = 0.250150 V/code, full scale 1024.6 V\n  VBUS_OFFSET_CODE        11.4 -> re-measure; the old value was a divider artefact\n  NTC channel             ADCINC3 (ADC-C ch3), BoosterPack J3-24; suggest ADC-C SOC2\n  NTC_VOLTS_PER_CODE      3.0 / 0.281437 / 4096 = 0.002602 V(module)/code\n                          10 V = 82 C; the channel clips at 10.66 V of module output\n  Vbus ACQPS              the 512-cycle S/H workaround is no longer needed\n  Sensor tolerance 6.4/6.5/6.6 V at 900 V is +/-1.5 % => trim VBUS_DIVIDER_RATIO\n  on the bench against a meter before trusting absolute bus volts."
+		(exclude_from_sim no)
+		(at 311.15 91.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "b43e4f2c-e911-4089-b35a-f01eb01b2dd9")
+	)
+	(text "MODULE ERROR TABLE - datasheet p.6.  WHICH PIN ASSERTS FOR WHICH FAULT\n                                  HB A   HB B   HB C   Temp   Volt\n                                  p2     p22    p5     p6     p16\n  Error driver core HB A           X\n  Error driver core HB B                  X\n  Error driver core HB C                         X\n  Overcurrent  HB A / HB B / HB C  X      X      X\n  Overtemperature output stage     X      X      X      X\n  Overtemperature PCB                                   X\n  Overvoltage DC-link (option)     X      X      X             X\n  Undervoltage power supply                                    X\n\n=> OVERCURRENT IS NOT PER-PHASE.  An OC in any leg asserts all three HB pins,\n   so FLT_OC_A/B/C cannot identify the faulting phase.  Only \"error driver\n   core\" is unique to one pin.  Firmware decode:\n     exactly one of A/B/C   -> driver-core fault in that half-bridge\n     A+B+C only             -> overcurrent, leg unknown\n     A+B+C + Temp           -> overtemperature output stage\n     A+B+C + Volt           -> DC-link overvoltage\n     Temp only              -> overtemperature PCB\n     Volt only              -> supply undervoltage\nDatasheet note: \"Over temperature shut down must be realized by customer\"\n=> the OT trip is OUR job - FLT_OT (pin 6) plus the NTC channel below."
+		(exclude_from_sim no)
+		(at 15.24 196 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "e2528180-c32c-4863-b665-b93ae634bd8d")
+	)
+	(text "S10 LAYOUT NOTES (module status)\n1. R42-R46 (pull-ups) and C44-C48 (1nF) belong AT THE DB37 - they terminate the\n   harness where it enters.  Ra/Rb/Ca and U9-U11 group together at the far end.\n2. C58 at DB37 pins 7/11 and C60 at pin 29, each returned to its own reference.\n3. VBUS_SNS_RAW + VBUS_RTN route as a PAIR into the analog partition.  NT3 is the\n   ONLY GND tie for VBUS_RTN: keep it within a few mm of R58 and let no other\n   current share that copper.  This is what fixes 3.0's -52 mV Vbus offset.\n4. C59 / C61 (22nF buckets) hard against the BoosterPack ADC pins J3-27 / J3-24,\n   ground vias straight into the analog partition - they are the S/H charge source.\n5. C54-C56 within 2 mm of each 74LVC2G17 VCC/GND pair; C57 is the local 3V3 bulk.\n6. The five FLT_*_15V traces carry 13.5 V edges - keep them off the analog partition."
+		(exclude_from_sim no)
+		(at 15.24 243.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "ffa1457b-86fb-4e24-943b-1b8e48f2d372")
+	)
+	(text "FAULT RECEIVERS - 5 identical channels, DB37 pins 2 / 22 / 5 / 6 / 16\nModule output is open collector, \"logic low = no fault\" (datasheet p.2)\n=> FAULT = HIGH, sink <= 15 mA, <= 15 V.  Pull-up defines the HIGH level.\nChain: DB37 - Rpu 4.7k to +13V5_GATE - C 1nF to GND - Ra 10k - node _DIV\n       - Rb 4.7k and C 1nF to GND - 74LVC2G17 Schmitt - 3V3 GPIO.\nLevels at the DB37 pin:  no fault 0.15 V (module sinks 2.84 mA) / fault 10.23 V.\nReferred to that pin the receiver trips between 2.60 V and 7.32 V worst case\n  => 2.45 V of margin from the LOW state, 2.91 V from the HIGH state.\n  This is why the pull-up goes to 13.5 V and not to 5 V: the margin has to\n  absorb module-GND shift across the harness, not just board noise.\nAt the Schmitt: 3.27 V nominal when faulted, 3.16 V worst case, against\n  VT+ max 2.34 V at VCC 3.3 V => 0.82 V.  LVC inputs are rated to 5.5 V.\nIoff keeps the outputs high-Z if board +3V3 dies while the LaunchPad lives\n  (its own LDO runs off +5V), so the GPIO pull-up then reads FAULT.\nResponse 5.7 us typ / 8.9 us worst case (two 3.56 us poles).  The module\n  protects itself in 15 us and the PWM period is 100 us - this is the\n  reporting and X-BAR backstop path, not the primary protection.\nFAIL-SAFE: an unplugged DB37 floats all five lines high => all read FAULT.\nLoad 14.2 mA total on +13V5_GATE; P(Rpu) 38 mW each, 0603 at 38 %.\nNo fault LEDs by design: these lines drive a hardware trip and are not\n  loaded with anything optional."
+		(exclude_from_sim no)
+		(at 116.84 196 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "ceee2a1b-bd61-4d05-95a6-b166486cd374")
+	)
+	(wire
+		(pts
+			(xy 17.78 38.1) (xy 33.02 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cc852a92-bb18-40b9-aa81-b5aa5d72feb9")
+	)
+	(wire
+		(pts
+			(xy 33.02 38.1) (xy 45.72 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "138a60e8-c97f-4d15-84de-bc281f4485b2")
+	)
+	(wire
+		(pts
+			(xy 45.72 38.1) (xy 58.42 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "636dc307-eb05-42ee-8327-d7175ba7451b")
+	)
+	(wire
+		(pts
+			(xy 58.42 38.1) (xy 76.2 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa843450-5ccb-4003-addd-2c632a86b35a")
+	)
+	(wire
+		(pts
+			(xy 33.02 30.48) (xy 33.02 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "662b9bd8-c18a-4606-8588-0b5144fbc421")
+	)
+	(wire
+		(pts
+			(xy 45.72 45.72) (xy 45.72 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fae4307d-33b5-49a8-b91f-af82c040d1d1")
+	)
+	(wire
+		(pts
+			(xy 83.82 38.1) (xy 91.44 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "51f8ebb8-3b85-4550-8c61-9c4323ee7d55")
+	)
+	(wire
+		(pts
+			(xy 91.44 38.1) (xy 102.87 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5750cba8-22e1-49f8-8bc7-40d31fb10f14")
+	)
+	(wire
+		(pts
+			(xy 102.87 38.1) (xy 110.49 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "baf252ed-182a-40d7-8c3f-fa36cc744f04")
+	)
+	(wire
+		(pts
+			(xy 91.44 45.72) (xy 91.44 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a202a4c3-a71a-4347-acdd-3e4f5706c8c0")
+	)
+	(wire
+		(pts
+			(xy 102.87 45.72) (xy 102.87 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7a873e17-7cf0-4319-ac49-76324e861260")
+	)
+	(wire
+		(pts
+			(xy 138.43 38.1) (xy 152.4 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d04222f6-d128-453a-9fcb-1dbf7b60ed6d")
+	)
+	(wire
+		(pts
+			(xy 152.4 38.1) (xy 166.37 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dc5bb121-481c-483a-9b6c-65f2e027a3f0")
+	)
+	(wire
+		(pts
+			(xy 17.78 68.58) (xy 33.02 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "59781b47-dda4-46e0-83cd-6a97d8ca8cd1")
+	)
+	(wire
+		(pts
+			(xy 33.02 68.58) (xy 45.72 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b1ec3a2d-4aff-49fd-a5f9-adf84d377f94")
+	)
+	(wire
+		(pts
+			(xy 45.72 68.58) (xy 76.2 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7b6786e-9c87-49e9-9b85-c9c7e0845bfa")
+	)
+	(wire
+		(pts
+			(xy 33.02 60.96) (xy 33.02 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "39a64f95-b68b-4439-a92e-c548ccae7d44")
+	)
+	(wire
+		(pts
+			(xy 45.72 76.2) (xy 45.72 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f31b413c-ce50-4c97-8a81-5a58d4812c7d")
+	)
+	(wire
+		(pts
+			(xy 83.82 68.58) (xy 91.44 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15c7172c-b9f7-4324-91ec-bc1f5e35e84d")
+	)
+	(wire
+		(pts
+			(xy 91.44 68.58) (xy 102.87 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9985b726-7707-4a15-b20a-c9e0060159f1")
+	)
+	(wire
+		(pts
+			(xy 102.87 68.58) (xy 110.49 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15842c6c-e2fe-4806-ab09-de3e9adcbde2")
+	)
+	(wire
+		(pts
+			(xy 91.44 76.2) (xy 91.44 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09f0014f-527b-4c76-ad30-52e49577af11")
+	)
+	(wire
+		(pts
+			(xy 102.87 76.2) (xy 102.87 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c4c28f8d-d514-49d1-9d1f-c32c30bcbf53")
+	)
+	(wire
+		(pts
+			(xy 138.43 68.58) (xy 152.4 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "af53ae7a-c6e2-41f3-9232-7c7a4adc9a32")
+	)
+	(wire
+		(pts
+			(xy 152.4 68.58) (xy 166.37 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7733efe8-00b5-496b-ba63-04240f9fce71")
+	)
+	(wire
+		(pts
+			(xy 17.78 99.06) (xy 33.02 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "441f429a-b9f7-47f6-b481-afc8ce88e31d")
+	)
+	(wire
+		(pts
+			(xy 33.02 99.06) (xy 45.72 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "77a83e41-4cf4-4006-8871-75a36f4b68a5")
+	)
+	(wire
+		(pts
+			(xy 45.72 99.06) (xy 76.2 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b0df6629-1b33-4e3b-8469-5cf415466ed6")
+	)
+	(wire
+		(pts
+			(xy 33.02 91.44) (xy 33.02 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0ef13a32-a850-4284-8514-98762c123c94")
+	)
+	(wire
+		(pts
+			(xy 45.72 106.68) (xy 45.72 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8930f729-3e9c-4dce-986b-5979985ded0f")
+	)
+	(wire
+		(pts
+			(xy 83.82 99.06) (xy 91.44 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "efb139b9-857b-4607-b25a-344fb43c5750")
+	)
+	(wire
+		(pts
+			(xy 91.44 99.06) (xy 102.87 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aa91bafa-9751-44a5-abdb-a2764aeae738")
+	)
+	(wire
+		(pts
+			(xy 102.87 99.06) (xy 110.49 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f4fec5e-294b-4df6-a7f5-97a4ca1ab92b")
+	)
+	(wire
+		(pts
+			(xy 91.44 106.68) (xy 91.44 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09377749-9536-4202-acec-2088f5ca98b0")
+	)
+	(wire
+		(pts
+			(xy 102.87 106.68) (xy 102.87 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "abd88a99-ec24-4f8c-a52c-f3fd77a1233a")
+	)
+	(wire
+		(pts
+			(xy 138.43 99.06) (xy 152.4 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c151326b-9799-49f2-b062-851f00d6e4a9")
+	)
+	(wire
+		(pts
+			(xy 152.4 99.06) (xy 166.37 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3445b734-9f1c-4461-a26c-f7791e59b94f")
+	)
+	(wire
+		(pts
+			(xy 17.78 129.54) (xy 33.02 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d29d6420-fdee-4934-b371-27375778eff8")
+	)
+	(wire
+		(pts
+			(xy 33.02 129.54) (xy 45.72 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "07e84a6d-7b9e-4db1-be9e-73cbcf1bff64")
+	)
+	(wire
+		(pts
+			(xy 45.72 129.54) (xy 76.2 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "583d6b48-683f-47a8-9c5d-7b43943040be")
+	)
+	(wire
+		(pts
+			(xy 33.02 121.92) (xy 33.02 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "879be9bd-8d47-4e31-aa97-b40b018a8d16")
+	)
+	(wire
+		(pts
+			(xy 45.72 137.16) (xy 45.72 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aeacb3ec-761f-4851-85b2-fb55c7d93e47")
+	)
+	(wire
+		(pts
+			(xy 83.82 129.54) (xy 91.44 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fd10a1b9-e426-475b-a964-b391dcaf9dcd")
+	)
+	(wire
+		(pts
+			(xy 91.44 129.54) (xy 102.87 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5b8cb70b-c16e-43ac-af08-aa743883ef90")
+	)
+	(wire
+		(pts
+			(xy 102.87 129.54) (xy 110.49 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1db1c652-47ad-432e-a9ff-849c45c52532")
+	)
+	(wire
+		(pts
+			(xy 91.44 137.16) (xy 91.44 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78c86364-a8f1-481d-8964-0ad14d018536")
+	)
+	(wire
+		(pts
+			(xy 102.87 137.16) (xy 102.87 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1017f174-ed40-4ef8-84f1-04d9640ce740")
+	)
+	(wire
+		(pts
+			(xy 138.43 129.54) (xy 152.4 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "01036a53-6536-4495-9b31-12350e12c38f")
+	)
+	(wire
+		(pts
+			(xy 152.4 129.54) (xy 166.37 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b5b26c6-1968-4166-87d0-1268f71c6087")
+	)
+	(wire
+		(pts
+			(xy 17.78 160.02) (xy 33.02 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "22976cb5-3319-4555-9e87-ff16b534636d")
+	)
+	(wire
+		(pts
+			(xy 33.02 160.02) (xy 45.72 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f5f5b503-0860-42dd-b9d2-0f4c144f4215")
+	)
+	(wire
+		(pts
+			(xy 45.72 160.02) (xy 76.2 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "289d6d35-96c9-4e50-acbc-be40fe5fc25d")
+	)
+	(wire
+		(pts
+			(xy 33.02 152.4) (xy 33.02 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "db5cbcea-fe8b-4252-b61b-6fcbbeff0805")
+	)
+	(wire
+		(pts
+			(xy 45.72 167.64) (xy 45.72 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "60304b6e-0a6d-41b0-9e34-b91c04d33c98")
+	)
+	(wire
+		(pts
+			(xy 83.82 160.02) (xy 91.44 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8a42ca6-bba8-4ba3-8e3f-770f4537906d")
+	)
+	(wire
+		(pts
+			(xy 91.44 160.02) (xy 102.87 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6489f3e-c1f6-4db8-b335-4764a38751ba")
+	)
+	(wire
+		(pts
+			(xy 102.87 160.02) (xy 110.49 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1cafac6c-b540-436f-8d36-1a5f3c756ac1")
+	)
+	(wire
+		(pts
+			(xy 91.44 167.64) (xy 91.44 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f88be85-4a3f-41bd-b236-81e3a2685e31")
+	)
+	(wire
+		(pts
+			(xy 102.87 167.64) (xy 102.87 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "35e99fe8-ba16-46ab-909b-e71ca85456d9")
+	)
+	(wire
+		(pts
+			(xy 138.43 160.02) (xy 152.4 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "18774b7e-874b-4ff1-8b55-3ae1c67abc56")
+	)
+	(wire
+		(pts
+			(xy 152.4 160.02) (xy 166.37 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "863dc6e7-812a-4056-8eb1-620abbc2044d")
+	)
+	(wire
+		(pts
+			(xy 110.49 182.88) (xy 100.33 182.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "46823b4a-bb7d-4dad-834a-b25c1805b8ba")
+	)
+	(wire
+		(pts
+			(xy 177.8 30.48) (xy 203.2 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fe42a091-b5b6-4eb5-a9ac-1b9a535524ff")
+	)
+	(wire
+		(pts
+			(xy 203.2 30.48) (xy 228.6 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c8f3fd0b-83d8-47c9-a762-1ff5c3c10959")
+	)
+	(wire
+		(pts
+			(xy 228.6 30.48) (xy 254 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2f57baf-3b69-4c70-ab5e-e482bd0d74d5")
+	)
+	(wire
+		(pts
+			(xy 177.8 50.8) (xy 203.2 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "800caf63-fcb9-4185-a3f0-110cbf8bda19")
+	)
+	(wire
+		(pts
+			(xy 203.2 50.8) (xy 228.6 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6da0dd16-bda7-4523-8e24-84167bab0091")
+	)
+	(wire
+		(pts
+			(xy 228.6 50.8) (xy 254 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5635e12-79b8-4dce-883a-b1b811eb7154")
+	)
+	(wire
+		(pts
+			(xy 254 30.48) (xy 254 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8ca6d91c-3e4c-4a80-bedc-6e5118f994c1")
+	)
+	(wire
+		(pts
+			(xy 254 50.8) (xy 254 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed16dda0-9933-492c-8bfd-ae77698043fb")
+	)
+	(wire
+		(pts
+			(xy 254 36.83) (xy 266.7 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b3ff7ad1-2165-4d6d-b999-a85c0e04013e")
+	)
+	(wire
+		(pts
+			(xy 266.7 36.83) (xy 279.4 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a1cfe358-0746-4884-9397-f854004b522b")
+	)
+	(wire
+		(pts
+			(xy 279.4 36.83) (xy 292.1 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "33367672-a4c9-4f54-9729-d8ad34a28513")
+	)
+	(wire
+		(pts
+			(xy 254 44.45) (xy 266.7 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b0cd1603-bfbb-48e7-af8d-8b8d1105f248")
+	)
+	(wire
+		(pts
+			(xy 266.7 44.45) (xy 279.4 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f8230c8-198b-4a86-b111-698b855175ee")
+	)
+	(wire
+		(pts
+			(xy 279.4 44.45) (xy 292.1 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3b98f0c2-c4bf-47bf-9b6b-c44333e6a2bd")
+	)
+	(wire
+		(pts
+			(xy 190.5 76.2) (xy 200.66 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70402024-5b81-44fa-9ee6-2573a3a51b18")
+	)
+	(wire
+		(pts
+			(xy 200.66 76.2) (xy 209.55 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4cd08594-e856-45a6-b885-fa52dd30f6e6")
+	)
+	(wire
+		(pts
+			(xy 209.55 76.2) (xy 215.9 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a0a79e76-b8bd-4c15-b4b1-306d212b2e40")
+	)
+	(wire
+		(pts
+			(xy 223.52 76.2) (xy 228.6 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "57d0bd26-8f75-4b6c-9f7a-16cd037eb519")
+	)
+	(wire
+		(pts
+			(xy 228.6 76.2) (xy 245.11 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "71bcbec0-5ab7-45f0-b642-51e55ceeab29")
+	)
+	(wire
+		(pts
+			(xy 252.73 76.2) (xy 261.62 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1bb628d6-7cca-49e1-9191-94c668c42c6a")
+	)
+	(wire
+		(pts
+			(xy 261.62 76.2) (xy 271.78 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fbf47a31-b516-4909-affb-b10ad51682b8")
+	)
+	(wire
+		(pts
+			(xy 271.78 76.2) (xy 281.94 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a30f03cc-0ce1-4b87-bc23-7a18579c974e")
+	)
+	(wire
+		(pts
+			(xy 261.62 83.82) (xy 261.62 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "30c4bebb-da43-498d-bbcc-48aa0e8cad6d")
+	)
+	(wire
+		(pts
+			(xy 209.55 83.82) (xy 219.71 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4b97eec6-7899-4159-8d7f-2f3d684d326b")
+	)
+	(wire
+		(pts
+			(xy 219.71 83.82) (xy 228.6 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4e5524e3-07cb-42bf-903e-eccb98391dd8")
+	)
+	(wire
+		(pts
+			(xy 228.6 83.82) (xy 238.76 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e0aa924c-3a77-4152-8610-9612784d554a")
+	)
+	(wire
+		(pts
+			(xy 243.84 83.82) (xy 251.46 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8ecdb9f-8b5e-4ead-9209-760e6ac280bc")
+	)
+	(wire
+		(pts
+			(xy 190.5 114.3) (xy 200.66 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b0f0d2c-df54-43ff-b589-7315c6874c1f")
+	)
+	(wire
+		(pts
+			(xy 200.66 114.3) (xy 209.55 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0b20e780-2d46-4c52-9607-4b9e17072885")
+	)
+	(wire
+		(pts
+			(xy 209.55 114.3) (xy 215.9 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6c63fe03-9109-44c5-87e8-f100b2c8e7df")
+	)
+	(wire
+		(pts
+			(xy 209.55 121.92) (xy 209.55 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4950e920-15ab-4360-91bc-0b78cb45e88e")
+	)
+	(wire
+		(pts
+			(xy 223.52 114.3) (xy 233.68 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0b0561ce-2191-487b-9cfb-6bcf83665e2a")
+	)
+	(wire
+		(pts
+			(xy 233.68 114.3) (xy 245.11 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c6724477-0df0-44b1-a9b7-5596f32db9a7")
+	)
+	(wire
+		(pts
+			(xy 233.68 121.92) (xy 233.68 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f3f00a3-dbfa-429e-a29e-7ef9ca9a274f")
+	)
+	(wire
+		(pts
+			(xy 252.73 114.3) (xy 261.62 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89bc7d8c-d6b2-4592-8b15-9c86018d495c")
+	)
+	(wire
+		(pts
+			(xy 261.62 114.3) (xy 271.78 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "61a1e0f5-1f48-41a2-8044-93eaed840073")
+	)
+	(wire
+		(pts
+			(xy 271.78 114.3) (xy 281.94 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b356890a-00cc-4d5f-86a6-5e5b3164ffdf")
+	)
+	(wire
+		(pts
+			(xy 261.62 121.92) (xy 261.62 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2be25c16-8a63-4c1b-80cb-c2ca7598d33a")
+	)
+	(label "FLT_OC_A_DIV"
+		(at 85.09 38.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0518313b-cd2f-4f7b-828c-b7fa6a61ddf3")
+	)
+	(label "FLT_OC_B_DIV"
+		(at 85.09 68.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2df3de51-43db-422c-8b70-a0846fade34c")
+	)
+	(label "FLT_OC_C_DIV"
+		(at 85.09 99.06 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "245dc0c0-d16b-4b3a-922c-91148427561b")
+	)
+	(label "FLT_OT_DIV"
+		(at 85.09 129.54 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "051a8813-73ea-433a-87ea-008b4a8a6bee")
+	)
+	(label "FLT_OV_DIV"
+		(at 85.09 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ece8f4d9-7c56-4811-ad34-61d01f297b9a")
+	)
+	(label "VBUS_DIV"
+		(at 231.14 76.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1062b93c-dc63-403f-8004-cac5345c405d")
+	)
+	(label "NTC_1_DIV"
+		(at 231.14 114.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "73f76651-64d4-406b-b0ac-0b1ba13b10dc")
+	)
+	(global_label "+13V5_GATE"
+		(at 33.02 27.94 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8a871812-c10e-4178-80fa-d5fe7c3c47bd")
+	)
+	(global_label "GND"
+		(at 45.72 48.26 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0e22df9b-9719-4ea0-8c40-885df0ffeef5")
+	)
+	(global_label "GND"
+		(at 91.44 48.26 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a9873379-e99a-468e-a0f7-bebcab38f87f")
+	)
+	(global_label "GND"
+		(at 102.87 48.26 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7ea44b27-ac3c-4fa1-90ac-d95c4966d1b2")
+	)
+	(global_label "+13V5_GATE"
+		(at 33.02 58.42 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4c37197b-9fbe-4fb5-aca3-e51e18f3debb")
+	)
+	(global_label "GND"
+		(at 45.72 78.74 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "a5656a94-b0f6-4747-b266-286da1affec9")
+	)
+	(global_label "GND"
+		(at 91.44 78.74 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e8d21be5-6dea-4422-9d81-6c690af3a3a8")
+	)
+	(global_label "GND"
+		(at 102.87 78.74 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "52ddbc35-521f-4c63-b6ee-7f389a5f3ac8")
+	)
+	(global_label "+13V5_GATE"
+		(at 33.02 88.9 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "26139749-44b6-49ca-b195-4a1b2078ef07")
+	)
+	(global_label "GND"
+		(at 45.72 109.22 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "29397d45-3633-452e-bd88-570edcb0cfab")
+	)
+	(global_label "GND"
+		(at 91.44 109.22 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "baadf823-1394-40d6-a6bc-c3ff8b59efbc")
+	)
+	(global_label "GND"
+		(at 102.87 109.22 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f5607be7-7923-4710-aa4e-36afa9da2832")
+	)
+	(global_label "+13V5_GATE"
+		(at 33.02 119.38 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7009fede-d0c5-4a8e-9bbd-73b5728bc23f")
+	)
+	(global_label "GND"
+		(at 45.72 139.7 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d1fa9176-f48e-4636-8d55-4e3fea3c707d")
+	)
+	(global_label "GND"
+		(at 91.44 139.7 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "2e4d9c16-556d-4bee-a124-c010ba0a757d")
+	)
+	(global_label "GND"
+		(at 102.87 139.7 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b32e49a3-fa37-4a25-9f34-acde9ced3ac2")
+	)
+	(global_label "+13V5_GATE"
+		(at 33.02 149.86 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "08006f91-490d-4536-bb1f-aac9d2133f34")
+	)
+	(global_label "GND"
+		(at 45.72 170.18 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "58a6473c-d596-4f1b-a458-0090cce88ec7")
+	)
+	(global_label "GND"
+		(at 91.44 170.18 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c55850b6-8e3c-4f25-a0be-8ecb0a880f9f")
+	)
+	(global_label "GND"
+		(at 102.87 170.18 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8f0c5bf8-7538-4336-9df3-6ca68b463a70")
+	)
+	(global_label "GND"
+		(at 100.33 182.88 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "55e9eff1-afce-41d5-b0e4-1499df4e5310")
+	)
+	(global_label "+3V3"
+		(at 177.8 30.48 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "bb621dd7-07c7-4185-9fe1-66d8aa83d847")
+	)
+	(global_label "GND"
+		(at 177.8 50.8 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5a5d7dae-459e-4658-8558-964d1fe77a80")
+	)
+	(global_label "GND"
+		(at 261.62 86.36 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "ca1976d5-0ef4-4986-bcc9-0846acfea033")
+	)
+	(global_label "GND"
+		(at 251.46 83.82 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7517b821-5438-4113-92f6-572310e38e37")
+	)
+	(global_label "GND"
+		(at 209.55 124.46 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7d9b23da-bba5-4d2d-bba3-66773cc43e45")
+	)
+	(global_label "GND"
+		(at 233.68 124.46 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "64913c77-1303-4111-97cf-8a04ed9c426e")
+	)
+	(global_label "GND"
+		(at 261.62 124.46 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5b515f19-9f0b-4f8e-835d-9001431c1935")
+	)
+	(hierarchical_label "FLT_OC_A_15V"
+		(shape input)
+		(at 17.78 38.1 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c4d1cbef-2fdc-499d-8f0e-9896b4f4092e")
+	)
+	(hierarchical_label "FLT_OC_A_3V3"
+		(shape output)
+		(at 166.37 38.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "dd682abb-f89e-4606-93c4-694b3df42e0f")
+	)
+	(hierarchical_label "FLT_OC_B_15V"
+		(shape input)
+		(at 17.78 68.58 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "19e5754e-99e4-46e6-9acf-daa840fd6780")
+	)
+	(hierarchical_label "FLT_OC_B_3V3"
+		(shape output)
+		(at 166.37 68.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e2fa5d10-2028-4d23-a88f-803fa2b0ca8e")
+	)
+	(hierarchical_label "FLT_OC_C_15V"
+		(shape input)
+		(at 17.78 99.06 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "77e70b86-2eab-4aaf-8ac1-06f2c682f1b1")
+	)
+	(hierarchical_label "FLT_OC_C_3V3"
+		(shape output)
+		(at 166.37 99.06 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6c3289ea-45cb-4010-84c6-be39263ace26")
+	)
+	(hierarchical_label "FLT_OT_15V"
+		(shape input)
+		(at 17.78 129.54 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e970c96f-f17c-4005-8e80-41cf4da3bf79")
+	)
+	(hierarchical_label "FLT_OT_3V3"
+		(shape output)
+		(at 166.37 129.54 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5ff12b8a-fe64-4079-88b0-97bd2a96bffe")
+	)
+	(hierarchical_label "FLT_OV_15V"
+		(shape input)
+		(at 17.78 160.02 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "47ff0a6f-797a-4817-91ae-40587d505498")
+	)
+	(hierarchical_label "FLT_OV_3V3"
+		(shape output)
+		(at 166.37 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "15ade875-fd8c-403e-abd9-f6339ac4cb45")
+	)
+	(hierarchical_label "VBUS_SNS_RAW"
+		(shape input)
+		(at 190.5 76.2 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4ef033ea-caf5-46e7-bb37-35ed7f35bcf3")
+	)
+	(hierarchical_label "VBUS_ADC"
+		(shape output)
+		(at 281.94 76.2 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "21277394-caa0-497b-8548-20e7dab8e61d")
+	)
+	(hierarchical_label "VBUS_RTN"
+		(shape bidirectional)
+		(at 209.55 83.82 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5384fa12-eee9-44ba-a0a6-0ae8c5b0b42c")
+	)
+	(hierarchical_label "NTC_1_RAW"
+		(shape input)
+		(at 190.5 114.3 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5b0b69c9-02f0-42cf-930a-b0f7a5b2b19c")
+	)
+	(hierarchical_label "NTC_1_ADC"
+		(shape output)
+		(at 281.94 114.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4a6c8e29-c056-45fa-85c7-63819a66c06c")
+	)
+	(no_connect
+		(at 138.43 182.88)
+		(uuid "ece2f297-4fcf-4273-b831-703031dbd9f8")
 	)
 	(sheet_instances
 		(path "/"
