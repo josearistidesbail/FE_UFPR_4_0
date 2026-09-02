@@ -31,7 +31,7 @@ YS = 182.88
 b.place('U11', 125.73, YS, 0, unit=2, ref_off=(0,-8.89), val_off=(0,11.43))
 b.wire((110.49,YS),(100.33,YS)); b.gnd(100.33, YS, up=False)
 b.nc(138.43, YS)
-b.s.add_text(b.texts[5], 15.24, 26.67, 1.27)
+b.s.add_text(b.text_by('FAULT RECEIVERS  (5 '), 15.24, 26.67, 1.27)
 
 # ═════════ 2. +3V3 SUPPLY / DECOUPLING (power units of U9-U11) ═════════
 for ref,x in (('U9',177.8),('U10',203.2),('U11',228.6)):
@@ -42,7 +42,7 @@ b.wire((254.0,30.48),(254.0,36.83)); b.wire((254.0,50.8),(254.0,44.45))
 for ref,x in (('C54',254.0),('C55',266.7),('C56',279.4),('C57',292.1)):
     b.place(ref, x, 40.64, 0, **VERT)
 b.wire((254.0,36.83),(292.1,36.83)); b.wire((254.0,44.45),(292.1,44.45))
-b.s.add_text(b.texts[6], 190.5, 22.86, 1.27)
+b.s.add_text(b.text_by('+3V3 SUPPLY / DECOUP'), 190.5, 22.86, 1.27)
 
 # ═════════ 3. VBUS SENSE (Kelvin) ═════════
 YV = 76.2
@@ -64,7 +64,7 @@ b.place('TP21', 219.71, YR, 0, ref_off=(-1.27,8.89), val_off=(-1.27,6.35))
 b.place('NT3', 241.3, YR, 0, ref_off=(0,-3.81), val_off=(0,4.445))
 b.wire((243.84,YR),(251.46,YR)); b.gnd(251.46, YR)
 b.hlab('VBUS_RTN', 209.55, YR, 180, "right")
-b.s.add_text(b.texts[8], 190.5, 66.04, 1.27)
+b.s.add_text(b.text_by('VBUS SENSE  (Kelvin)'), 190.5, 66.04, 1.27)
 
 # ═════════ 4. NTC / TEMPERATURE ═════════
 YN = 114.3
@@ -80,10 +80,10 @@ b.wire((252.73,YN),(281.94,YN))
 b.shunt('C61', 261.62, YN, up=False)
 b.place('TP23', 271.78, YN, 0, ref_off=(-1.27,-6.35), val_off=(-1.27,-3.81))
 b.hlab('NTC_1_ADC', 281.94, YN, 0, "left")
-b.s.add_text(b.texts[0], 190.5, 104.14, 1.27)
+b.s.add_text(b.text_by('NTC / TEMPERATURE  ('), 190.5, 104.14, 1.27)
 
 # ═════════ 5. NOTES ═════════
-b.notes([1,3,4], (311.15,), 26.67, 200.0)
-b.notes([9,2,7], (15.24, 116.84), 196.0, 288.0)
+b.notes_by(['VBUS FRONT-END   DB3', 'NTC / TEMPERATURE   ', 'FIRMWARE HANDOFF (hw'], (311.15,), 26.67, 200.0)
+b.notes_by(['MODULE ERROR TABLE -', 'S10 LAYOUT NOTES (mo', 'FAULT RECEIVERS - 5 '], (15.24, 116.84), 196.0, 288.0)
 
 print("module_status:", *b.save(SRC))

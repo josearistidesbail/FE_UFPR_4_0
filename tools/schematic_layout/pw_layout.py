@@ -4,7 +4,7 @@ from layoutlib import *
 
 SRC = '/home/jose/Kicad/FE_UFPR_4_0/power.kicad_sch'
 b = Builder(SRC)
-b.s.add_text(b.texts[3], 15.24, 16.51, 1.27)
+b.s.add_text(b.text_by('S3 - POWER SUPPLIES '), 15.24, 16.51, 1.27)
 
 # ═════════ 1. ENTRY: J1 -> F1 -> Q1 (reverse polarity) -> +24V_PROT ═════════
 YE = 40.64
@@ -148,13 +148,13 @@ for r,d,rail,rtn,lname,x in LEDS:
     b.place(r, x, 161.29, 0, **VERT)
     b.wire((x,165.1),(x,167.64)); b.lab(lname, x, 167.64, 0)
     b.place(d, x, 171.45, 90, **VERT)
-    b.wire((x,175.26),(x,177.8)); b.glab(rtn, x, 177.8, 90)
+    b.wire((x,175.26),(x,177.8)); b.glab(rtn, x, 177.8, 90, 'right')
 for tp,flg,nm,x in (('TP2','#FLG05','+13V5_GATE',20.32), ('TP3','#FLG06','+5V',60.96),
                     ('TP4',None,'+3V3',101.6), ('TP9','#FLG04','GND',142.24)):
-    b.wire((x,187.96),(x + (17.78 if flg else 10.16),187.96)); b.glab(nm, x, 187.96, 0)
-    b.place(tp, x+10.16, 187.96, 0, ref_off=(-1.27,-6.35), val_off=(-1.27,-3.81))
-    if flg: b.place(flg, x+17.78, 187.96, 0, ref_off=(0,-6.35), val_off=(0,-3.81))
+    b.wire((x,193.04),(x + (17.78 if flg else 10.16),193.04)); b.glab(nm, x, 193.04, 0)
+    b.place(tp, x+10.16, 193.04, 0, ref_off=(-1.27,-6.35), val_off=(-1.27,-3.81))
+    if flg: b.place(flg, x+17.78, 193.04, 0, ref_off=(0,-6.35), val_off=(0,-3.81))
 
 # ═════════ 7. NOTES ═════════
-b.notes([2,4,0,5,1], (15.24, 150.0), 198.0, 290.0)
+b.notes_by(['Q1 REVERSE-POLARITY ', 'EN / UVLO:\\nU1 LMR33', 'U2 TPS62933F - PCB L', 'U1 LMR33630A - PCB L', 'SWITCHING-MODE NOTES'], (15.24, 150.0), 198.0, 290.0)
 print("power:", *b.save(SRC))

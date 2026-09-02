@@ -39,7 +39,11 @@ class Builder:
     def glab(self, t, x, y, r=0, j="left"): self.G.append((t,x,y,r,j))
     def hlab(self, t, x, y, r=0, j="left"): self.H.append((t,x,y,r,j))
     def nc(self, x, y): self.NC.append((x,y))
-    def gnd(self, x, y, up=False): self.glab('GND', x, y, 270 if up else 90)
+    # KiCad rule (measured S8): for a vertical global label the JUSTIFY decides which side of
+    # the anchor the flag body lies on - 'left' = body on the far side of the reading
+    # direction (up for 90/270 alike), 'right' = body below the anchor. A flag hanging
+    # below a part therefore needs rot 90 + 'right'; one standing above it rot 270 + 'left'.
+    def gnd(self, x, y, up=False): self.glab('GND', x, y, 270 if up else 90, 'left' if up else 'right')
     def stub_gnd(self, x, y, d=2.54, up=False):
         yy = y - d if up else y + d
         self.wire((x,y),(x,yy)); self.gnd(x, yy, up)
@@ -53,9 +57,18 @@ class Builder:
         end = far - d if up else far + d
         self.wire((x,far),(x,end))
         if netlab is None: self.gnd(x, end, up)
-        elif glob: self.glab(netlab, x, end, 270 if up else 90)
+        elif glob: self.glab(netlab, x, end, 270 if up else 90, 'left' if up else 'right')
         else: self.lab(netlab, x, end, 0, "left top" if not up else "left bottom")
-    # ---- notes
+    # ---- notes (content-addressed: the file order of (text ...) records changes on every
+    #      regeneration, so an index into self.texts is only valid against the very first
+    #      hand-drawn sheet - S8 lesson)
+    def text_by(self, prefix):
+        hits = [t for t in self.texts if t.startswith(prefix)]
+        assert len(hits) == 1, f"text prefix {prefix!r} matches {len(hits)} notes"
+        return hits[0]
+    def notes_by(self, prefixes, cols, y0, ymax, **kw):
+        idx = [self.texts.index(self.text_by(p)) for p in prefixes]
+        return self.notes(idx, cols, y0, ymax, **kw)
     def notes(self, order, cols, y0, ymax, size=1.27, lead=1.9, gap=4.0):
         cw = [c for c in cols]; y = [y0]*len(cols); ci = 0
         for idx in order:

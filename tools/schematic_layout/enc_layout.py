@@ -33,7 +33,7 @@ s.place('#FLG07', 66.04, YV, 0, ref_off=(1.27,-6.35), val_off=(1.27,-3.81))
 lab('ENC_VDD', 99.06, YV, 0)
 for x, ref in ((81.28,'C97'), (93.98,'C98')):
     s.place(ref, x, 33.02, 0, **VERT)
-    wire((x,YV),(x,29.21)); wire((x,36.83),(x,39.37)); glab('GND', x, 39.37, 90)
+    wire((x,YV),(x,29.21)); wire((x,36.83),(x,39.37)); glab('GND', x, 39.37, 90, 'right')
 
 # ─────────────────────────  B. REFERENCE CHAIN  ─────────────────────────────
 XC = 120.65
@@ -43,15 +43,15 @@ s.place('R106', XC, 55.88, 0, **VERT)
 s.place('R107', XC, 71.12, 0, **VERT)
 wire((XC,44.45),(XC,52.07))          # ENC_VREF_HI_UB node
 wire((XC,59.69),(XC,67.31))          # ENC_VREF3V_UB node
-wire((XC,74.93),(XC,77.47)); glab('GND', XC, 77.47, 90)
+wire((XC,74.93),(XC,77.47)); glab('GND', XC, 77.47, 90, 'right')
 # filter caps to the left of the chain
 s.place('C101', 107.95, 52.07, 0, ref_off=(-11.43,-1.27), val_off=(-11.43,1.905))
 wire((107.95,48.26),(XC,48.26))
-wire((107.95,55.88),(107.95,58.42)); glab('GND', 107.95, 58.42, 90)
+wire((107.95,55.88),(107.95,58.42)); glab('GND', 107.95, 58.42, 90, 'right')
 lab('ENC_VREF_HI_UB', 110.49, 48.26, 0)
 s.place('C102', 107.95, 67.31, 0, ref_off=(-11.43,-1.27), val_off=(-11.43,1.905))
 wire((107.95,63.5),(XC,63.5))
-wire((107.95,71.12),(107.95,73.66)); glab('GND', 107.95, 73.66, 90)
+wire((107.95,71.12),(107.95,73.66)); glab('GND', 107.95, 73.66, 90, 'right')
 # ENC_VREF3V_UB routed into U17 pin 3
 wire((XC,63.5),(146.05,63.5)); wire((146.05,63.5),(146.05,68.58)); wire((146.05,68.58),(152.4,68.58))
 lab('ENC_VREF3V_UB', 127.0, 63.5, 0)
@@ -59,7 +59,7 @@ lab('ENC_VREF3V_UB', 127.0, 63.5, 0)
 # ─────────────────────────  C. U17 REFERENCE BUFFERS  ───────────────────────
 s.place('U17', 165.1, 76.2, 0, ref_off=(-3.81,-11.43), val_off=(-3.81,11.43))
 wire((165.1,60.96),(165.1,55.88)); lab('ENC_VDD', 165.1, 55.88, 0)
-wire((165.1,91.44),(165.1,93.98)); glab('GND', 165.1, 93.98, 90)
+wire((165.1,91.44),(165.1,93.98)); glab('GND', 165.1, 93.98, 90, 'right')
 # A = ENC_VREF3V follower
 wire((152.4,71.12),(146.05,71.12)); lab('ENC_VREF3V', 133.35, 71.12, 0)
 wire((146.05,71.12),(133.35,71.12))
@@ -74,7 +74,7 @@ s.place('TP43', 184.15, 82.55, 0, ref_off=(-1.27,-3.81), val_off=(-1.27,-6.35))
 # U17 decoupling
 for x, ref in ((203.2,'C103'), (215.9,'C104')):
     s.place(ref, x, 62.23, 0, **VERT)
-    wire((x,58.42),(x,55.88)); wire((x,66.04),(x,68.58)); glab('GND', x, 68.58, 90)
+    wire((x,58.42),(x,55.88)); wire((x,66.04),(x,68.58)); glab('GND', x, 68.58, 90, 'right')
 wire((203.2,55.88),(215.9,55.88)); lab('ENC_VDD', 203.2, 55.88, 0)
 
 # ─────────────────────────────  D. J4 CONNECTOR  ────────────────────────────
@@ -91,7 +91,7 @@ wire(P['10'],(25.4,130.81)); wire((25.4,130.81),(25.4,140.97))
 wire((25.4,140.97),(45.72,140.97)); lab('SHIELD_ENC', 27.94, 140.97, 0)
 for x, ref in ((25.4,'C113'), (35.56,'R118'), (45.72,'R119')):
     s.place(ref, x, 144.78, 0, **VERT)
-wire((25.4,148.59),(45.72,148.59)); glab('GND', 45.72, 148.59, 90)
+wire((25.4,148.59),(45.72,148.59)); glab('GND', 45.72, 148.59, 90, 'right')
 
 # ───────────────────────  E/F. SIN + COS CHANNELS  ──────────────────────────
 # sgn = +1 -> channel A (SIN, above U16) ; -1 -> channel B (COS, below U16)
@@ -105,7 +105,7 @@ def channel(sgn, RAW, P_, N_, OUT, ADC, Cin, TPin, Rin, Rref, Cref,
     wire((76.2 if sgn>0 else 85.09, yraw),(104.14, yraw))
     lab(RAW, 78.74 if sgn>0 else 92.71, yraw, 0)
     s.place(Cin, 88.9, yraw + 3.81, 0, **VERT)
-    wire((88.9, yraw + 7.62),(88.9, yraw + 10.16)); glab('GND', 88.9, yraw + 10.16, 90)
+    wire((88.9, yraw + 7.62),(88.9, yraw + 10.16)); glab('GND', 88.9, yraw + 10.16, 90, 'right')
     s.place(TPin, 97.79, yraw, 0, ref_off=(-1.27,-3.81), val_off=(-1.27,-6.35))
     s.place(Rin, 107.95, yraw, 90, **HORZ)
     wire((111.76, yraw),(143.51, yraw))
@@ -133,12 +133,12 @@ def channel(sgn, RAW, P_, N_, OUT, ADC, Cin, TPin, Rin, Rref, Cref,
     wire((196.85, yo),(241.3, yo))
     yb = yo + 7.62
     s.place(Cadc, 203.2, yo + 3.81, 0, **VERT)
-    wire((203.2, yb),(203.2, yb + 2.54)); glab('GND', 203.2, yb + 2.54, 90)
+    wire((203.2, yb),(203.2, yb + 2.54)); glab('GND', 203.2, yb + 2.54, 90, 'right')
     s.place(TPadc, 212.09, yo, 0, ref_off=(-1.27,-3.81), val_off=(-1.27,-6.35))
     s.place(Dclamp, 226.06, yb, 180, ref_off=(0,-7.62), val_off=(0,5.08))
     wire((226.06, yo),(226.06, yo + 2.54))
-    wire((218.44, yb),(218.44, yb + 2.54)); glab('+3V3', 218.44, yb + 2.54, 90)
-    wire((233.68, yb),(233.68, yb + 2.54)); glab('GND', 233.68, yb + 2.54, 90)
+    wire((218.44, yb),(218.44, yb + 2.54)); glab('+3V3', 218.44, yb + 2.54, 90, 'right')
+    wire((233.68, yb),(233.68, yb + 2.54)); glab('GND', 233.68, yb + 2.54, 90, 'right')
     hlab(ADC, 241.3, yo, 0)
 
 channel(+1, 'ENC_SIN_RAW','ENC_SIN_P','ENC_SIN_N','ENC_SIN_OUT','ENC_SIN_ADC',
@@ -151,22 +151,26 @@ channel(-1, 'ENC_COS_RAW','ENC_COS_P','ENC_COS_N','ENC_COS_OUT','ENC_COS_ADC',
 # ─────────────────────────────  G. U16  ─────────────────────────────────────
 s.place('U16', 165.1, 132.08, 0, ref_off=(-3.81,-11.43), val_off=(-3.81,11.43))
 wire((165.1,116.84),(165.1,111.76)); lab('ENC_VDD', 165.1, 111.76, 0)
-wire((165.1,147.32),(165.1,152.4)); glab('GND', 165.1, 152.4, 90)
+wire((165.1,147.32),(165.1,152.4)); glab('GND', 165.1, 152.4, 90, 'right')
 for x, ref in ((177.8,'C111'), (190.5,'C112')):
     s.place(ref, x, 105.41, 0, **VERT)
 wire((177.8,101.6),(190.5,101.6)); lab('ENC_VDD', 177.8, 101.6, 0)
-wire((177.8,109.22),(190.5,109.22)); glab('GND', 190.5, 109.22, 90)
+wire((177.8,109.22),(190.5,109.22)); glab('GND', 190.5, 109.22, 90, 'right')
 
 # ─────────────────────────────  H. TEXT NOTES  ──────────────────────────────
 NOTE_Y = 178.0
 col = [(20.32, [4,0]), (20.32,[0]), (152.4,[2]), (152.4,[3]), (20.32,[1])]
 def nlines(t): return t.count('\\n') + 1
+def text_by(prefix):
+    hits = [t for t in TEXTS if t.startswith(prefix)]
+    assert len(hits) == 1, prefix
+    return hits[0]
 y1 = NOTE_Y
-for idx in (4, 0, 1):
-    s.add_text(TEXTS[idx], 20.32, y1, 1.27); y1 += nlines(TEXTS[idx]) * 1.9 + 4.0
+for pre in ['J4 = DEUTSCH DTM13-1', 'RM44AC SOURCE  (RLS/', 'TRANSFER FUNCTION (i']:
+    t = text_by(pre); s.add_text(t, 20.32, y1, 1.27); y1 += nlines(t) * 1.9 + 4.0
 y2 = NOTE_Y
-for idx in (2, 3):
-    s.add_text(TEXTS[idx], 152.4, y2, 1.27); y2 += nlines(TEXTS[idx]) * 1.9 + 4.0
+for pre in ['REFERENCES  R105 3.0', 'ANTI-ALIAS AND PHASE']:
+    t = text_by(pre); s.add_text(t, 152.4, y2, 1.27); y2 += nlines(t) * 1.9 + 4.0
 
 # ─────────────────────────────  EMIT  ───────────────────────────────────────
 from conncheck import interior

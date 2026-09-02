@@ -2,8 +2,8 @@
 	(version "E")
 	(design
 		(source "/home/jose/Kicad/FE_UFPR_4_0/FE_UFPR_4_0.kicad_sch")
-		(date "2026-08-31T22:48:25")
-		(tool "Eeschema 10.0.5")
+		(date "2026-09-01T21:20:38")
+		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
 			(name "/")
@@ -10311,6 +10311,1871 @@
 						)
 						(pin
 							(num "7")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C116")
+			(value "100nF 50V")
+			(footprint "FE_UFPR_4_0:C_0603_1608Metric")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "LCSC") "C14663")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "LCSC")
+				(value "C14663")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "7e10c26c-2ddf-450f-9d86-3f147bd5d3bc")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C117")
+			(value "1uF 50V")
+			(footprint "FE_UFPR_4_0:C_0805_2012Metric")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "LCSC") "C28323")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:C_0805_2012Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "LCSC")
+				(value "C28323")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "7a54e075-e717-4718-8ee8-4a27c1255efd")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C118")
+			(value "100nF 50V")
+			(footprint "FE_UFPR_4_0:C_0603_1608Metric")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "LCSC") "C14663")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "LCSC")
+				(value "C14663")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "15fb1e38-287a-4273-8677-1d1b5cfb3755")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C119")
+			(value "100nF 50V")
+			(footprint "FE_UFPR_4_0:C_0603_1608Metric")
+			(description "Unpolarized capacitor")
+			(fields
+				(field
+					(name "LCSC") "C14663")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Unpolarized capacitor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "C")
+				(description "Unpolarized capacitor")
+			)
+			(property
+				(name "LCSC")
+				(value "C14663")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "cap capacitor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "C_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "21f12e0a-013c-4777-b45c-947f9284b7cb")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D13")
+			(value "PSM712")
+			(footprint "FE_UFPR_4_0:SOT-23")
+			(datasheet "https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF")
+			(description "Dual bidirectional TVS for CAN, SOT-23 (pin 1/2 = lines, pin 3 = GND); KiCad NUP2105L symbol renamed")
+			(fields
+				(field
+					(name "LCSC") "C32677")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:SOT-23")
+				(field
+					(name "Datasheet") "https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF")
+				(field
+					(name "Description") "Dual bidirectional TVS for CAN, SOT-23 (pin 1/2 = lines, pin 3 = GND); KiCad NUP2105L symbol renamed")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "D_TVS_Dual_CAN")
+				(description "Dual bidirectional TVS for CAN, SOT-23 (pin 1/2 = lines, pin 3 = GND); KiCad NUP2105L symbol renamed")
+			)
+			(property
+				(name "LCSC")
+				(value "C32677")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "can esd protection suppression transient")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "SOT?23*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "b7d62903-72b9-4c41-bfe8-4963d52534ea")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D14")
+			(value "1N4148W")
+			(footprint "FE_UFPR_4_0:D_SOD-123")
+			(description "Diode")
+			(fields
+				(field
+					(name "LCSC") "C81598")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:D_SOD-123")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Diode")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "D")
+				(description "Diode")
+			)
+			(property
+				(name "LCSC")
+				(value "C81598")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "diode")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "TO-???* *_Diode_* *SingleDiode* D_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "a3805bf2-49ef-4854-9ad4-366cbccec9d0")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D15")
+			(value "1N4148W")
+			(footprint "FE_UFPR_4_0:D_SOD-123")
+			(description "Diode")
+			(fields
+				(field
+					(name "LCSC") "C81598")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:D_SOD-123")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Diode")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "D")
+				(description "Diode")
+			)
+			(property
+				(name "LCSC")
+				(value "C81598")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "diode")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "TO-???* *_Diode_* *SingleDiode* D_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "1f0fed84-6481-47d4-b12f-b5d7f849ad55")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D16")
+			(value "SS34")
+			(footprint "FE_UFPR_4_0:D_SMA")
+			(description "Schottky diode")
+			(fields
+				(field
+					(name "LCSC") "C8678")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:D_SMA")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Schottky diode")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "D_Schottky")
+				(description "Schottky diode")
+			)
+			(property
+				(name "LCSC")
+				(value "C8678")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "diode Schottky")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "TO-???* *_Diode_* *SingleDiode* D_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "5b7e0197-3c89-44df-911f-52f070cd2c33")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "D17")
+			(value "SMAJ5.0A")
+			(footprint "FE_UFPR_4_0:D_SMA")
+			(description "Zener diode")
+			(fields
+				(field
+					(name "LCSC") "C2925443")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:D_SMA")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Zener diode")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "D_TVS_Unidirectional")
+				(description "Zener diode")
+			)
+			(property
+				(name "LCSC")
+				(value "C2925443")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "diode")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "TO-???* *_Diode_* *SingleDiode* D_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "c281356b-2812-4101-974f-ff1b28db5635")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "F3")
+			(value "0.2A 30V 1206L020")
+			(footprint "FE_UFPR_4_0:Fuse_1206_3216Metric")
+			(description "Resettable fuse, polymeric positive temperature coefficient")
+			(fields
+				(field
+					(name "LCSC") "C7542932")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:Fuse_1206_3216Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resettable fuse, polymeric positive temperature coefficient")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "Polyfuse")
+				(description "Resettable fuse, polymeric positive temperature coefficient")
+			)
+			(property
+				(name "LCSC")
+				(value "C7542932")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "resettable fuse PTC PPTC polyfuse polyswitch")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "*polyfuse* *PTC*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "710c3858-7d03-4e4e-803f-9ae429717ceb")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J5")
+			(value "VEH DTM13-08PA-R004 key A")
+			(footprint "FE_UFPR_4_0:DEUTSCH_DTM13-08PA-R004_Horizontal")
+			(description "Generic connector, double row, 02x04, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(fields
+				(field
+					(name "LCSC") "CONSIGNED")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DTM13-08PA-R004_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, double row, 02x04, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "Conn_02x04_Counter_Clockwise")
+				(description "Generic connector, double row, 02x04, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)")
+			)
+			(property
+				(name "LCSC")
+				(value "CONSIGNED")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "connector")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Connector*:*_2x??_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "f00c6e52-4250-4959-bef5-10cfa70e8027")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "JP6")
+			(value "CAN TERM bridged=120R")
+			(footprint "FE_UFPR_4_0:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm")
+			(description "Solder Jumper, 2-pole, closed/bridged")
+			(fields
+				(field
+					(name "LCSC") "NOFIT")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Solder Jumper, 2-pole, closed/bridged")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "SolderJumper_2_Bridged")
+				(description "Solder Jumper, 2-pole, closed/bridged")
+			)
+			(property
+				(name "LCSC")
+				(value "NOFIT")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "solder jumper SPST")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "SolderJumper*Bridged*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "1565a158-3ad7-40ae-854a-e943e4178403")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "L3")
+			(value "ACT45B-101-2P-TL003")
+			(footprint "FE_UFPR_4_0:L_CommonMode_TDK_ACT45B")
+			(description "Common-mode choke, windings 1-4 and 2-3 (TDK ACT45B pinout); KiCad Choke_CommonMode_FerriteCore_1423 renamed")
+			(fields
+				(field
+					(name "LCSC") "C88056")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:L_CommonMode_TDK_ACT45B")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Common-mode choke, windings 1-4 and 2-3 (TDK ACT45B pinout); KiCad Choke_CommonMode_FerriteCore_1423 renamed")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "L_CommonMode")
+				(description "Common-mode choke, windings 1-4 and 2-3 (TDK ACT45B pinout); KiCad Choke_CommonMode_FerriteCore_1423 renamed")
+			)
+			(property
+				(name "LCSC")
+				(value "C88056")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "signal line filter")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "dff4448a-7ea6-4e3c-9912-811de00ed253")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R120")
+			(value "10k")
+			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
+			(description "Resistor")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "02d35da6-005d-47a7-a014-e04454cbb5a2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R121")
+			(value "10k")
+			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
+			(description "Resistor")
+			(fields
+				(field
+					(name "LCSC") "C25804")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "LCSC")
+				(value "C25804")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "01146079-ba06-4372-b263-b696b7fbcc93")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R122")
+			(value "120R")
+			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
+			(description "Resistor")
+			(fields
+				(field
+					(name "LCSC") "C22787")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "LCSC")
+				(value "C22787")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "06b672a1-fa03-4d37-858b-cf4f531b26ef")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R123")
+			(value "2.2k")
+			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
+			(description "Resistor")
+			(fields
+				(field
+					(name "LCSC") "C4190")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "LCSC")
+				(value "C4190")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "8e34691f-c131-4455-a962-983125429548")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R124")
+			(value "2.2k")
+			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
+			(description "Resistor")
+			(fields
+				(field
+					(name "LCSC") "C4190")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "LCSC")
+				(value "C4190")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "7b81fd64-c056-4d61-9b3e-18db8d3120dc")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R125")
+			(value "2.2k")
+			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
+			(description "Resistor")
+			(fields
+				(field
+					(name "LCSC") "C4190")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "LCSC")
+				(value "C4190")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "195115c7-70e4-40c3-a878-1fd0da2a6b62")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R126")
+			(value "2.2k")
+			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
+			(description "Resistor")
+			(fields
+				(field
+					(name "LCSC") "C4190")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "LCSC")
+				(value "C4190")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "209c9107-aca1-430f-b428-6efee28fe78d")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R127")
+			(value "2.2k")
+			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
+			(description "Resistor")
+			(fields
+				(field
+					(name "LCSC") "C4190")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "LCSC")
+				(value "C4190")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "9936443b-d1e5-4206-9c18-c760826b58fc")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R128")
+			(value "2.2k")
+			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
+			(description "Resistor")
+			(fields
+				(field
+					(name "LCSC") "C4190")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "R")
+				(description "Resistor")
+			)
+			(property
+				(name "LCSC")
+				(value "C4190")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "R res resistor")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "R_*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "86114aa3-1168-49e7-9201-b893a6baf4be")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP49")
+			(value "CAN_H")
+			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
+			(description "test point")
+			(fields
+				(field
+					(name "LCSC") "NOFIT")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "LCSC")
+				(value "NOFIT")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "2d8739c6-f23a-408c-b1f7-f33faa8b88c8")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP50")
+			(value "CAN_L")
+			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
+			(description "test point")
+			(fields
+				(field
+					(name "LCSC") "NOFIT")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "LCSC")
+				(value "NOFIT")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "b10ac6bf-a077-469c-8b2b-c280a546c125")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP51")
+			(value "SW_MAIN_3V3")
+			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
+			(description "test point")
+			(fields
+				(field
+					(name "LCSC") "NOFIT")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "LCSC")
+				(value "NOFIT")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "533ac1b2-e639-4e4d-a94c-2046c33e47ec")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "TP52")
+			(value "SW_START_3V3")
+			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
+			(description "test point")
+			(fields
+				(field
+					(name "LCSC") "NOFIT")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "test point")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "TestPoint")
+				(description "test point")
+			)
+			(property
+				(name "LCSC")
+				(value "NOFIT")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "test point tp")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "Pin* Test*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "110f4587-1e8e-4949-ac5b-c55c39531aae")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U18")
+			(value "SN65HVD230DR")
+			(footprint "FE_UFPR_4_0:SOIC-8_3.9x4.9mm_P1.27mm")
+			(datasheet "http://www.ti.com/lit/ds/symlink/sn65hvd230.pdf")
+			(description "CAN Bus Transceivers, 3.3V, 1Mbps, Low-Power capabilities, SOIC-8")
+			(fields
+				(field
+					(name "LCSC") "C12084")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:SOIC-8_3.9x4.9mm_P1.27mm")
+				(field
+					(name "Datasheet") "http://www.ti.com/lit/ds/symlink/sn65hvd230.pdf")
+				(field
+					(name "Description") "CAN Bus Transceivers, 3.3V, 1Mbps, Low-Power capabilities, SOIC-8")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "SN65HVD230")
+				(description "CAN Bus Transceivers, 3.3V, 1Mbps, Low-Power capabilities, SOIC-8")
+			)
+			(property
+				(name "LCSC")
+				(value "C12084")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "can transeiver ti low-power")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "SOIC*3.9x4.9mm*P1.27mm*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "c1d0ca75-04f1-4e70-befe-7a2b9d26979a")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "6")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U19")
+			(value "LTV-817S-TA1-C")
+			(footprint "FE_UFPR_4_0:Optocoupler_LTV-817S_SMD-4P")
+			(datasheet "http://www.us.liteon.com/downloads/LTV-817-827-847.PDF")
+			(description "DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4")
+			(fields
+				(field
+					(name "LCSC") "C109227")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:Optocoupler_LTV-817S_SMD-4P")
+				(field
+					(name "Datasheet") "http://www.us.liteon.com/downloads/LTV-817-827-847.PDF")
+				(field
+					(name "Description") "DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "LTV-817S")
+				(description "DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4")
+			)
+			(property
+				(name "LCSC")
+				(value "C109227")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "NPN DC Optocoupler")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "SMDIP*W9.53mm*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "0ff2c726-0214-4343-8b26-fccfd0b2ebce")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U20")
+			(value "LTV-817S-TA1-C")
+			(footprint "FE_UFPR_4_0:Optocoupler_LTV-817S_SMD-4P")
+			(datasheet "http://www.us.liteon.com/downloads/LTV-817-827-847.PDF")
+			(description "DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4")
+			(fields
+				(field
+					(name "LCSC") "C109227")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:Optocoupler_LTV-817S_SMD-4P")
+				(field
+					(name "Datasheet") "http://www.us.liteon.com/downloads/LTV-817-827-847.PDF")
+				(field
+					(name "Description") "DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "LTV-817S")
+				(description "DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4")
+			)
+			(property
+				(name "LCSC")
+				(value "C109227")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "NPN DC Optocoupler")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "SMDIP*W9.53mm*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "845fab37-0b15-495b-bb5d-0edd885088c2")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U21")
+			(value "SN74LVC2G17DBVR")
+			(footprint "FE_UFPR_4_0:SOT-23-6")
+			(datasheet "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf")
+			(description "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS")
+			(fields
+				(field
+					(name "LCSC") "C10429")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:SOT-23-6")
+				(field
+					(name "Datasheet") "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf")
+				(field
+					(name "Description") "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS")
+			)
+			(libsource
+				(lib "FE_UFPR_4_0")
+				(part "74LVC2G17")
+				(description "Dual Buffer, Schmitt Triggered, Low-Voltage CMOS")
+			)
+			(property
+				(name "LCSC")
+				(value "C10429")
+			)
+			(property
+				(name "Sheetname")
+				(value "vehicle_io")
+			)
+			(property
+				(name "Sheetfile")
+				(value "vehicle_io.kicad_sch")
+			)
+			(property
+				(name "ki_keywords")
+				(value "Dual Buffer Schmitt LVC CMOS")
+			)
+			(property
+				(name "ki_fp_filters")
+				(value "SG-* SOT*")
+			)
+			(sheetpath
+				(names "/vehicle_io/")
+				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
+			)
+			(tstamps "ca91de93-445b-440c-8707-e3840a2525af" "caef2866-e5d7-488e-9dbb-0d9e64820a2a"
+				"93748f0e-8881-417b-aebc-de568014b6a9"
+			)
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "6")
+						)
+					)
+				)
+				(unit
+					(name "B")
+					(pins
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+					)
+				)
+				(unit
+					(name "C")
+					(pins
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "2")
 						)
 					)
 				)
@@ -21024,6 +22889,72 @@
 		)
 		(libpart
 			(lib "FE_UFPR_4_0")
+			(part "Conn_02x04_Counter_Clockwise")
+			(description "Generic connector, double row, 02x04, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)")
+			(footprints
+				(fp "Connector*:*_2x??_*")
+			)
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_02x04_Counter_Clockwise")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DTM13-08PA-R004_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic connector, double row, 02x04, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)")
+				(field
+					(name "LCSC")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "Pin_1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "Pin_2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "Pin_3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "Pin_4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "Pin_5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "Pin_6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "Pin_7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "Pin_8")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "FE_UFPR_4_0")
 			(part "Conn_02x06_Counter_Clockwise")
 			(description "Generic connector, double row, 02x06, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)")
 			(footprints
@@ -21286,6 +23217,50 @@
 		)
 		(libpart
 			(lib "FE_UFPR_4_0")
+			(part "D")
+			(description "Diode")
+			(footprints
+				(fp "TO-???*")
+				(fp "*_Diode_*")
+				(fp "*SingleDiode*")
+				(fp "D_*")
+			)
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "D")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Diode")
+				(field
+					(name "Sim.Device") "D")
+				(field
+					(name "Sim.Pins") "1=K 2=A")
+				(field
+					(name "LCSC")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "K")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "A")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "FE_UFPR_4_0")
 			(part "DSUB-37_Socket")
 			(description "D-Sub 37-pin female (socket), 2 rows 19+18 - PrimeSTACK 6PS04512E43W39693 interface")
 			(footprints
@@ -21540,6 +23515,47 @@
 				)
 				(pin
 					(num "2")
+					(name "A")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "FE_UFPR_4_0")
+			(part "D_TVS_Dual_CAN")
+			(description "Dual bidirectional TVS for CAN, SOT-23 (pin 1/2 = lines, pin 3 = GND); KiCad NUP2105L symbol renamed")
+			(docs "https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF")
+			(footprints
+				(fp "SOT?23*")
+			)
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "PSM712")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:SOT-23")
+				(field
+					(name "Datasheet") "https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF")
+				(field
+					(name "Description") "Dual bidirectional TVS for CAN, SOT-23 (pin 1/2 = lines, pin 3 = GND); KiCad NUP2105L symbol renamed")
+				(field
+					(name "LCSC")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "K")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "K")
+					(type "passive")
+				)
+				(pin
+					(num "3")
 					(name "A")
 					(type "passive")
 				)
@@ -21852,6 +23868,95 @@
 		)
 		(libpart
 			(lib "FE_UFPR_4_0")
+			(part "LTV-817S")
+			(description "DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4")
+			(docs "http://www.us.liteon.com/downloads/LTV-817-827-847.PDF")
+			(footprints
+				(fp "SMDIP*W9.53mm*")
+			)
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "LTV-817S-TA1-C")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:Optocoupler_LTV-817S_SMD-4P")
+				(field
+					(name "Datasheet") "http://www.us.liteon.com/downloads/LTV-817-827-847.PDF")
+				(field
+					(name "Description") "DC Optocoupler, Vce 35V, CTR 50%, SMDIP-4")
+				(field
+					(name "LCSC")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "FE_UFPR_4_0")
+			(part "L_CommonMode")
+			(description "Common-mode choke, windings 1-4 and 2-3 (TDK ACT45B pinout); KiCad Choke_CommonMode_FerriteCore_1423 renamed")
+			(fields
+				(field
+					(name "Reference") "FL")
+				(field
+					(name "Value") "ACT45B-101-2P-TL003")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:L_CommonMode_TDK_ACT45B")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Common-mode choke, windings 1-4 and 2-3 (TDK ACT45B pinout); KiCad Choke_CommonMode_FerriteCore_1423 renamed")
+				(field
+					(name "LCSC")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "FE_UFPR_4_0")
 			(part "MOSFET_P_GDS")
 			(description "-23A Id, -100V Vds, 117mOhm Rds, P-Channel HEXFET Power MOSFET, TO-220")
 			(docs "http://www.irf.com/product-info/datasheets/data/irf9540n.pdf")
@@ -21990,6 +24095,44 @@
 		)
 		(libpart
 			(lib "FE_UFPR_4_0")
+			(part "Polyfuse")
+			(description "Resettable fuse, polymeric positive temperature coefficient")
+			(footprints
+				(fp "*polyfuse*")
+				(fp "*PTC*")
+			)
+			(fields
+				(field
+					(name "Reference") "F")
+				(field
+					(name "Value") "Polyfuse")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resettable fuse, polymeric positive temperature coefficient")
+				(field
+					(name "LCSC")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "FE_UFPR_4_0")
 			(part "R")
 			(description "Resistor")
 			(footprints
@@ -22021,6 +24164,108 @@
 				(pin
 					(num "2")
 					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "FE_UFPR_4_0")
+			(part "SN65HVD230")
+			(description "CAN Bus Transceivers, 3.3V, 1Mbps, Low-Power capabilities, SOIC-8")
+			(docs "http://www.ti.com/lit/ds/symlink/sn65hvd230.pdf")
+			(footprints
+				(fp "SOIC*3.9x4.9mm*P1.27mm*")
+			)
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "SN65HVD230DR")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:SOIC-8_3.9x4.9mm_P1.27mm")
+				(field
+					(name "Datasheet") "http://www.ti.com/lit/ds/symlink/sn65hvd230.pdf")
+				(field
+					(name "Description") "CAN Bus Transceivers, 3.3V, 1Mbps, Low-Power capabilities, SOIC-8")
+				(field
+					(name "LCSC")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "D")
+					(type "input")
+				)
+				(pin
+					(num "2")
+					(name "GND")
+					(type "power_in")
+				)
+				(pin
+					(num "3")
+					(name "VCC")
+					(type "power_in")
+				)
+				(pin
+					(num "4")
+					(name "R")
+					(type "output")
+				)
+				(pin
+					(num "5")
+					(name "Vref")
+					(type "output")
+				)
+				(pin
+					(num "6")
+					(name "CANL")
+					(type "bidirectional")
+				)
+				(pin
+					(num "7")
+					(name "CANH")
+					(type "bidirectional")
+				)
+				(pin
+					(num "8")
+					(name "Rs")
+					(type "input")
+				)
+			)
+		)
+		(libpart
+			(lib "FE_UFPR_4_0")
+			(part "SolderJumper_2_Bridged")
+			(description "Solder Jumper, 2-pole, closed/bridged")
+			(footprints
+				(fp "SolderJumper*Bridged*")
+			)
+			(fields
+				(field
+					(name "Reference") "JP")
+				(field
+					(name "Value") "SolderJumper_2_Bridged")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Solder Jumper, 2-pole, closed/bridged")
+				(field
+					(name "LCSC")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "A")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "B")
 					(type "passive")
 				)
 			)
@@ -22277,6 +24522,21 @@
 			(name "+3V3")
 			(class "Power_1A")
 			(node
+				(ref "C116")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C117")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C118")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
 				(ref "C21")
 				(pin "1")
 				(pintype "passive")
@@ -22330,6 +24590,11 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "R121")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
 				(ref "R16")
 				(pin "1")
 				(pintype "passive")
@@ -22348,6 +24613,28 @@
 			)
 			(node
 				(ref "U11")
+				(pin "5")
+				(pinfunction "VCC_5")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U18")
+				(pin "3")
+				(pinfunction "VCC_3")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U19")
+				(pin "4")
+				(pintype "passive")
+			)
+			(node
+				(ref "U20")
+				(pin "4")
+				(pintype "passive")
+			)
+			(node
+				(ref "U21")
 				(pin "5")
 				(pinfunction "VCC_5")
 				(pintype "power_in")
@@ -22429,6 +24716,12 @@
 				(ref "D12")
 				(pin "1")
 				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D16")
+				(pin "2")
+				(pinfunction "A_2")
 				(pintype "passive")
 			)
 			(node
@@ -22910,6 +25203,12 @@
 				(pinfunction "Pin_11_11")
 				(pintype "passive")
 			)
+			(node
+				(ref "U18")
+				(pin "4")
+				(pinfunction "R_4")
+				(pintype "output")
+			)
 		)
 		(net
 			(code "11")
@@ -22920,6 +25219,17 @@
 				(pin "9")
 				(pinfunction "Pin_9_9")
 				(pintype "passive")
+			)
+			(node
+				(ref "R121")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U18")
+				(pin "1")
+				(pinfunction "D_1")
+				(pintype "input")
 			)
 		)
 		(net
@@ -23699,6 +26009,17 @@
 				(pinfunction "A_1")
 				(pintype "passive")
 			)
+			(node
+				(ref "TP51")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U21")
+				(pin "6")
+				(pintype "output")
+			)
 		)
 		(net
 			(code "44")
@@ -23709,6 +26030,17 @@
 				(pin "14")
 				(pinfunction "Pin_14_14")
 				(pintype "passive")
+			)
+			(node
+				(ref "TP52")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U21")
+				(pin "4")
+				(pintype "output")
 			)
 		)
 		(net
@@ -25994,6 +28326,196 @@
 		)
 		(net
 			(code "134")
+			(name "/vehicle_io/+5V_VEH")
+			(class "Default")
+			(node
+				(ref "C119")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "D17")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F3")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "2")
+				(pinfunction "Pin_2_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "135")
+			(name "/vehicle_io/CAN_H")
+			(class "Default")
+			(node
+				(ref "D13")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "1")
+				(pinfunction "Pin_1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "L3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R122")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "TP49")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "136")
+			(name "/vehicle_io/CAN_H_XCVR")
+			(class "Default")
+			(node
+				(ref "L3")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "U18")
+				(pin "7")
+				(pinfunction "CANH_7")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "137")
+			(name "/vehicle_io/CAN_L")
+			(class "Default")
+			(node
+				(ref "D13")
+				(pin "2")
+				(pinfunction "K_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "8")
+				(pinfunction "Pin_8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "JP6")
+				(pin "1")
+				(pinfunction "A_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "L3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "TP50")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "138")
+			(name "/vehicle_io/CAN_L_XCVR")
+			(class "Default")
+			(node
+				(ref "L3")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U18")
+				(pin "6")
+				(pinfunction "CANL_6")
+				(pintype "bidirectional")
+			)
+		)
+		(net
+			(code "139")
+			(name "/vehicle_io/CAN_RS")
+			(class "Default")
+			(node
+				(ref "R120")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U18")
+				(pin "8")
+				(pinfunction "Rs_8")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "140")
+			(name "/vehicle_io/SW_MAIN_RTN")
+			(class "Default")
+			(node
+				(ref "D14")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "6")
+				(pinfunction "Pin_6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "U19")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "141")
+			(name "/vehicle_io/SW_START_RTN")
+			(class "Default")
+			(node
+				(ref "D15")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J5")
+				(pin "5")
+				(pinfunction "Pin_5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "U20")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "142")
 			(name "GND")
 			(class "Power_3A")
 			(node
@@ -26068,6 +28590,26 @@
 			)
 			(node
 				(ref "C115")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C116")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C117")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C118")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C119")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -26450,6 +28992,18 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "D13")
+				(pin "3")
+				(pinfunction "A_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "D17")
+				(pin "2")
+				(pinfunction "A_2")
+				(pintype "passive")
+			)
+			(node
 				(ref "D4")
 				(pin "1")
 				(pinfunction "K_1")
@@ -26534,6 +29088,12 @@
 				(pintype "passive")
 			)
 			(node
+				(ref "J5")
+				(pin "7")
+				(pinfunction "Pin_7_7")
+				(pintype "passive")
+			)
+			(node
 				(ref "JP2")
 				(pin "2")
 				(pinfunction "B_2")
@@ -26600,6 +29160,21 @@
 			)
 			(node
 				(ref "R119")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R120")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R125")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R128")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -26847,6 +29422,12 @@
 				(pintype "power_in")
 			)
 			(node
+				(ref "U18")
+				(pin "2")
+				(pinfunction "GND_2")
+				(pintype "power_in")
+			)
+			(node
 				(ref "U2")
 				(pin "1")
 				(pinfunction "RT_1")
@@ -26856,6 +29437,12 @@
 				(ref "U2")
 				(pin "4")
 				(pinfunction "GND_4")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U21")
+				(pin "2")
+				(pinfunction "GND_2")
 				(pintype "power_in")
 			)
 			(node
@@ -26902,7 +29489,7 @@
 			)
 		)
 		(net
-			(code "135")
+			(code "143")
 			(name "ISO_COM")
 			(class "Power_1A")
 			(node
@@ -27067,7 +29654,183 @@
 			)
 		)
 		(net
-			(code "136")
+			(code "144")
+			(name "Net-(D14-K)")
+			(class "Default")
+			(node
+				(ref "D14")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R124")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U19")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "145")
+			(name "Net-(D15-K)")
+			(class "Default")
+			(node
+				(ref "D15")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R127")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U20")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "146")
+			(name "Net-(D16-K)")
+			(class "Default")
+			(node
+				(ref "D16")
+				(pin "1")
+				(pinfunction "K_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "F3")
+				(pin "2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "147")
+			(name "Net-(J5-Pin_3)")
+			(class "Default")
+			(node
+				(ref "J5")
+				(pin "3")
+				(pinfunction "Pin_3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "R123")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "148")
+			(name "Net-(J5-Pin_4)")
+			(class "Default")
+			(node
+				(ref "J5")
+				(pin "4")
+				(pinfunction "Pin_4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "R126")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "149")
+			(name "Net-(JP6-B)")
+			(class "Default")
+			(node
+				(ref "JP6")
+				(pin "2")
+				(pinfunction "B_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R122")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "150")
+			(name "Net-(R123-Pad2)")
+			(class "Default")
+			(node
+				(ref "R123")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R124")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "151")
+			(name "Net-(R125-Pad1)")
+			(class "Default")
+			(node
+				(ref "R125")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U19")
+				(pin "3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U21")
+				(pin "1")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "152")
+			(name "Net-(R126-Pad2)")
+			(class "Default")
+			(node
+				(ref "R126")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R127")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "153")
+			(name "Net-(R128-Pad1)")
+			(class "Default")
+			(node
+				(ref "R128")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U20")
+				(pin "3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U21")
+				(pin "3")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "154")
 			(name "PGND_MOD")
 			(class "Power_3A")
 			(node
@@ -27090,7 +29853,7 @@
 			)
 		)
 		(net
-			(code "137")
+			(code "155")
 			(name "unconnected-(J2-Pad14)")
 			(class "Default")
 			(node
@@ -27101,7 +29864,7 @@
 			)
 		)
 		(net
-			(code "138")
+			(code "156")
 			(name "unconnected-(J2-Pad15)")
 			(class "Default")
 			(node
@@ -27112,7 +29875,7 @@
 			)
 		)
 		(net
-			(code "139")
+			(code "157")
 			(name "unconnected-(J2-Pad17)")
 			(class "Default")
 			(node
@@ -27123,7 +29886,7 @@
 			)
 		)
 		(net
-			(code "140")
+			(code "158")
 			(name "unconnected-(J2-Pad18)")
 			(class "Default")
 			(node
@@ -27134,7 +29897,7 @@
 			)
 		)
 		(net
-			(code "141")
+			(code "159")
 			(name "unconnected-(J2-Pad33)")
 			(class "Default")
 			(node
@@ -27145,7 +29908,7 @@
 			)
 		)
 		(net
-			(code "142")
+			(code "160")
 			(name "unconnected-(J2-Pad34)")
 			(class "Default")
 			(node
@@ -27156,7 +29919,7 @@
 			)
 		)
 		(net
-			(code "143")
+			(code "161")
 			(name "unconnected-(J2-Pad35)")
 			(class "Default")
 			(node
@@ -27167,7 +29930,7 @@
 			)
 		)
 		(net
-			(code "144")
+			(code "162")
 			(name "unconnected-(J2-Pad36)")
 			(class "Default")
 			(node
@@ -27178,7 +29941,7 @@
 			)
 		)
 		(net
-			(code "145")
+			(code "163")
 			(name "unconnected-(J3-Pin_7-Pad7)")
 			(class "Default")
 			(node
@@ -27189,7 +29952,7 @@
 			)
 		)
 		(net
-			(code "146")
+			(code "164")
 			(name "unconnected-(J4-Pin_5-Pad5)")
 			(class "Default")
 			(node
@@ -27200,7 +29963,7 @@
 			)
 		)
 		(net
-			(code "147")
+			(code "165")
 			(name "unconnected-(J4-Pin_6-Pad6)")
 			(class "Default")
 			(node
@@ -27211,7 +29974,7 @@
 			)
 		)
 		(net
-			(code "148")
+			(code "166")
 			(name "unconnected-(J4-Pin_7-Pad7)")
 			(class "Default")
 			(node
@@ -27222,7 +29985,7 @@
 			)
 		)
 		(net
-			(code "149")
+			(code "167")
 			(name "unconnected-(J4-Pin_8-Pad8)")
 			(class "Default")
 			(node
@@ -27233,7 +29996,7 @@
 			)
 		)
 		(net
-			(code "150")
+			(code "168")
 			(name "unconnected-(J4-Pin_9-Pad9)")
 			(class "Default")
 			(node
@@ -27244,7 +30007,7 @@
 			)
 		)
 		(net
-			(code "151")
+			(code "169")
 			(name "unconnected-(J4-Pin_11-Pad11)")
 			(class "Default")
 			(node
@@ -27255,7 +30018,7 @@
 			)
 		)
 		(net
-			(code "152")
+			(code "170")
 			(name "unconnected-(J4-Pin_12-Pad12)")
 			(class "Default")
 			(node
@@ -27266,7 +30029,7 @@
 			)
 		)
 		(net
-			(code "153")
+			(code "171")
 			(name "unconnected-(J20-Pin_1-Pad1)")
 			(class "Default")
 			(node
@@ -27277,7 +30040,7 @@
 			)
 		)
 		(net
-			(code "154")
+			(code "172")
 			(name "unconnected-(J20-Pin_3-Pad3)")
 			(class "Default")
 			(node
@@ -27288,7 +30051,7 @@
 			)
 		)
 		(net
-			(code "155")
+			(code "173")
 			(name "unconnected-(J20-Pin_5-Pad5)")
 			(class "Default")
 			(node
@@ -27299,7 +30062,7 @@
 			)
 		)
 		(net
-			(code "156")
+			(code "174")
 			(name "unconnected-(J20-Pin_6-Pad6)")
 			(class "Default")
 			(node
@@ -27310,7 +30073,7 @@
 			)
 		)
 		(net
-			(code "157")
+			(code "175")
 			(name "unconnected-(J20-Pin_7-Pad7)")
 			(class "Default")
 			(node
@@ -27321,7 +30084,7 @@
 			)
 		)
 		(net
-			(code "158")
+			(code "176")
 			(name "unconnected-(J20-Pin_10-Pad10)")
 			(class "Default")
 			(node
@@ -27332,7 +30095,7 @@
 			)
 		)
 		(net
-			(code "159")
+			(code "177")
 			(name "unconnected-(J20-Pin_11-Pad11)")
 			(class "Default")
 			(node
@@ -27343,7 +30106,7 @@
 			)
 		)
 		(net
-			(code "160")
+			(code "178")
 			(name "unconnected-(J20-Pin_12-Pad12)")
 			(class "Default")
 			(node
@@ -27354,7 +30117,7 @@
 			)
 		)
 		(net
-			(code "161")
+			(code "179")
 			(name "unconnected-(J20-Pin_13-Pad13)")
 			(class "Default")
 			(node
@@ -27365,7 +30128,7 @@
 			)
 		)
 		(net
-			(code "162")
+			(code "180")
 			(name "unconnected-(J20-Pin_15-Pad15)")
 			(class "Default")
 			(node
@@ -27376,7 +30139,7 @@
 			)
 		)
 		(net
-			(code "163")
+			(code "181")
 			(name "unconnected-(J20-Pin_17-Pad17)")
 			(class "Default")
 			(node
@@ -27387,7 +30150,7 @@
 			)
 		)
 		(net
-			(code "164")
+			(code "182")
 			(name "unconnected-(J20-Pin_19-Pad19)")
 			(class "Default")
 			(node
@@ -27398,7 +30161,7 @@
 			)
 		)
 		(net
-			(code "165")
+			(code "183")
 			(name "unconnected-(J20-Pin_20-Pad20)")
 			(class "Default")
 			(node
@@ -27409,7 +30172,7 @@
 			)
 		)
 		(net
-			(code "166")
+			(code "184")
 			(name "unconnected-(J21-Pin_1-Pad1)")
 			(class "Default")
 			(node
@@ -27420,7 +30183,7 @@
 			)
 		)
 		(net
-			(code "167")
+			(code "185")
 			(name "unconnected-(J21-Pin_3-Pad3)")
 			(class "Default")
 			(node
@@ -27431,7 +30194,7 @@
 			)
 		)
 		(net
-			(code "168")
+			(code "186")
 			(name "unconnected-(J21-Pin_4-Pad4)")
 			(class "Default")
 			(node
@@ -27442,7 +30205,7 @@
 			)
 		)
 		(net
-			(code "169")
+			(code "187")
 			(name "unconnected-(J21-Pin_5-Pad5)")
 			(class "Default")
 			(node
@@ -27453,7 +30216,7 @@
 			)
 		)
 		(net
-			(code "170")
+			(code "188")
 			(name "unconnected-(J21-Pin_6-Pad6)")
 			(class "Default")
 			(node
@@ -27464,7 +30227,7 @@
 			)
 		)
 		(net
-			(code "171")
+			(code "189")
 			(name "unconnected-(J21-Pin_7-Pad7)")
 			(class "Default")
 			(node
@@ -27475,7 +30238,7 @@
 			)
 		)
 		(net
-			(code "172")
+			(code "190")
 			(name "unconnected-(J21-Pin_8-Pad8)")
 			(class "Default")
 			(node
@@ -27486,7 +30249,7 @@
 			)
 		)
 		(net
-			(code "173")
+			(code "191")
 			(name "unconnected-(J21-Pin_10-Pad10)")
 			(class "Default")
 			(node
@@ -27497,7 +30260,7 @@
 			)
 		)
 		(net
-			(code "174")
+			(code "192")
 			(name "unconnected-(J21-Pin_12-Pad12)")
 			(class "Default")
 			(node
@@ -27508,7 +30271,7 @@
 			)
 		)
 		(net
-			(code "175")
+			(code "193")
 			(name "unconnected-(J21-Pin_13-Pad13)")
 			(class "Default")
 			(node
@@ -27519,7 +30282,7 @@
 			)
 		)
 		(net
-			(code "176")
+			(code "194")
 			(name "unconnected-(J21-Pin_15-Pad15)")
 			(class "Default")
 			(node
@@ -27530,7 +30293,7 @@
 			)
 		)
 		(net
-			(code "177")
+			(code "195")
 			(name "unconnected-(J21-Pin_16-Pad16)")
 			(class "Default")
 			(node
@@ -27541,7 +30304,7 @@
 			)
 		)
 		(net
-			(code "178")
+			(code "196")
 			(name "unconnected-(J21-Pin_17-Pad17)")
 			(class "Default")
 			(node
@@ -27552,7 +30315,7 @@
 			)
 		)
 		(net
-			(code "179")
+			(code "197")
 			(name "unconnected-(J21-Pin_18-Pad18)")
 			(class "Default")
 			(node
@@ -27563,7 +30326,7 @@
 			)
 		)
 		(net
-			(code "180")
+			(code "198")
 			(name "unconnected-(J21-Pin_19-Pad19)")
 			(class "Default")
 			(node
@@ -27574,7 +30337,7 @@
 			)
 		)
 		(net
-			(code "181")
+			(code "199")
 			(name "unconnected-(J22-Pin_1-Pad1)")
 			(class "Default")
 			(node
@@ -27585,7 +30348,7 @@
 			)
 		)
 		(net
-			(code "182")
+			(code "200")
 			(name "unconnected-(J22-Pin_3-Pad3)")
 			(class "Default")
 			(node
@@ -27596,7 +30359,7 @@
 			)
 		)
 		(net
-			(code "183")
+			(code "201")
 			(name "unconnected-(J22-Pin_5-Pad5)")
 			(class "Default")
 			(node
@@ -27607,7 +30370,7 @@
 			)
 		)
 		(net
-			(code "184")
+			(code "202")
 			(name "unconnected-(J22-Pin_6-Pad6)")
 			(class "Default")
 			(node
@@ -27618,7 +30381,7 @@
 			)
 		)
 		(net
-			(code "185")
+			(code "203")
 			(name "unconnected-(J22-Pin_7-Pad7)")
 			(class "Default")
 			(node
@@ -27629,7 +30392,7 @@
 			)
 		)
 		(net
-			(code "186")
+			(code "204")
 			(name "unconnected-(J22-Pin_8-Pad8)")
 			(class "Default")
 			(node
@@ -27640,7 +30403,7 @@
 			)
 		)
 		(net
-			(code "187")
+			(code "205")
 			(name "unconnected-(J22-Pin_9-Pad9)")
 			(class "Default")
 			(node
@@ -27651,7 +30414,7 @@
 			)
 		)
 		(net
-			(code "188")
+			(code "206")
 			(name "unconnected-(J22-Pin_11-Pad11)")
 			(class "Default")
 			(node
@@ -27662,7 +30425,7 @@
 			)
 		)
 		(net
-			(code "189")
+			(code "207")
 			(name "unconnected-(J22-Pin_13-Pad13)")
 			(class "Default")
 			(node
@@ -27673,7 +30436,7 @@
 			)
 		)
 		(net
-			(code "190")
+			(code "208")
 			(name "unconnected-(J22-Pin_17-Pad17)")
 			(class "Default")
 			(node
@@ -27684,7 +30447,7 @@
 			)
 		)
 		(net
-			(code "191")
+			(code "209")
 			(name "unconnected-(J22-Pin_19-Pad19)")
 			(class "Default")
 			(node
@@ -27695,7 +30458,7 @@
 			)
 		)
 		(net
-			(code "192")
+			(code "210")
 			(name "unconnected-(J22-Pin_20-Pad20)")
 			(class "Default")
 			(node
@@ -27706,7 +30469,7 @@
 			)
 		)
 		(net
-			(code "193")
+			(code "211")
 			(name "unconnected-(J23-Pin_8-Pad8)")
 			(class "Default")
 			(node
@@ -27717,7 +30480,7 @@
 			)
 		)
 		(net
-			(code "194")
+			(code "212")
 			(name "unconnected-(J23-Pin_10-Pad10)")
 			(class "Default")
 			(node
@@ -27728,7 +30491,7 @@
 			)
 		)
 		(net
-			(code "195")
+			(code "213")
 			(name "unconnected-(J23-Pin_12-Pad12)")
 			(class "Default")
 			(node
@@ -27739,7 +30502,7 @@
 			)
 		)
 		(net
-			(code "196")
+			(code "214")
 			(name "unconnected-(J23-Pin_13-Pad13)")
 			(class "Default")
 			(node
@@ -27750,7 +30513,7 @@
 			)
 		)
 		(net
-			(code "197")
+			(code "215")
 			(name "unconnected-(J23-Pin_15-Pad15)")
 			(class "Default")
 			(node
@@ -27761,7 +30524,7 @@
 			)
 		)
 		(net
-			(code "198")
+			(code "216")
 			(name "unconnected-(J23-Pin_17-Pad17)")
 			(class "Default")
 			(node
@@ -27772,7 +30535,7 @@
 			)
 		)
 		(net
-			(code "199")
+			(code "217")
 			(name "unconnected-(J23-Pin_19-Pad19)")
 			(class "Default")
 			(node
@@ -27783,7 +30546,7 @@
 			)
 		)
 		(net
-			(code "200")
+			(code "218")
 			(name "unconnected-(U1-PG-Pad4)")
 			(class "Default")
 			(node
@@ -27794,12 +30557,23 @@
 			)
 		)
 		(net
-			(code "201")
+			(code "219")
 			(name "unconnected-(U11-Pad4)")
 			(class "Default")
 			(node
 				(ref "U11")
 				(pin "4")
+				(pintype "output+no_connect")
+			)
+		)
+		(net
+			(code "220")
+			(name "unconnected-(U18-Vref-Pad5)")
+			(class "Default")
+			(node
+				(ref "U18")
+				(pin "5")
+				(pinfunction "Vref_5")
 				(pintype "output+no_connect")
 			)
 		)

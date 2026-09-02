@@ -6,8 +6,16 @@ Interface PCB between a TI **LAUNCHXL-F28379D** (FOC firmware) and an Infineon *
 
 ## Roadmap & current phase
 
-**Current phase: S8 IN PROGRESS.** Done: firmware pin map verified against SPRUI77 Tables 1–4, CAN pins chosen, BoosterPack socket grouping established, **`launchpad` sheet captured and ERC-clean**. Remaining: `vehicle_io` (CAN transceiver, cockpit inputs), full BOM/JLC audit, schematic-freeze tag.
+**Current phase: S8 COMPLETE — schematic frozen at tag `v4.0-schematic-freeze` (2026-09-01). Next: S9 (board setup, stackup, placement).** All seven sheets captured; project ERC **0 violations with `--severity-all`**; pin map cross-checked netlist-side (29/29, 0 mismatches); BOM/JLC audit done (293 purchasable placements, 63 LCSC lines, 5 consigned). ⚠ **Any schematic change after this reopens S8's checklist** (REDESIGN_PLAN.md).
 *(This line is the ONLY place phase state lives — update it when a session's exit criteria pass.)*
+
+**S8's deliverable is [`S8_INTEGRATION_DESIGN.md`](S8_INTEGRATION_DESIGN.md)** — the vehicle connector
+(why the 8-way, and the finding that `DTM13-08PA-R004` is a **vertical-flange right-angle part** with
+**6.35 mm** row spacing, not the flat-base 4.19 mm grid S7's table assumed), the CAN front-end, the two
+**isolated cockpit inputs** with every level and the fail-safe argument, the **provisional `+5V_VEH`**
+feed and its 4.6–4.75 V interface spec, the netlist-side **pin-map cross-check table**, the **BOM/JLC
+audit** (and the 2.2 nF C0G stock finding), and four tooling defects found by finally *looking at* the
+rendered sheets.
 
 **S7's deliverable is [`S7_ENCODER_DESIGN.md`](S7_ENCODER_DESIGN.md)** — the RM44AC's real output
 spec (single-ended, 2.2 Vpp, 3/5·Vdd, 720 Ω), the difference-amp transfer function and every
@@ -99,7 +107,17 @@ not (`GPIO31` status LED, `GPIO42`/`GPIO43` SCI-A) are exactly the three this fi
 deliberately off-header. Checked by parsing the tables out of the PDF and diffing against the pin map,
 not by eye. Confirms independently: **GPIO131 → J6-58** (S2), **ADCINC3 → J3-24** (S5), the
 **five contiguous current pins J7-65…69** (S6), and **GPIO67 → J1-5**, which retires this file's
-"pin unverified on Control_V2" caveat on the ISR probe.
+"pin unverified on Control_V2" caveat on the ISR probe. **Closed netlist-side on 2026-09-01:** every
+socket pin in the exported netlist was mapped through the socket rule and SPRUI77 to its MCU function
+and compared with the pin map — **29/29 signals on the expected pin, 0 mismatches, 47 no-connects**
+(`S8_INTEGRATION_DESIGN.md` §7).
+
+**Verified in S8 from TE's `DTM13-08PA-R004` drawing (rev D):** the 8-way is a **right-angle part with
+a VERTICAL panel flange** (68.58 × 33.02 + four slotted ears), pins exit the flange rear and bend down;
+**PCB rows are 6.35 ± 0.25 mm apart** (section B-B), columns 4.191; the flange hangs 4.4 mm below the
+board top and only the 8 pins retain the part. S7's comparison table had assumed a 4.19 mm grid for
+it — corrected. TE's repository holds **no** `DTM13-12PC/12PD`, `DTM13-08PB` or `DT13-08/12PA` drawing
+under any flange suffix tried (probed slowly after a 222-request burst earned a temporary 403).
 
 **Verified in S4 from the PrimeSTACK datasheet (`datasheets/`, pages 2 and 6) — no longer assumptions:**
 DB37 pin functions for all 37 pins incl. TOP/BOT within each half-bridge; **fault = HIGH**
@@ -147,9 +165,13 @@ FE_UFPR_4_0/
 │                            / S5_MODULE_STATUS_DESIGN.md (S5)
 │                            / S6_CURRENT_SENSE_DESIGN.md (S6)
 │                            / S7_ENCODER_DESIGN.md (S7)
+│                            / S8_INTEGRATION_DESIGN.md (S8)
 ├── tools/schematic_layout/  sheet generators + connectivity/netlist checkers + golden.net
-│                            (S7.5; S8 added `lp_layout.py` and `canon.py`)
+│                            (S7.5; S8 added `lp_layout.py`, `vio_layout.py`, `canon.py`,
+│                             content-addressed notes and the label-orientation fixes)
 ├── datasheets/               SPRUI77 (LaunchPad UG) + **LEM-LA_100-P-v15** (fetched S6)
+│                            + **LiteOn-LTV-817-series**, **TDK-ACT45B**, **TI-SN65HVD230** (fetched S8)
+│                            + **ECU AM06.pdf**, **TCC.pdf** (user-supplied S8, REFERENCE ONLY)
 │                            + **RLS-RM44_RM58-RM4458D01_01** (fetched S7 — the RM44AC output
 │                             spec is on p.10 "AC - Analogue sinusoidal outputs", the part
 │                             numbering incl. order code 01S on p.20)
@@ -172,6 +194,18 @@ FE_UFPR_4_0/
 | Power/flags | `GND` `PWR_FLAG` `+3V3` `+5V` `+12V` `+24V` `+15V_ISO` `-15V_ISO` |
 | Connector | `DSUB-37_Socket` (generated) `Conn_02x10_Odd_Even` |
 | Utility | `TestPoint` `MountingHole` `NetTie_2` `SolderJumper_2_Open` `SolderJumper_3_Open` |
+
+**Appended in S8 (51 → 57 symbols):** `SN65HVD230` (KiCad `Interface_CAN_LIN`), `LTV-817S`
+(`Isolator`), `SolderJumper_2_Bridged` (`Jumper`), `D_TVS_Dual_CAN` (`Power_Protection:NUP2105L`
+renamed — same SOT-23 pinout as the PSM712: 1/2 lines, 3 GND), `Conn_02x04_Counter_Clockwise`
+(`Connector_Generic`, 1..4 / 8..5 = the DTM 8-way cavity order) and `L_CommonMode`
+(`Filter:Choke_CommonMode_FerriteCore_1423` renamed — windings 1–4 / 2–3 = ACT45B pinout). All
+standalone, copied by script, LCSC property added. New footprints (42 → 47):
+**`DEUTSCH_DTM13-08PA-R004_Horizontal`** (hand-derived, `S8_INTEGRATION_DESIGN.md` §1.3),
+**`Optocoupler_LTV-817S_SMD-4P`** (Lite-On land: 1.5 × 1.3 pads, 2.54 pitch, rows 9.0 apart),
+**`L_CommonMode_TDK_ACT45B`** (TDK land: 1.35 × 0.9 pads, 5.9 × 3.4 outer), plus copies of
+`SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm` and `D_SOD-123`. Library revalidated:
+**57/57 symbols (59 SVGs) and 47/47 footprints**.
 
 **Appended in S7 (49 → 51 symbols):** `Conn_02x06_Counter_Clockwise` (KiCad `Connector_Generic` —
 its 1..6 / 12..7 numbering is exactly the DTM13 pin order) and `BAT54S` (KiCad `Diode`, 3-pin series
@@ -353,7 +387,7 @@ Price ≈ $0.85–1.46 / 1000, stock 0.5 M–37 M on every line. **0.1 % gain/di
 | 220 pF | 0603 | NP0 | 50 | C106210 | CC0603JRNPO9BN221 | Extended | filter |
 | 470 pF | 0603 | NP0 | 50 | C106211 | CC0603JRNPO9BN471 | Extended | filter |
 | 1 nF | 0603 | NP0 | 50 | C106246 | CC0603JRNPO9BN102 | Extended | charge bucket / filter |
-| 2.2 nF | 0603 | NP0 | 50 | C107043 | CC0603JRNPO9BN222 | Extended | filter |
+| 2.2 nF | 0603 | C0G | 50 | **C77033** (was C107043, see the S8 stock note) | GRM1885C1H222JA01D | Extended | filter |
 | 4.7 nF | 0603 | C0G | 50 | C85980 | GRM1885C1H472JA01D | Extended | filter |
 | 10 nF | 0603 | NP0 | 50 | C389113 | CC0603JRNPO9BN103 | Extended | filter (C0G ceiling in 0603) |
 | 22 nF | 0805 | C0G | 50 | C77069 | GRM21B5C1H223JA01L | Extended | filter (C0G ceiling overall) |
@@ -385,10 +419,28 @@ Price ≈ $0.85–1.46 / 1000, stock 0.5 M–37 M on every line. **0.1 % gain/di
 | Part | LCSC | JLC | Stock | Notes |
 |---|---|---|---|---|
 | **2×10 female header, 2.54 mm** PM2.54-2*10 | C5116528 | Ext | 15 698 | J20–J23, the four BoosterPack sockets. **No Basic or Preferred 2×10 female exists** — every 20-pin 2-row line at JLC is Extended. Highest-stock of the four straight/direct-insert candidates (C7499346 11 814, C2897411 9 858, C92266 3 330). ⚠ **Insulator height not yet checked** against the LaunchPad standoffs — S9 |
+| **SN65HVD230DR** 3.3 V CAN transceiver, SOIC-8 | C12084 | **Preferred** | 91 835 | U18. RS pin → 10 k = slope control ≈15 V/µs; V_ref NC |
+| **LTV-817S-TA1-C** phototransistor opto, SMD-4P, CTR 200–400 % | C109227 | **Basic** | 597 938 | U19/U20 — the two car-referenced inputs. PC817C is Extended; TLP2361/6N137/H11L1 are inverting |
+| **PSM712** dual asymmetric CAN TVS, SOT-23 | C32677 | **Basic** | 317 834 | D13, +12/−7 V standoff = the CAN common-mode window |
+| **ACT45B-101-2P-TL003** 100 µH CM choke, 4.5 × 3.2 | C88056 | Ext | 38 604 | L3, AEC-Q200 |
+| **1N4148W** SOD-123 | C81598 | **Basic** | 3.5 M | D14/D15 anti-parallel across the opto LEDs (LED V_R max 6 V) |
+| **SMAJ5.0A** TVS, SMA | C2925443 | **Preferred** | 64 985 | D17 on `+5V_VEH` |
+| **1206L020/30NR** polyfuse 0.2 A hold / 0.46 A trip, 30 V | C7542932 | Ext | 141 752 | F3 on `+5V_VEH` |
+| **120 Ω 0603 1 %** 0603WAF1200T5E | C22787 | **Basic** | 1.34 M | R122 CAN termination (new kit line) |
+| **DEUTSCH DTM13-08PA-R004** 8-way, key A | — | **CONSIGNED** | — | J5 vehicle connector — a **vertical-flange** part, see the S8 doc |
 
 Everything else S8 places comes from the existing kit: SS34 `C8678` (the LaunchPad 5 V feed
-resolved in S3 and physically placed here), 10 µF/0805 `C15850`, 100 nF `C14663`.
-**S8 introduces no new C0G value** and no new passive value.
+resolved in S3, placed on `launchpad`, and a second one as the `+5V_VEH` back-feed block), 10 µF/0805
+`C15850`, 100 nF `C14663`, 1 µF/0805 `C28323`, 10 kΩ `C25804`, 2.2 kΩ `C4190`, 74LVC2G17 `C10429`.
+**S8 introduces no new C0G value**; it adds one passive line (120 Ω).
+
+⚠ **S8 BOM audit: the 2.2 nF C0G line `C107043` reports 4 in stock** in two of three sources
+(JLCSearch `/api/search` and the MCP local snapshot; the `capacitors/list` endpoint says 88 976 — the
+endpoints disagree on every part). The ten anti-alias caps (C62/63/69/71/76/78 on `current_sense`,
+C105/106/108/109 on `encoder`) were moved to **`C77033` GRM1885C1H222JA01D** (Murata C0G 50 V 5 %,
+2 265 / 24 839 by the same two sources — the same family as the kit's 4.7 nF and 22 nF). **S12 verifies
+live.** Other low-stock lines under the pessimistic source: `C5369735` 362, `C5219272` 2 255,
+`C870760` 4 210, `C15857` 4 688.
 
 ### Parts appended in S7
 
@@ -680,6 +732,16 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - 2026-08-31 — S8 — **Socket = PM2.54-2*10 (C5116528), and there is no Basic option.** Every 2-row 20-pin female line at JLC is Extended; picked on stock (15 698, against 11 814 / 9 858 / 3 330 for the alternatives). ⚠ The **insulator height is unverified** — the LaunchPad hangs below on nylon standoffs, so the mated stack has to close before this is ordered. S9.
 - 2026-08-31 — S8 — **[FINDING] The six `PWM_*_3V3` nets sit on `Default`, and always have.** Confirmed from `kicad-cli`'s own `(class …)` output, not by reading the pattern list. The netclass patterns cover `*PWM_*_15V` and `*PWM_*_DRV` but **not** `*PWM_*_3V3`, so the MCU-side half of the gate bus is unclassed. This is the S5 defect's milder cousin — a pattern set that looks deliberate but is incomplete. **Not changed here**: netclass values and their derivation are S9's, and moving six nets deserves a stated rationale rather than a silent edit. Logged as an open item.
 
+- 2026-09-01 — S8 — **J5 = DEUTSCH `DTM13-08PA-R004` (8-way, key A, consigned).** Keys A and B are spent on J3/J4, and TE's board-mount DTM13 family has only 8- and 12-way members, so an 8-way is the only receptacle a 12-way plug physically cannot enter: **mis-mate protection by way-count**. The S7 premise was re-tested, not inherited: `DTM13-12PC/12PD-R004/R005`, `DTM13-08PB-R004`, `DT13-08PA`, `DT13-12PA` (+`-R004`/`-R008`) all return TE's not-found page. Pin pairs (1,8) CAN, (2,7) `+5V_VEH`/GND, (3,6) shutdown circuit, (4,5) start — every function on physically adjacent cavities.
+- 2026-09-01 — S8 — **[FINDING] The `-R004` is not a flat-base part.** Its flange is a vertical 68.58 × 33.02 plate with four slotted ears; the pins leave the flange rear and bend down, **rows 6.35 mm apart** (drawing section B-B, printed .250 ± .010 and measured 6.30), and the flange reaches 4.4 mm below the board. S7's table said "4 × 2, 4.191 mm" for this part — corrected in `S7_ENCODER_DESIGN.md`. Consequences: the board edge must sit between the rear pad row and the flange (footprint carries a `Dwgs.User` guide at y = +6.35 and the overhang in its courtyard), and **nothing retains the connector but its eight pins — S9 must bracket the flange slots.** Cavity numbers are taken from the drawing, which labels them (near row 1–4, far row 5–8); confirm on a real plug like J3/J4.
+- 2026-09-01 — S8 — **CAN front-end: SN65HVD230 (Preferred) + ACT45B 100 µH common-mode choke + PSM712 (Basic) at the connector + 120 Ω through a BRIDGED jumper (fitted by default, 2-node link).** RS = 10 k → slope control ≈15 V/µs (datasheet Fig. 33); **10 k pull-up on TXD** because the datasheet's own layout note says the internal bias is weak and a floating D with the LaunchPad unplugged could hold the bus dominant. Split termination rejected: one series jumper would leave an asymmetric 60 Ω + C stub on one line when opened. No shield pin on J5.
+- 2026-09-01 — S8 — **Both cockpit inputs are optically isolated, high-side, non-inverting: LTV-817S-C (Basic) → 2.2 k pull-down → SN74LVC2G17 Schmitt → GPIO.** Car GLV is 12 V (the AM06 ECU runs on +12 V); the LED chain 2 × 2.2 k + anti-parallel 1N4148W accepts 8–30 V (1.5 mA at 8 V, still ≥ 1.5× the 1.4 mA needed to saturate; 59 % of 0.1 W per 0603 at 24 V — use 3.3 k if the car goes 24 V). **Every failure — LED off, unplugged, broken wire, dead opto — reads LOW = gate enable withheld**, which is why it is high-side and why logic-output optos (all inverting) were rejected. Delay = the phototransistor's own fall time into 2.2 k, tens of µs, under one PWM period, and the only delay on the path (S4's no-filter rule kept). The Schmitt exists because a 20 µs edge violates LVC's 10 ns/V input-transition limit 1000×.
+- 2026-09-01 — S8 — **`+5V_VEH` (provisional) = SS34 → 0.2 A polyfuse → SMAJ5.0A + 100 nF → J5.2.** The Schottky is the one part the S8 note did not ask for: without it a mis-wired 12 V on the pin lands on the `+5V` rail (the polyfuse limits current, not voltage, and the TVS clamps at 6.4–7 V — above the OPA2376/LVC/buck absolute maxima). Its cost is the interface spec: **4.6–4.75 V at ≤ 75 mA at the connector — ISO1042/ISOW1044 class (4.5–5.5 V), NOT ISO1050 (4.75 V min).** Publish to the ECU team; 0 Ω in D16's place if they need 5.0 V and guarantee no back-feed.
+- 2026-09-01 — S8 — **`vehicle_io` captured: 30 components, netlist 201 → 220 nets / 835 → 914 nodes, every new net verified node-by-node, project ERC `--severity-all` = 0.** The 13 root-sheet label warnings that had waited since S1 are gone. `golden.net` re-baselined 201/835 → 220/914 in the same commit.
+- 2026-09-01 — S8 — **[TOOLING, four defects in the S7.5 generator, all fixed, all six older sheets regenerated and re-verified netlist-identical / ERC 0.]** (1) **A vertical global label's JUSTIFY, not its rotation, decides which side of the anchor the flag lies on** (measured on a four-label test sheet): the helper's `90 + left` stood every downward GND flag *on top of the part it hung from* — on every regenerated sheet, in the committed renders, unnoticed for a session because the netlist gate is blind to cosmetics. (2) KiCad transforms a field's justification with the symbol (mirror-y and 180° flip it). (3) Inserting a missing `(justify …)` never worked (it searched for a line it had already cut off). (4) **Note texts were addressed by file index, and the file order changes on every regeneration** — re-running any S7.5 script on its own output scrambled the notes (10/10 on `module_status`); now content-addressed (`text_by`/`notes_by`). **Lesson, seventh costume: a gate that cannot see a class of defect is not a gate for that class — render the sheet and look at it.**
+- 2026-09-01 — S8 — **BOM / JLC audit: 135 grouped lines, 293 purchasable placements on 63 LCSC codes (29 Basic / 4 Preferred / 30 Extended ≈ $90 setup fees, ≈ $28 of parts per board), 62 NOFIT, 5 consigned (J1–J5), 0 empty LCSC fields** (U9–U11 units 2/3 lacked the field and KiCad's BOM picked them — fixed). **`C107043` 2.2 nF C0G reports 4 in stock** in two sources → ten caps moved to Murata `C77033`; value strings normalised so each LCSC line is one BOM line. S12 re-verifies everything live.
+- 2026-09-01 — S8 — **Schematic freeze: tag `v4.0-schematic-freeze`.** Exit criteria met: ERC 0, pin map 100 % matched, BOM audit table exists (`S8_INTEGRATION_DESIGN.md` §8). Any schematic change after this reopens S8's checklist.
+
 ## Open items (owner session in brackets; struck items resolved with the session noted)
 
 - ~~[S2] BoosterPack header gender~~ — **resolved S2:** `PinSocket_2x10`, bottom side, LaunchPad below.
@@ -696,7 +758,7 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - **[user, before S12] DB37 hardware:** the module end is SUB-D 37 **male with UNC 4-40 female threads**, so the harness end that mates our socket needs matching jackscrews. Confirm the board-side hardware with the purchasable MPN.
 - ~~[S5] Fault pull-up value~~ — **resolved S5: 4.7 kΩ to `+13V5_GATE`** (2.84 mA sink), then 10 k/4.7 k into an SN74LVC2G17 Schmitt. 2.45 V / 2.91 V of noise margin referred to the DB37 pin.
 - ~~[S5] `NTC_1_RAW` divider must survive 10 V~~ — **resolved S5: 12 k / 4.7 k**, 10.000 V → 2.814 V (93.8 % range), clips at 10.66 V, 0.60 mA load. ADC pin `ADCINC3` (J3-24).
-- **[S8] `vehicle_io` must produce `SW_MAIN_3V3`** as a clean 3.3 V logic level with all contact conditioning on its side — `gate_drive` consumes it as a hardware interlock term with no local filtering by design.
+- ~~[S8] `vehicle_io` must produce `SW_MAIN_3V3` as a clean 3.3 V logic level~~ — **done S8:** opto → 2.2 k pull-down → Schmitt buffer, fail-safe LOW, no RC on the path.
 - ~~[cosmetic, any session] `power` and `current_sense` sheet readability~~ — **resolved S7.5.** The S6 objection ("a bulk move risks silently detaching a verified netlist") was answered by building the safety net first, not by avoiding the move: an independent geometry→connectivity engine plus an order-insensitive netlist fingerprint diffed against a golden `kicad-cli` export. Every sheet was re-drawn and re-verified **149 nets / 745 nodes identical**.
 - ~~[S6] Third current channel~~ — **resolved S6: `ISNS_C_ADC` = ADCINA5 (J7-66), suggested ADC-A SOC1.** Puts the whole current block on five contiguous J7 pins (65–69) across three converters.
 - ~~[S6] LA 100-P ±150 A range vs the 260 A SW trip~~ — **resolved S6 (user): accept.** LEM path is a validation instrument; see the SAFETY decision above.
@@ -705,7 +767,7 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - ~~[user / S7] Key or size the LEM connector differently from the encoder connector~~ — **resolved S7, and better than by size:** both are DTM13-12P-R005, J3 **key A** and J4 **key B**. A key-A plug physically cannot enter a key-B receptacle, so the ±15 V-into-an-RM44AC hazard is prevented by the connector itself and survives any future re-pinning of either harness.
 - ~~[user, if wanted] Board-mounted Deutsch instead of J3's Micro-Fit~~ — **done S7.** The drawing was never gated (see the S7 decision log); J3 is now `DTM13-12PA-R005`, footprint hand-derived from TE's dimensioned drawing, netlist re-verified pin-by-pin.
 - ~~[S12] Verify `C3294385`~~ — **moot S7:** J3 no longer uses the Micro-Fit clone. The symbol `Conn_02x04_Odd_Even` and the footprint `Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal` remain in the libraries, now **unused**.
-- **[user, BEFORE any harness is crimped] Confirm the DTM 12-way cavity numbering** against the molded numbers on a real `DTM06-12SA`/`-12SB`. TE's 12-way drawing does not label them; S7's 1–6 / 12–7 order is extrapolated from the 8-way drawing of the same family. Board, symbol and footprint are self-consistent either way — only the harness mapping is at risk.
+- **[user, BEFORE any harness is crimped] Confirm the DTM cavity numbering on J3/J4 (12-way) AND J5 (8-way)** — the 8-way drawing labels its cavities and S8 mapped them through the section view, but a real `DTM06-08SA` settles it. Original 12-way item: against the molded numbers on a real `DTM06-12SA`/`-12SB`. TE's 12-way drawing does not label them; S7's 1–6 / 12–7 order is extrapolated from the 8-way drawing of the same family. Board, symbol and footprint are self-consistent either way — only the harness mapping is at risk.
 - **[user / S9] The DTM13 mounting feature** — the drawing's Ø2.01 mm feature is ambiguous between a plastic locating peg and an M2 screw hole. The footprint uses Ø2.2 mm NPTH, which serves either; confirm against a real part before S9 finalises mechanical.
 - **[S9] Board edge budget.** Two DTM13-12P flanges are 2 × 41.02 mm of edge, plus the DB37 and the power entry, against 3.0's inherited 91.9 × 121.7 mm outline. S9 must confirm the analog flank actually holds both or grow the outline.
 - **[bench, optional] Measure the installed encoder's amplitude at the connector.** Not blocking — S7 spans the whole 2.0–2.4 Vpp datasheet range — but it says whether the `S7_ENCODER_DESIGN.md` §9.1 gain bump is worth fitting.
@@ -718,7 +780,13 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - **[cosmetic, any session] A3 title-block `Title` field overflows its box on all seven sheets** — the S1 sheet titles are longer than the block. Harmless on screen, visible in PDF/print.
 - **[S9] 3D model** for the derived DB37 footprint still points at KiCad's `…_EdgePinOffset9.40mm.step` (correct body, name differs from the footprint) — harmless, revisit if 3D export matters.
 - **[user / ECU team] Confirm the three PROVISIONAL S8 interface decisions** — (a) is the logic 24 V really an external battery unbonded from car GND? (b) does the barrier stay on the ECU side? (c) is their isolated bus side powered from our `+5V` or from an integrated DC/DC? The board is drawn correct either way, but the `+5V` budget, the harness pin count and the connector freeze all depend on (c).
-- **[S8] Vehicle connector must not be a third look-alike 12-way.** `DTM13-12P-R005` keys **A** and **B** are already spoken for (J3 LEM, J4 encoder), and S7's probe of TE's repository found the board-mount DTM13 family only in 8- and 12-way, keys A and B. Whatever the ECU/vehicle harness becomes, mis-mate protection has to come from way-count or a different series — the key trick is used up.
+- ~~[S8] Vehicle connector must not be a third look-alike 12-way~~ — **resolved S8: J5 = `DTM13-08PA-R004`, keyed by way-count.** Keys C/D and the DT13 board mounts do not exist in TE's repository (re-probed).
+- **[S9] J5 retention + board edge.** The `-R004` flange is vertical and off-board; put the board edge on the footprint's `Dwgs.User` line (y = +6.35) and give the four flange slots a bracket or panel — the eight pins are the only retention otherwise.
+- **[S9] CAN pair** — route `CAN_H/L` as a pair U18 → L3 → J5 with D13 and R122 at the connector; decide whether `*CAN_*` wants its own netclass (currently `Default`).
+- **[user / ECU team] `+5V_VEH` delivers 4.6–4.75 V** (SS34 back-feed block) — ISO1042/ISOW1044 class only, not ISO1050. Part of the three provisional S8 decisions to confirm.
+- **[user] Shutdown-circuit / GLV voltage is assumed 12 V** (from the AM06 ECU's +12 V supply). Designed for 8–30 V; at 24 V GLV change R123/R124/R126/R127 to 3.3 kΩ.
+- **[S12] The two JLCSearch endpoints disagree on stock for every part** (`/api/search` vs `<category>/list`). Verify the 2.2 nF C0G line (`C77033`, formerly `C107043`) and the four low-stock lines against JLCPCB itself before ordering.
+- **[cosmetic] `current_sense`** — the upward `ISO_COM` flags on R68/R69/C65/R73/C67 cross the wire of the row above (pre-existing S7.5 crowding, not touched in S8).
 - **[S9] `*PWM_*_3V3` has no netclass pattern** — the six MCU-side gate nets are on `Default` while their `_15V` and `_DRV` counterparts are `Gate`. Decide in S9 whether the header→driver half of the bus wants Gate rules; the fix is one `*`-prefixed pattern.
 - **[S9] Confirm the 2×10 socket insulator height** (C5116528) closes the mated stack against the LaunchPad standoffs before S12 orders it.
 
@@ -730,3 +798,9 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - Temp exports go to the session scratchpad, not the project directory.
 - **Never trust a hand-generated `.kicad_sch` until `kicad-cli sch export netlist` agrees with a golden baseline.** KiCad fails silently on a malformed token (it drops the rest of the sheet and still exits 0), and its connectivity rules are stricter than they look — see the four S7.5 behaviours in the Decision Log. The generator scripts and the checker live in the session scratchpad; the invariant they enforce is **149 nets / 745 nodes, node sets identical**.
 - `kicad-cli sch erc --severity-all` groups some sub-sheet violations under the root's section — read the coordinates, not the section header, to attribute them.
+- **Render and look** after any regeneration: `kicad-cli sch export svg` → `rsvg-convert` → crop. The netlist gate cannot see labels drawn over parts or scrambled notes (S8 found both, a session late).
+- **KiCad label/field orientation rules** (measured S8, encoded in `layoutlib`/`sheetedit`): a vertical global label's *justify* picks the side of the anchor (`right` = hangs below); field justification is transformed by the symbol's mirror/180° rotation; `(text …)` file order changes on every regeneration, so address notes by content.
+- `dump.py`/`conncheck` reported both S8 sheets as "1 net, 87 unlabelled pins" while `kicad-cli` proved them fully connected — a known false alarm, still not the gate.
+- **TE `DocumentDelivery` rate-limits**: a 222-request burst earned a ~1 h 403 for this address. Probe a few names with a pause between them. A missing drawing answers HTTP 500 + HTML.
+- **JLCSearch**: `/api/search?q=<LCSC or MPN>` gives `is_basic`/`is_preferred`/stock/price for ICs too (the category endpoints only cover passives), but the two disagree on stock — treat both as snapshots.
+- The MCP `batch_add_components` does not add the library symbol's `LCSC` property to every instance — `vio_layout.py` sets it for its own parts; check `grep -c '(property "LCSC"'` equals the symbol count after any MCP add.

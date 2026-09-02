@@ -12,11 +12,12 @@ Only `(at …)`, `(mirror …)` and field positions are rewritten inside a symbo
 ```bash
 kicad-cli sch export netlist --format kicadsexpr -o /tmp/new.net FE_UFPR_4_0.kicad_sch
 python3 tools/schematic_layout/netcmp.py tools/schematic_layout/golden.net /tmp/new.net
-# must print: 201 nets, 835 nodes  ...  IDENTICAL
+# must print: 220 nets, 914 nodes  ...  IDENTICAL
 ```
 
 `golden.net` was the S7 netlist; **re-baselined in S8** when the `launchpad` sheet
-added 52 nets and 90 nodes (149/745 -> 201/835). **If a later session
+added 52 nets and 90 nodes (149/745 -> 201/835) and again when `vehicle_io` added
+19 nets and 79 nodes (201/835 -> 220/914). **If a later session
 legitimately changes connectivity, re-baseline `golden.net` in the same commit** and say so
 in the Decision Log — otherwise the gate silently stops meaning anything.
 
@@ -37,6 +38,22 @@ git checkout encoder.kicad_sch && python3 tools/schematic_layout/enc_layout.py
 | `pw_layout.py` | `power` |
 | `cs_layout.py` | `current_sense` |
 | `lp_layout.py` | `launchpad` |
+| `vio_layout.py` | `vehicle_io` |
+
+Since S8 the scripts are idempotent against their **own output** too: note texts are
+addressed by content prefix (`Builder.text_by` / `notes_by`), not by file index.
+
+## Then LOOK at it
+
+The netlist gate is blind to cosmetics. After regenerating, render and inspect:
+
+```bash
+mkdir -p /tmp/sch && kicad-cli sch export svg -o /tmp/sch --no-background-color FE_UFPR_4_0.kicad_sch
+rsvg-convert -w 7200 -o /tmp/sheet.png /tmp/sch/FE_UFPR_4_0-vehicle_io.svg   # then crop / view
+```
+
+A label-orientation bug (below, item 5) survived a whole session of netlist-identical
+regenerations because nobody looked.
 
 ## Checking before KiCad
 
@@ -63,6 +80,14 @@ None of these produce an error message.
 4. **Floating-point drift creates zero-length wire fragments** that break connectivity while
    looking correct in the file. All coordinates are rounded to 4 dp and degenerate segments
    dropped.
+5. **A vertical global label's JUSTIFY decides which side of the anchor its body lies on, not
+   its rotation** (measured S8 with a four-label test sheet). `90`/`270` + `justify left` both
+   stand the flag *above* the anchor; `justify right` hangs it *below*. `Builder.gnd()` and
+   `shunt()` now emit `90 + right` for a flag below a part and `270 + left` for one above.
+6. **KiCad transforms a field's justification with the symbol**: on a `mirror y` or 180°
+   instance `(justify right)` renders left-justified. `sheetedit.place()` flips it for you.
+7. **`(text …)` records are re-emitted in script order**, so an index into the sheet's texts
+   is only valid against the very first hand-drawn file. Use `Builder.text_by(prefix)`.
 
 ## ⚠ And the reason the netlist gate is not optional
 

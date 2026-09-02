@@ -115,7 +115,7 @@ b.place('JP2', 241.3, 171.45, 270, ref_off=(3.302,-1.27), val_off=(3.302,1.905))
 b.wire((241.3,176.53),(215.9,176.53)); b.gnd(215.9, 176.53)
 
 # ═════════ 6. NOTES ═════════
-b.notes([4,0,5,6,2,3,7], (15.24, 157.48), 212.0, 288.0)
-b.s.add_text(b.texts[1], 306.07, 20.32, 1.27)
+b.notes_by(['S4 - GATE DRIVE     ', 'POLARITY CHAIN - ACT', 'DC LEVELS AT THE MOD', 'SKEW vs 1500 ns DEAD', 'JP1 INTERLOCK SELECT', 'FAIL-SAFE TABLE - ev', 'S10 LAYOUT NOTES (ga'], (15.24, 157.48), 212.0, 288.0)
+b.s.add_text(b.text_by('DB37 PIN TABLE - fro'), 306.07, 20.32, 1.27)
 
 print("gate_drive:", *b.save(SRC))

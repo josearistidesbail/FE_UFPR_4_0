@@ -283,7 +283,7 @@ three documents**, which is itself the finding:
 | | DTM13-08PA-R004 | **DTM13-12PA / 12PB-R005** |
 |---|---|---|
 | Flange envelope | 68.58 × 33.02 mm (4 ears) | **38.10 × 41.02 mm** (2 × Ø2.01 mm) |
-| PCB grid | 4 × 2, 4.191 mm | **6 × 2, 4.19 × 4.19 mm** |
+| PCB grid | 4 × 2, 4.191 mm across × **6.35 mm between rows** *(corrected S8 — the -R004 is a right-angle part with a VERTICAL panel flange, see  §1.2)* | **6 × 2, 4.19 × 4.19 mm** |
 | Pin Ø | 1.04 ± 0.05 mm | 1.04 ± 0.05 mm |
 | Keys | A only | **A and B** |
 | Mates | DTM06-08SA | DTM06-12SA / -12SB |

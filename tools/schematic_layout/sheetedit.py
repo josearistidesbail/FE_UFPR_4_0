@@ -84,13 +84,17 @@ class Sheet:
                     seg = s2[head.end():]
                     cut = seg.find("\n\t\t\t)\n")          # end of this property node
                     body = seg[:cut]
-                    if "(justify" not in body:
-                        body = body.replace("\t\t\t\t)\n\t\t\t)",
-                                            "\t\t\t\t)\n\t\t\t\t(justify " + just + ")\n\t\t\t)", 1)
-                        s2 = s2[:head.end()] + body + seg[cut:]
+                    if "(justify" in body:          # MCP-written fields carry one already (S8)
+                        body = re.sub(r'\(justify [^)]*\)', '(justify ' + just + ')', body, count=1)
+                    else:                           # body ends with the font block's closing paren
+                        body = body + "\n\t\t\t\t(justify " + just + ")"
+                    s2 = s2[:head.end()] + body + seg[cut:]
             return s2
         rj = 'left' if ref_off[0] > 0.5 else ('right' if ref_off[0] < -0.5 else None)
         vj = 'left' if val_off[0] > 0.5 else ('right' if val_off[0] < -0.5 else None)
+        if (mirror == 'y') != (int(rot) % 360 == 180):   # KiCad transforms a field's justification
+            flip = {'left':'right','right':'left',None:None} # with the symbol: mirror-y and 180 flip it
+            rj, vj = flip[rj], flip[vj]
         seg = setprop(seg, 'Reference', x + ref_off[0], y + ref_off[1], field_rot, rj)
         seg = setprop(seg, 'Value',     x + val_off[0], y + val_off[1], field_rot, vj)
         for h in ('Footprint', 'Datasheet', 'Description', 'LCSC'):

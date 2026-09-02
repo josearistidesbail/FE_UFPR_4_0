@@ -130,9 +130,9 @@ for ref,x in (('C96',280.67),('R103',293.37),('R104',306.07)):
 b.wire((280.67,171.45),(306.07,171.45)); b.gnd(306.07, 171.45)
 
 # ═════════ NOTES ═════════
-b.s.add_text(b.texts[6], 289.56, 90.17, 1.27)
-b.s.add_text(b.texts[4], 289.56, 120.65, 1.27)
-b.notes([1,5], (15.24,), 205.0, 288.0, gap=3.0)
-b.notes([0,2], (137.16,), 205.0, 288.0, gap=3.0)
-b.notes([3],   (259.08,), 205.0, 244.0, gap=3.0)
+b.s.add_text(b.text_by('J3 REVISED IN S7: Mi'), 289.56, 90.17, 1.27)
+b.s.add_text(b.text_by('4. The three channel'), 289.56, 120.65, 1.27)
+b.notes_by(['=== TRANSFER FUNCTIONS', '=== LEM BURDEN R_M'], (15.24,), 205.0, 288.0, gap=3.0)
+b.notes_by(['=== SOURCE SELECT JP3', '=== SAFETY: THE SW OC TRIP'], (137.16,), 205.0, 288.0, gap=3.0)
+b.notes_by(['=== S11 LAYOUT RULES'], (259.08,), 205.0, 244.0, gap=3.0)
 print("current_sense:", *b.save(SRC))
