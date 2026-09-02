@@ -24161,7 +24161,7 @@
 			(at 0 -8 180)
 			(unlocked yes)
 			(layer "F.SilkS")
-			(uuid "1134b3ef-15b3-4748-9f02-c0178742d5dd")
+			(uuid "155787a8-8c71-4615-9ea3-f60967629036")
 			(effects
 				(font
 					(size 1 1)
@@ -24173,7 +24173,7 @@
 			(at 0 16 180)
 			(unlocked yes)
 			(layer "F.Fab")
-			(uuid "de962740-2cc5-4b08-8457-747a83dc9b0f")
+			(uuid "a8cb2d95-e101-4f8e-8044-a9f32044ef63")
 			(effects
 				(font
 					(size 1 1)
@@ -24186,7 +24186,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "cdcc0412-07cc-49db-92b7-2f4c787187c2")
+			(uuid "8932f927-5b1f-4bf9-8e14-6b97bfead455")
 			(effects
 				(font
 					(size 1 1)
@@ -24199,7 +24199,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "a9973b8c-8b23-49ed-bd6a-582064c3ca8b")
+			(uuid "4a6c0236-d916-4ff6-abe2-e49026fb3365")
 			(effects
 				(font
 					(size 1 1)
@@ -24273,8 +24273,8 @@
 		)
 		(fp_poly
 			(pts
-				(xy -12.355 -5.45) (xy 12.355 -5.45) (xy 12.355 7.245) (xy 51.15 7.245)
-				(xy 51.15 25.75) (xy -17.93 25.75) (xy -17.93 7.245) (xy -12.355 7.245)
+				(xy -12.355 -5.45) (xy 12.355 -5.45) (xy 12.355 7.245) (xy 51.15 7.245) (xy 51.15 25.75) (xy -17.93 25.75)
+				(xy -17.93 7.245) (xy -12.355 7.245)
 			)
 			(stroke
 				(width 0.05)
@@ -24282,6 +24282,7 @@
 			)
 			(fill no)
 			(layer "F.CrtYd")
+			(uuid "831774c5-c3e5-423f-8060-a19ae36d7f14")
 		)
 		(fp_rect
 			(start -12.105 -5.2)

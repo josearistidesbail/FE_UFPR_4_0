@@ -11,7 +11,7 @@
 		(company "Formula UFPR - FSAE")
 		(comment 1 "LAUNCHXL-F28379D <-> Infineon PrimeSTACK 6PS04512E43W39693 interface")
 		(comment 2 "Emrax 208 / Renishaw RM44AC / LEM LA 100-P")
-		(comment 3 "See CLAUDE.md + REDESIGN_PLAN.md in project dir")
+		(comment 3 "See REDESIGN_PLAN.md in project dir")
 	)
 	(lib_symbols)
 	(wire
