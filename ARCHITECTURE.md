@@ -154,7 +154,7 @@ Every off-board connector shell or shield pin gets the same footprint pattern: p
 
 All changeable at the bench (solder jumper / DNP) without a respin.
 
-## 6. Floorplan & connector plan  **[DECIDED at region level — S9 executes]**
+## 6. Floorplan & connector plan  **[EXECUTED S9 — outline 146 × 130 mm; see S9_BOARD_SETUP.md §2]**
 
 Inherits the 3.0 arrangement that already fits the harness: DB37 centered on one short edge
 (faces the PrimeSTACK driver connector), LaunchPad grid mid-board with its long axis
@@ -197,7 +197,15 @@ envelope (grows only if S9 placement demands).
 - Bucks live in the power region top-right, diagonal to the analog partition; gate drivers
   sit between the LaunchPad grid and the DB37; fault receivers next to them.
 
-## 7. Mechanical / mounting  **[PENDING USER MEASUREMENT — logged per S2 exit criteria]**
+## 7. Mechanical / mounting  **[RESOLVED S9 — pattern read from the datasheet; adapter plate confirmed]**
+
+**S9 (2026-09-02):** the datasheet's p.5 mechanical drawing gives four **M8 × 14 deep** threads on
+**143.2 × 242.6** and four **Ø9.2** through-holes (Ø17 × 11 counterbores) on **195 × 260**, both
+centred on the 215 × 280 body. The board (146 × 130) carries six Ø3.2 NPTH holes (corners plus
+mid-left/right) and three Ø3.2 LaunchPad standoff holes; the plate maps the board's M3 pattern onto
+the M8 points. The same top face carries the HV busbar terminals — standoff height and creepage are
+the plate's job (user). The paragraphs below are the S2 record.
+
 
 - The 6PS04512E43W39693 mechanical drawing is gated behind a myInfineon login (S2 tried;
   the public product page carries no documents). Known envelope: **215 × 280 × 120 mm**,

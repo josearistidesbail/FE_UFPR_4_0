@@ -6,8 +6,16 @@ Interface PCB between a TI **LAUNCHXL-F28379D** (FOC firmware) and an Infineon *
 
 ## Roadmap & current phase
 
-**Current phase: S8 COMPLETE — schematic frozen at tag `v4.0-schematic-freeze` (2026-09-01). Next: S9 (board setup, stackup, placement).** All seven sheets captured; project ERC **0 violations with `--severity-all`**; pin map cross-checked netlist-side (29/29, 0 mismatches); BOM/JLC audit done (293 purchasable placements, 63 LCSC lines, 5 consigned). ⚠ **Any schematic change after this reopens S8's checklist** (REDESIGN_PLAN.md).
+**Current phase: S9 COMPLETE (2026-09-02) — 4-layer 146 × 130 mm board set up and fully placed, KiCad DRC 0 errors at `--severity-all`. Next: S10 (routing I: power, gate path, planes).** Schematic still frozen at tag `v4.0-schematic-freeze`, netlist IDENTICAL to `golden.net` (220 nets / 914 nodes). 369 footprints placed (360 + 9 holes), 0 courtyard overlaps, 386 silkscreen warnings deferred to S11's silk pass, 499 unrouted connections. ⚠ **Any schematic change reopens S8's checklist** (REDESIGN_PLAN.md).
 *(This line is the ONLY place phase state lives — update it when a session's exit criteria pass.)*
+
+**S9's deliverable is [`S9_BOARD_SETUP.md`](S9_BOARD_SETUP.md)** — the 146 × 130 mm floorplan and why
+every block sits where it does, the JLC04161H-7628 stackup, the JLC-derived design rules and the
+IPC-2221 re-derivation of every netclass (**Power_3A is 1.1 A on an inner layer — pours only**), the
+**PrimeSTACK mounting pattern read from the datasheet** (M8 on 143.2 × 242.6, Ø9.2 on 195 × 260),
+the **LaunchPad outline and hole positions measured from SPRUI77's layer figures**, the socket
+handedness derived from the LaunchPad silk and verified from the placed pad coordinates, the
+placement generator, and the J5 courtyard defect that would have hidden collisions from DRC.
 
 **S8's deliverable is [`S8_INTEGRATION_DESIGN.md`](S8_INTEGRATION_DESIGN.md)** — the vehicle connector
 (why the 8-way, and the finding that `DTM13-08PA-R004` is a **vertical-flange right-angle part** with
@@ -153,7 +161,9 @@ fitted** (Unit 1 and Unit 3 columns empty), independently confirming S4's single
 
 ```
 FE_UFPR_4_0/
-├── FE_UFPR_4_0.kicad_pro     netclasses, track/via presets, netclass patterns
+├── FE_UFPR_4_0.kicad_pro     6 netclasses, track/via presets, 27 netclass patterns, JLC rules (S9)
+├── FE_UFPR_4_0.kicad_pcb     4-layer 146 × 130 board, JLC04161H-7628 stackup, placed in S9 (unrouted)
+├── FE_UFPR_4_0.kicad_dru     one rule: pad-to-pad inside U2 (SOT-583) relaxes to 0.15 mm (S9)
 ├── FE_UFPR_4_0.kicad_sch     root: A3, 7 hierarchical sheet boxes
 ├── power / gate_drive / module_status / current_sense /
 │   encoder / launchpad / vehicle_io  .kicad_sch   (pages 2–8, A3, titled)
@@ -166,6 +176,8 @@ FE_UFPR_4_0/
 │                            / S6_CURRENT_SENSE_DESIGN.md (S6)
 │                            / S7_ENCODER_DESIGN.md (S7)
 │                            / S8_INTEGRATION_DESIGN.md (S8)
+│                            / S9_BOARD_SETUP.md (S9)
+├── tools/board_layout/      place_s9.py — floorplan → moves.json for the MCP batch mover (S9)
 ├── tools/schematic_layout/  sheet generators + connectivity/netlist checkers + golden.net
 │                            (S7.5; S8 added `lp_layout.py`, `vio_layout.py`, `canon.py`,
 │                             content-addressed notes and the label-orientation fixes)
@@ -604,7 +616,17 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
   Verified empirically against the exported netlist, not by eye: all 27 `current_sense` signal nets
   resolve to **Analog**, `SHIELD_LEM` stays Default (matching `SHIELD_DB37`). Project-wide:
   125 nets = 52 Default / **43 Analog** / 17 Gate / 8 Power_1A / 5 Power_3A.
-- **Mounting:** board mounts on top of the inverter; mounting holes required (3.0 had none — only DB37 jackscrews). Pattern from the PrimeSTACK top-face drawing (S2/S9).
+  **S9 update:** added **`*PWM_*_3V3` → Gate** (closes S8's open item — the MCU-side half of the
+  gate bus now shares its class) and a new class **`CAN`** (0.40 track, 0.30 clearance, 0.8/0.4 via,
+  diff-pair 0.40/0.30, priority 15) on **`*CAN_H*` / `*CAN_L*`**. **27 patterns, 6 classes**, verified
+  from `kicad-cli`'s `(class …)` output: 55 Default / 58 Analog / **23 Gate** / 9 Power_1A / 5 Power_3A /
+  **4 CAN**. Board rules re-derived against JLCPCB's published 4-layer capabilities
+  (`S9_BOARD_SETUP.md` §4): min track/clearance 0.127, via ≥ 0.5/0.2 (0.6/0.3 default), hole-to-hole
+  0.5, copper-to-edge 0.3, silk 0.15 / 1.0 mm text. Netclass *values* unchanged — they are routing
+  discipline, all ≥ 1.4× JLC's floors — but their IPC-2221 ratings are on record: **Power_3A carries
+  3.7 A on 1 oz outer and only 1.1 A on 0.5 oz inner**, so `+24V_*` and `PGND_MOD` are outer-layer
+  runs or ≥ 5 mm L3 pours, never a 1.2 mm inner trace.
+- **Mounting:** board mounts on top of the inverter; mounting holes required (3.0 had none — only DB37 jackscrews). **S9: six Ø3.2 NPTH board holes (corners + mid-left/right, no pads — the screws must not be a ground path in a floating domain) and three Ø3.2 LaunchPad standoff holes; the PrimeSTACK pattern (M8 on 143.2 × 242.6, Ø9.2 on 195 × 260, datasheet p.5) dwarfs the board, so the adapter plate remains the mechanism.**
 
 ## Decision log (append-only: date — session — decision — rationale)
 
@@ -742,11 +764,22 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - 2026-09-01 — S8 — **BOM / JLC audit: 135 grouped lines, 293 purchasable placements on 63 LCSC codes (29 Basic / 4 Preferred / 30 Extended ≈ $90 setup fees, ≈ $28 of parts per board), 62 NOFIT, 5 consigned (J1–J5), 0 empty LCSC fields** (U9–U11 units 2/3 lacked the field and KiCad's BOM picked them — fixed). **`C107043` 2.2 nF C0G reports 4 in stock** in two sources → ten caps moved to Murata `C77033`; value strings normalised so each LCSC line is one BOM line. S12 re-verifies everything live.
 - 2026-09-01 — S8 — **Schematic freeze: tag `v4.0-schematic-freeze`.** Exit criteria met: ERC 0, pin map 100 % matched, BOM audit table exists (`S8_INTEGRATION_DESIGN.md` §8). Any schematic change after this reopens S8's checklist.
 
+- 2026-09-02 — S9 — **Board 146 × 130 mm, 4-layer JLC04161H-7628 (0.035 / 0.21 prepreg / 0.015 / 1.065 core / 0.015 / 0.21 / 0.035), origin (50, 50).** 3.0's 91.9 × 121.7 cannot hold two board-mounted DTM13 12-ways (41.5 × 38.6 mm each) plus the DB37 and the LaunchPad grid; the growth is deliberate and stays inside the module's 143.2 × 242.6 M8 grid.
+- 2026-09-02 — S9 — **Floorplan executed as S2 decided, with one refinement: encoder connector top-left, LEM connector bottom-left**, so each front-end sits beside both its connector and its ADC socket pads (`ENC_*_ADC` on J20 at y ≈ 33, `ISNS_*` on J22 at y ≈ 89–98). `U4` sits beside J3 with its ±15 V pins facing the LEM pin field; DB37 rotation 0 puts all six gate pins and four of the five fault pins under the driver corner beside J23, and the analog pins over the current-sense strip. The socket columns are barriers (0.84 mm between pads) — every block was placed so its traffic reaches its pads without crossing one.
+- 2026-09-02 — S9 — **[VERIFY] Socket handedness derived from SPRUI77 Fig. 12, not from 3.0.** Component side up, USB up: J1 is the outer-left column with pin 1 at the USB end, J3 inner-left, J4/J2 inner/outer right with 40/20 at the top; site 2 likewise. Our board sees the LaunchPad un-mirrored (it hangs below, component side up), so the sockets are on B.Cu **unrotated**, and the pad coordinates read back from the placed board confirm pad 1 → pad 2 is +x and pad 1 → pad 3 is +y. 3.0's as-built grid agrees — the cross-check, not the source.
+- 2026-09-02 — S9 — **[FINDING] The LaunchPad is 129.9 × 58.4 mm and its seven holes are now known to ±0.3 mm** — measured from the PCB layer figures in SPRUI77 §6.3 by blob analysis scaled on the 2.54 mm header pitch (the 63.5 / 43.18 mm grid checks to 0.3 %), because TI publishes no drawing and the Gerbers live in login-gated C2000Ware. Three standoff holes on the board (`H7`–`H9`: near-centre, mid, far-left corner); the far-right corner hole was dropped because it lands on the fault-receiver corner. **The user verifies with a caliper before ordering.**
+- 2026-09-02 — S9 — **PrimeSTACK mounting pattern read from the datasheet p.5** (rendered at 400 dpi): M8 × 14 deep on 143.2 × 242.6, Ø9.2 through with Ø17 × 11 counterbores on 195 × 260, both centred on the 215 × 280 body. **The adapter plate stays the mechanism** (ARCHITECTURE.md §7 no longer pending). ⚠ The same top face carries the HV busbar terminals (the 155/93/31 and 62/62 patterns) — the plate's standoff height and creepage are the user's mechanical call.
+- 2026-09-02 — S9 — **Board holes are NPTH without pads.** With a floating 24 V domain (S8), a plated GND hole under a screw into the chassis-bonded plate would undo `JP2`'s soft tie; the screws must not be a ground path.
+- 2026-09-02 — S9 — **Design rules from JLCPCB's published 4-layer capabilities; netclass values kept, IPC-2221 ratings recorded; `*PWM_*_3V3` → Gate; new `CAN` class.** All verified from `kicad-cli`'s `(class …)` output, per the S5 lesson. One `.kicad_dru` rule relaxes pad-to-pad inside `U2` (SOT-583, 0.5 mm pitch) to 0.15 mm — the 0.25/0.30 netclass clearances are routing discipline and cannot be met between a fine-pitch part's own pads; scoping the relaxation to the footprint keeps it out of routing.
+- 2026-09-02 — S9 — **[TOOLING] J5's courtyard was two overlapping rectangles → KiCad "malformed (self-intersecting)", and a malformed courtyard is silently excluded from the overlap check.** Replaced by one eight-vertex polygon in the library and in the board's embedded copy. Eighth costume of the lesson: the MCP's bounding-box overlap checker reported three phantom overlaps on J5 and none of the real risk; `kicad-cli pcb drc --severity-all` is the gate.
+- 2026-09-02 — S9 — **[TOOLING] MCP quirks met this session:** `replace_board_outline` / `clear_board_outline` crash on the SWIG backend (edit Edge.Cuts in the file); every external edit of the `.kicad_pcb` must be followed by `open_project` or the next auto-save is refused; a flip to B.Cu is reported as rotation 180 while the geometry is the intended mirror; `place_component` with `boardPath` and the `FE_UFPR_4_0:` prefix does place project-library footprints (an earlier "not saved" scare was a grep for the un-prefixed name).
+- 2026-09-02 — S9 — **Placement generated, not hand-placed:** `tools/board_layout/place_s9.py` derives block membership from net families and shelf-packs courtyards. A first pass keyed on reference numbers overflowed five blocks and lost seven parts; the net-derived pass placed 360/360. It is the reproducible *structure*; S10/S11 refine within blocks. Exit criteria met: 369 placed, KiCad DRC 0 errors, 0 courtyard overlaps, ratsnest reviewed (`S9_BOARD_SETUP.md` §7).
+
 ## Open items (owner session in brackets; struck items resolved with the session noted)
 
 - ~~[S2] BoosterPack header gender~~ — **resolved S2:** `PinSocket_2x10`, bottom side, LaunchPad below.
-- **[S9] PrimeSTACK mounting pattern — the drawing is now IN HAND** (`datasheets/…-DS-v02_00…pdf` **p.5**): 215 × 280 body, Ø9.2 / Ø11×10-deep holes, M8×14-deep + M6×11-deep threads, 195 / 143.2 / 155 / 93 / 31 / 62 / 242.6 / 260. S9 extracts the exact pattern; the adapter-plate plan (ARCHITECTURE.md §7) stays as the decoupling mechanism but may no longer be necessary.
-- **[user] DB37 purchasable MPN** for the consigned list. Geometry (female, right-angle, 2.77 × 2.54 mm, 63.5 mm jackscrews) is de-facto validated by 3.0 mating the real harness **and now by the datasheet's "X1 = 37 contacts, SUB-D, male" with UNC 4-40 female thread** — only the buyable part number is open. If the team ever switches to a *vertical* part, the row pitch becomes 2.84 mm and the footprint must be re-derived.
+- ~~[S9] PrimeSTACK mounting pattern~~ — **resolved S9:** M8 × 14 deep on **143.2 × 242.6**, Ø9.2 through (Ø17 × 11 counterbore) on **195 × 260**, both centred on the 215 × 280 body. Both dwarf the 146 × 130 board → **adapter plate confirmed** as the mechanism. **[user] The top face carries the HV busbar terminals — set the plate's standoff height for creepage.**
+- **[user] DB37 purchasable MPN** for the consigned list. **S9 placed the board edge 9.40 mm from pin row 1 (KiCad's footprint); 3.0's as-built part sat at 12.07 mm** — a longer-offset part merely protrudes 2.7 mm, a shorter one on a 12.07 board would be recessed and its plug hood would hit the edge, which is why 9.40 was chosen; confirm with the MPN. Geometry (female, right-angle, 2.77 × 2.54 mm, 63.5 mm jackscrews) is de-facto validated by 3.0 mating the real harness **and now by the datasheet's "X1 = 37 contacts, SUB-D, male" with UNC 4-40 female thread** — only the buyable part number is open. If the team ever switches to a *vertical* part, the row pitch becomes 2.84 mm and the footprint must be re-derived.
 - ~~[S3] Schottky vs ideal-diode/load-switch for the LaunchPad 5 V feed~~ — **resolved S3:** plain Schottky **SS34, C8678 (JLC Basic)**; V_f ≈ 0.35 V at ~200 mA leaves the LaunchPad ≈4.63 V, ample for its own 3.3 V LDO. **Physically placed in S8** on the `launchpad` sheet at the header.
 - ~~[S3] X5R vs X7R for bulk rails~~ — **resolved S3:** X7R wherever a Basic/Preferred X7R exists at the needed value (100 nF, 47 nF, 1 µF); X5R for the bulk ≥4.7 µF where JLC Basic offers nothing else, with ≥2× voltage derating (50 V parts on the 24 V rail, 25 V parts on 5 V/3V3). AMS1117 dissipates 0.25 W → ≈85 °C junction at the 70 °C worst-case local ambient.
 - ~~[S7] Standardise C0G filter values~~ — **resolved S7: the set stays at exactly four.** 1 nF `C106246` (EMC at connectors), 2.2 nF `C107043` and 4.7 nF `C85980` (active anti-alias poles), 22 nF 0805 `C77069` (ADC charge buckets). S5, S6 and S7 each added none; S7's matched SIN/COS RCs are 2.2 nF and its buckets 22 nF.
@@ -769,7 +802,7 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - ~~[S12] Verify `C3294385`~~ — **moot S7:** J3 no longer uses the Micro-Fit clone. The symbol `Conn_02x04_Odd_Even` and the footprint `Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal` remain in the libraries, now **unused**.
 - **[user, BEFORE any harness is crimped] Confirm the DTM cavity numbering on J3/J4 (12-way) AND J5 (8-way)** — the 8-way drawing labels its cavities and S8 mapped them through the section view, but a real `DTM06-08SA` settles it. Original 12-way item: against the molded numbers on a real `DTM06-12SA`/`-12SB`. TE's 12-way drawing does not label them; S7's 1–6 / 12–7 order is extrapolated from the 8-way drawing of the same family. Board, symbol and footprint are self-consistent either way — only the harness mapping is at risk.
 - **[user / S9] The DTM13 mounting feature** — the drawing's Ø2.01 mm feature is ambiguous between a plastic locating peg and an M2 screw hole. The footprint uses Ø2.2 mm NPTH, which serves either; confirm against a real part before S9 finalises mechanical.
-- **[S9] Board edge budget.** Two DTM13-12P flanges are 2 × 41.02 mm of edge, plus the DB37 and the power entry, against 3.0's inherited 91.9 × 121.7 mm outline. S9 must confirm the analog flank actually holds both or grow the outline.
+- ~~[S9] Board edge budget~~ — **resolved S9: outline grew to 146 × 130 mm.** Both 12-ways stack on the left edge (y 9–50 and 58–100) with the mid-left hole between them; the isolated ±15 V island sits below the LEM connector.
 - **[bench, optional] Measure the installed encoder's amplitude at the connector.** Not blocking — S7 spans the whole 2.0–2.4 Vpp datasheet range — but it says whether the `S7_ENCODER_DESIGN.md` §9.1 gain bump is worth fitting.
 - **[S12] DTM contacts and wedgelocks are consigned**: `DTM06-12SA`/`-12SB` plugs, size-20 contacts, `W12S` wedgelocks. Not on the JLC BOM.
 - **[user, LEM board] Interface contract:** the remote board needs three LA 100-P, ±15 V / `ISO_COM` decoupling, and wiring — **and must not carry burden resistors.** Both burdens per channel are on this board by design.
@@ -778,17 +811,20 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - **[S12 firmware] `FAULT_OC_A/B/C` do not identify the faulting phase** — any leg's OC asserts all three. Implement the decode table in `S5_MODULE_STATUS_DESIGN.md` §1.2, and note the module does **not** self-shutdown on over-temperature.
 - ~~[cosmetic, project-wide] Hierarchical labels carry no wire stub on any sheet~~ — **resolved S7.5: all five populated sheets re-drawn.** Every label now sits on a wire; project ERC 66 → 40 and **all five sub-sheets are ERC-clean of every class**. The 40 that remain are root-sheet labels for `launchpad` / `vehicle_io`, which S8 fills.
 - **[cosmetic, any session] A3 title-block `Title` field overflows its box on all seven sheets** — the S1 sheet titles are longer than the block. Harmless on screen, visible in PDF/print.
-- **[S9] 3D model** for the derived DB37 footprint still points at KiCad's `…_EdgePinOffset9.40mm.step` (correct body, name differs from the footprint) — harmless, revisit if 3D export matters.
+- **[S12] 3D model** for the derived DB37 footprint still points at KiCad's `…_EdgePinOffset9.40mm.step` (correct body, name differs from the footprint) — harmless, revisit if 3D export matters.
 - **[user / ECU team] Confirm the three PROVISIONAL S8 interface decisions** — (a) is the logic 24 V really an external battery unbonded from car GND? (b) does the barrier stay on the ECU side? (c) is their isolated bus side powered from our `+5V` or from an integrated DC/DC? The board is drawn correct either way, but the `+5V` budget, the harness pin count and the connector freeze all depend on (c).
 - ~~[S8] Vehicle connector must not be a third look-alike 12-way~~ — **resolved S8: J5 = `DTM13-08PA-R004`, keyed by way-count.** Keys C/D and the DT13 board mounts do not exist in TE's repository (re-probed).
-- **[S9] J5 retention + board edge.** The `-R004` flange is vertical and off-board; put the board edge on the footprint's `Dwgs.User` line (y = +6.35) and give the four flange slots a bracket or panel — the eight pins are the only retention otherwise.
-- **[S9] CAN pair** — route `CAN_H/L` as a pair U18 → L3 → J5 with D13 and R122 at the connector; decide whether `*CAN_*` wants its own netclass (currently `Default`).
+- ~~[S9] J5 board edge~~ — **done S9:** J5's `Dwgs.User` line lies on the top edge; pin field x 65.7–78.3, flange off-board x 21–90, 2.8 mm below the board's bottom face (the LaunchPad's top surface is 11 mm below — clear). **[user] J5 retention** is still only its eight pins — bracket the four flange slots (off-board, x 25.5 / 49.7 from the pin-field centre, z ±15.4).
+- ~~[S9] CAN netclass~~ — **resolved S9: class `CAN`** (0.40/0.30, diff-pair 0.40/0.30) on `*CAN_H*`/`*CAN_L*`, 4 nets. **[S11] route as a pair** U18 → L3 → J5 with D13 and R122 at the connector; D13/R122/JP6 are placed at J5's CAN end.
 - **[user / ECU team] `+5V_VEH` delivers 4.6–4.75 V** (SS34 back-feed block) — ISO1042/ISOW1044 class only, not ISO1050. Part of the three provisional S8 decisions to confirm.
 - **[user] Shutdown-circuit / GLV voltage is assumed 12 V** (from the AM06 ECU's +12 V supply). Designed for 8–30 V; at 24 V GLV change R123/R124/R126/R127 to 3.3 kΩ.
 - **[S12] The two JLCSearch endpoints disagree on stock for every part** (`/api/search` vs `<category>/list`). Verify the 2.2 nF C0G line (`C77033`, formerly `C107043`) and the four low-stock lines against JLCPCB itself before ordering.
 - **[cosmetic] `current_sense`** — the upward `ISO_COM` flags on R68/R69/C65/R73/C67 cross the wire of the row above (pre-existing S7.5 crowding, not touched in S8).
-- **[S9] `*PWM_*_3V3` has no netclass pattern** — the six MCU-side gate nets are on `Default` while their `_15V` and `_DRV` counterparts are `Gate`. Decide in S9 whether the header→driver half of the bus wants Gate rules; the fix is one `*`-prefixed pattern.
-- **[S9] Confirm the 2×10 socket insulator height** (C5116528) closes the mated stack against the LaunchPad standoffs before S12 orders it.
+- ~~[S9] `*PWM_*_3V3` has no netclass pattern~~ — **resolved S9:** pattern added → Gate (23 Gate nets), verified from the `kicad-cli` netlist.
+- **[user / S12] Confirm the 2×10 socket insulator height** (C5116528): it sets the LaunchPad standoff length (S9 assumed 8.5 mm insulator + 2.5 mm header base = **11 mm**) and must close the mated stack before S12 orders it.
+- **[user, before S12] Verify the LaunchPad outline and hole positions** measured in S9 (`S9_BOARD_SETUP.md` §1.1: 129.9 × 58.4 mm, corner holes 124.6 × 53.4, J1-pin-1 31.9 mm from the USB edge) with a caliper on the real board; `H7`–`H9` are Ø3.2 and tolerate ±0.5 mm.
+- **[S10] `Power_3A` on inner layers is 1.1 A at 1.2 mm** — `+24V_*` / `PGND_MOD` on outer layers or ≥ 5 mm L3 pours.
+- **[S11] 386 silkscreen DRC warnings** (auto-placed reference text over pads/each other) — the silk pass fixes them together with the jumper tables and the JP2 warning text.
 
 ## Tooling notes
 
@@ -798,6 +834,8 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
 - Temp exports go to the session scratchpad, not the project directory.
 - **Never trust a hand-generated `.kicad_sch` until `kicad-cli sch export netlist` agrees with a golden baseline.** KiCad fails silently on a malformed token (it drops the rest of the sheet and still exits 0), and its connectivity rules are stricter than they look — see the four S7.5 behaviours in the Decision Log. The generator scripts and the checker live in the session scratchpad; the invariant they enforce is **149 nets / 745 nodes, node sets identical**.
 - `kicad-cli sch erc --severity-all` groups some sub-sheet violations under the root's section — read the coordinates, not the section header, to attribute them.
+- **PCB session workflow (S9):** MCP `sync_schematic_to_board` imports the netlist (equivalent of F8); `batch_move_components` places (flip with `layer: "B.Cu"` — reported as rotation 180, geometry correct); `place_component` with `boardPath` + `FE_UFPR_4_0:` prefix adds library footprints. **Edge.Cuts by file edit** — `replace_board_outline`/`clear_board_outline` crash on the SWIG backend. **After ANY external edit of the `.kicad_pcb`, call `open_project` before the next MCP write** or its auto-save is refused and the change lives only in memory. The gate is `kicad-cli pcb drc --severity-all --format json`; the MCP `check_courtyard_overlaps` is bounding-box only (phantoms on L-shaped courtyards) and a *malformed* courtyard is skipped by KiCad's overlap test — DRC must report zero `malformed_courtyard` before its overlap result means anything.
+- **Render and look** applies to the board too: `get_board_2d_view` (file mode) after every placement pass; the KiCad GUI holding the project open (`~*.lck`) does not see file-level edits until the board is reloaded.
 - **Render and look** after any regeneration: `kicad-cli sch export svg` → `rsvg-convert` → crop. The netlist gate cannot see labels drawn over parts or scrambled notes (S8 found both, a session late).
 - **KiCad label/field orientation rules** (measured S8, encoded in `layoutlib`/`sheetedit`): a vertical global label's *justify* picks the side of the anchor (`right` = hangs below); field justification is transformed by the symbol's mirror/180° rotation; `(text …)` file order changes on every regeneration, so address notes by content.
 - `dump.py`/`conncheck` reported both S8 sheets as "1 net, 87 unlabelled pins" while `kicad-cli` proved them fully connected — a known false alarm, still not the gate.

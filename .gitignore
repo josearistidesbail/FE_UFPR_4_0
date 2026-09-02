@@ -23,3 +23,7 @@ fp-info-cache
 /.history/
 __pycache__/
 *.pyc
+
+# MCP server backups and renders
+/.mcp-backups/
+*_2d_view.png

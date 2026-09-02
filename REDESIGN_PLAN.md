@@ -301,7 +301,24 @@ obvious guess and does not exist.
 
 ---
 
-## S9 — Board setup, stackup, placement
+## S9 — Board setup, stackup, placement  ✅ **DONE (2026-09-02)**
+
+**Outcome:** 4-layer **146 × 130 mm** board on the JLC04161H-7628 stackup, JLC-derived design rules,
+six netclasses (`CAN` added, `*PWM_*_3V3` → Gate), nine mounting holes, **369 footprints placed by a
+net-derived generator, KiCad DRC 0 errors at `--severity-all`, 0 courtyard overlaps**, netlist
+IDENTICAL to the S8 freeze. Deliverable = [`S9_BOARD_SETUP.md`](S9_BOARD_SETUP.md).
+
+**What the session found:** the PrimeSTACK mounting pattern from the datasheet page S4 flagged
+(M8 on 143.2 × 242.6, Ø9.2 on 195 × 260 — both dwarf the board, so the adapter plate stays); the
+LaunchPad's **129.9 × 58.4 mm** outline and its seven holes, measured from SPRUI77's own PCB layer
+figures to ±0.3 mm because TI publishes no drawing; the socket handedness, derived from the LaunchPad
+silkscreen and verified from the placed pad coordinates; and that **J5's two-rectangle courtyard was
+self-intersecting**, which KiCad silently excludes from the overlap check.
+
+**Deviations from plan:** the outline grew from 3.0's 91.9 × 121.7 to 146 × 130 (two board-mounted
+DTM13 12-ways, which S2's floorplan predates); the far-right LaunchPad standoff was dropped (three
+fitted); the placement is a generated, block-structured starting point that S10/S11 refine.
+Silkscreen (386 warnings) is deferred to S11's silk pass by design.
 
 **Objective:** Outline, stackup, rules, full placement (no routing).
 
