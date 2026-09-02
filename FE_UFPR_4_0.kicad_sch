@@ -36,86 +36,6 @@
 	)
 	(wire
 		(pts
-			(xy 214.63 125.73) (xy 222.25 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e920fea9-4da4-417c-b9bb-c5d9e8d7580f")
-	)
-	(label "MOT_TEMP_ADC"
-		(at 222.25 125.73 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "90e8b5e4-8077-41d5-9596-73250c06d375")
-	)
-	(wire
-		(pts
-			(xy 214.63 128.27) (xy 222.25 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "07326764-de5c-4607-a763-aaee5ac19c0a")
-	)
-	(label "MOT_TEMP_REF_ADC"
-		(at 222.25 128.27 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "4c1363a6-f1d8-4e4b-a626-d052740987e2")
-	)
-	(wire
-		(pts
-			(xy 358.14 140.97) (xy 365.76 140.97)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f9129cc9-e54e-4e68-ac12-3959ad4a2ba4")
-	)
-	(label "MOT_TEMP_ADC"
-		(at 365.76 140.97 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "95bf8017-20de-4a4b-a8fb-edf7104b8cb5")
-	)
-	(wire
-		(pts
-			(xy 358.14 143.51) (xy 365.76 143.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "be8b2908-0480-4442-9ee0-069dcae8387a")
-	)
-	(label "MOT_TEMP_REF_ADC"
-		(at 365.76 143.51 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b4ff5d88-894c-4650-9abe-d1722be46ed2")
-	)
-	(wire
-		(pts
 			(xy 214.63 120.65) (xy 222.25 120.65)
 		)
 		(stroke
@@ -143,6 +63,16 @@
 			(type default)
 		)
 		(uuid "05f825f7-92ad-4af1-94ed-25cfba92b38f")
+	)
+	(wire
+		(pts
+			(xy 214.63 128.27) (xy 222.25 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "07326764-de5c-4607-a763-aaee5ac19c0a")
 	)
 	(wire
 		(pts
@@ -666,6 +596,16 @@
 	)
 	(wire
 		(pts
+			(xy 358.14 143.51) (xy 365.76 143.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be8b2908-0480-4442-9ee0-069dcae8387a")
+	)
+	(wire
+		(pts
 			(xy 358.14 161.29) (xy 365.76 161.29)
 		)
 		(stroke
@@ -776,6 +716,16 @@
 	)
 	(wire
 		(pts
+			(xy 214.63 125.73) (xy 222.25 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e920fea9-4da4-417c-b9bb-c5d9e8d7580f")
+	)
+	(wire
+		(pts
 			(xy 110.49 200.66) (xy 118.11 200.66)
 		)
 		(stroke
@@ -833,6 +783,16 @@
 			(type default)
 		)
 		(uuid "f537afa1-ff1c-4575-931e-5bbfeaca5059")
+	)
+	(wire
+		(pts
+			(xy 358.14 140.97) (xy 365.76 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f9129cc9-e54e-4e68-ac12-3959ad4a2ba4")
 	)
 	(wire
 		(pts
@@ -1054,6 +1014,16 @@
 		)
 		(uuid "48e44cae-a88c-46e0-9d27-79946ab89083")
 	)
+	(label "MOT_TEMP_REF_ADC"
+		(at 222.25 128.27 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4c1363a6-f1d8-4e4b-a626-d052740987e2")
+	)
 	(label "ISNS_REF_B_ADC"
 		(at 118.11 146.05 0)
 		(effects
@@ -1244,6 +1214,16 @@
 		)
 		(uuid "8b08e303-c7de-4ce6-a6c9-660c5628e8cb")
 	)
+	(label "MOT_TEMP_ADC"
+		(at 222.25 125.73 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "90e8b5e4-8077-41d5-9596-73250c06d375")
+	)
 	(label "FLT_OV_3V3"
 		(at 365.76 50.8 0)
 		(effects
@@ -1253,6 +1233,16 @@
 			(justify left bottom)
 		)
 		(uuid "9197bcd3-95b0-411a-b6bb-4758d2492b5d")
+	)
+	(label "MOT_TEMP_ADC"
+		(at 365.76 140.97 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "95bf8017-20de-4a4b-a8fb-edf7104b8cb5")
 	)
 	(label "PWM_VH_3V3"
 		(at 265.43 125.73 180)
@@ -1313,6 +1303,16 @@
 			(justify left bottom)
 		)
 		(uuid "ae5448cb-2327-4f07-bc83-880bcddff7a5")
+	)
+	(label "MOT_TEMP_REF_ADC"
+		(at 365.76 143.51 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "b4ff5d88-894c-4650-9abe-d1722be46ed2")
 	)
 	(label "ISNS_C_RAW"
 		(at 118.11 125.73 0)

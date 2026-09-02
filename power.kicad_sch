@@ -3709,6 +3709,12 @@
 		(color 0 0 0 0)
 		(uuid "d31e5f8c-a5e3-496f-bf7a-a143460353fb")
 	)
+	(junction
+		(at 53.34 40.64)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ffe18cb9-a036-4b90-96d3-b349b2da8439")
+	)
 	(no_connect
 		(at 170.18 66.04)
 		(uuid "67e8a589-e7d7-4060-a2fd-c863f33c1994")
@@ -3822,6 +3828,16 @@
 			(type default)
 		)
 		(uuid "0d20547f-0ba8-4f19-ba39-2fdf1cbde162")
+	)
+	(wire
+		(pts
+			(xy 53.34 40.64) (xy 60.96 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0fa3af19-828b-4ba3-8ad7-91def95e63e5")
 	)
 	(wire
 		(pts
@@ -4675,6 +4691,16 @@
 	)
 	(wire
 		(pts
+			(xy 53.34 49.53) (xy 53.34 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4535769-ae16-4535-a597-7674fc304f09")
+	)
+	(wire
+		(pts
 			(xy 252.73 53.34) (xy 252.73 41.91)
 		)
 		(stroke
@@ -4792,16 +4818,6 @@
 			(type default)
 		)
 		(uuid "d63f116a-86a3-4bcc-86aa-dc75ee8484df")
-	)
-	(wire
-		(pts
-			(xy 53.34 40.64) (xy 60.96 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d8599e64-ef69-4132-a56b-eaf41c0f3cbe")
 	)
 	(wire
 		(pts
@@ -5154,7 +5170,7 @@
 		(uuid "7587f1ea-1be3-4d7f-a419-dcb078707c1b")
 	)
 	(label "PWR_24V_FUSED"
-		(at 53.34 40.64 0)
+		(at 53.34 49.53 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -13370,7 +13386,7 @@
 			)
 		)
 		(property "Value" "Mini-Fit Jr 5566-02A"
-			(at 13.97 36.83 0)
+			(at 30.988 37.084 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects

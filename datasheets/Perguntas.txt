@@ -1,0 +1,24 @@
+Perguntas:
+
+A alimentacao 24V vai ser por bateria externa e completamente isolada do referencial do carro?
+    - Implica que as entradas do cockpit sao por optoacoplador, e a CAN eh isolada
+    - ≈2.1 A nos 24 V
+
+A isolação galvanica do barramento CAN vai ficar na ECU?
+
+Cockpit inputs - daniel tinha dito pra manter o switch fisico, mantemos igual a ecu antiga?
+- Enable switch
+- Brake switch
+- Acelerador apenas CAN
+
+Supply - No mesmo conector Deutsch? Separado minifit? Ambos?
+
+Is your isolated bus side powered from our +5V, or from its own DC/DC?
+
+conectores:
+LEM e encoder:
+DEUTSCH DTM13-08PA-R004
+
+Banco de capacitores:
+
+6s4p
