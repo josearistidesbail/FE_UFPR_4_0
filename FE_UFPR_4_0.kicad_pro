@@ -650,6 +650,10 @@
       },
       {
         "netclass": "Power_1A",
+        "pattern": "+5V_LP"
+      },
+      {
+        "netclass": "Power_1A",
         "pattern": "+3V3"
       },
       {

@@ -12,10 +12,11 @@ Only `(at …)`, `(mirror …)` and field positions are rewritten inside a symbo
 ```bash
 kicad-cli sch export netlist --format kicadsexpr -o /tmp/new.net FE_UFPR_4_0.kicad_sch
 python3 tools/schematic_layout/netcmp.py tools/schematic_layout/golden.net /tmp/new.net
-# must print: 149 nets, 745 nodes  ...  IDENTICAL
+# must print: 201 nets, 835 nodes  ...  IDENTICAL
 ```
 
-`golden.net` is the S7 netlist, captured before the re-draw. **If a later session
+`golden.net` was the S7 netlist; **re-baselined in S8** when the `launchpad` sheet
+added 52 nets and 90 nodes (149/745 -> 201/835). **If a later session
 legitimately changes connectivity, re-baseline `golden.net` in the same commit** and say so
 in the Decision Log — otherwise the gate silently stops meaning anything.
 
@@ -35,6 +36,7 @@ git checkout encoder.kicad_sch && python3 tools/schematic_layout/enc_layout.py
 | `ms_layout.py` | `module_status` |
 | `pw_layout.py` | `power` |
 | `cs_layout.py` | `current_sense` |
+| `lp_layout.py` | `launchpad` |
 
 ## Checking before KiCad
 
