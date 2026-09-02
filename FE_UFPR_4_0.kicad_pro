@@ -759,6 +759,10 @@
       {
         "netclass": "CAN",
         "pattern": "*CAN_L*"
+      },
+      {
+        "netclass": "Analog",
+        "pattern": "*MOT_TEMP_*"
       }
     ]
   },

@@ -16,7 +16,7 @@ def even_y(pin): return YC - (10.16 - 2.54*((pin-2)//2))    # pins 2,4,..,20
 J20 = {1:('N',None), 3:('N',None), 5:('N',None), 7:('N',None), 9:('W','ISR'),
        11:('N',None),13:('N',None),15:('N',None),17:('N',None),19:('N',None),
        2:('G','+5V_LP'), 4:('G','GND'), 6:('N',None), 8:('H','NTC_1_ADC'),
-       10:('N',None), 12:('N',None), 14:('H','VBUS_ADC'),
+       10:('H','MOT_TEMP_ADC'), 12:('H','MOT_TEMP_REF_ADC'), 14:('H','VBUS_ADC'),
        16:('H','ENC_COS_ADC'), 18:('H','ENC_SIN_ADC'), 20:('N',None)}
 J21 = {1:('N',None), 3:('N',None), 5:('N',None), 7:('N',None),
        9:('H','CAN_TX_3V3'), 11:('H','CAN_RX_3V3'),

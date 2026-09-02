@@ -11,6 +11,24 @@ def rawstr(block):
     return m.group(1)
 TEXTS = [rawstr(b) for b in raw_texts]
 
+# ── S9.5 motor-PTC parts: stamp LCSC (MCP batch_add_components omits it) ──────
+import re as _re
+LCSC = {'R129':'C861295','R130':'C22978','R131':'C95204','R132':'C95204',
+        'C120':'C106246','C121':'C77069','C122':'C77069','D18':'C7420333',
+        'TP53':'NOFIT','TP54':'NOFIT'}
+def _lcsc_tmpl(x, y, val):
+    return (f'\t\t(property "LCSC" "{val}"\n\t\t\t(at {x} {y} 0)\n\t\t\t(show_name no)\n'
+            f'\t\t\t(do_not_autoplace no)\n\t\t\t(effects\n\t\t\t\t(font\n'
+            f'\t\t\t\t\t(size 1.27 1.27)\n\t\t\t\t)\n\t\t\t\t(hide yes)\n\t\t\t)\n\t\t)\n')
+for blk in s.blocks:
+    if blk[0] != 'symbol' or blk[2][0] not in LCSC: continue
+    ref = blk[2][0]; val = LCSC[ref]; bt = blk[1]
+    if '(property "LCSC"' in bt:
+        blk[1] = _re.sub(r'\(property "LCSC" "[^"]*"', f'(property "LCSC" "{val}"', bt, count=1)
+    else:
+        at = _re.search(r'\n\t\t\(at ([-\d.]+) ([-\d.]+)', bt); k = bt.find('\n\t\t(pin ')
+        blk[1] = bt[:k+1] + _lcsc_tmpl(at.group(1), at.group(2), val) + bt[k+1:]
+
 s.clear_graphics()
 W, J, L, G, H, NC = [], [], [], [], [], []
 def wire(*pts): W.append(list(pts))
@@ -80,15 +98,20 @@ wire((203.2,55.88),(215.9,55.88)); lab('ENC_VDD', 203.2, 55.88, 0)
 # ─────────────────────────────  D. J4 CONNECTOR  ────────────────────────────
 s.place('J4', 44.45, 130.81, 0, mirror='y', ref_off=(-8.89,-13.97), val_off=(-8.89,-11.43))
 P = s.pins('J4')
-nc(*P['5']); nc(*P['6'])
-for k in ('7','8','9','11','12'): nc(*P[k])
+nc(*P['5'])
+for k in ('8','9','11','12'): nc(*P[k])
 wire(P['1'],(52.07,125.73)); wire((52.07,125.73),(52.07,116.84)); lab('ENC_VDD', 52.07, 116.84, 0)
 wire(P['3'],(57.15,130.81)); glab('GND', 57.15, 130.81, 0)
 wire(P['2'],(76.2,128.27)); wire((76.2,128.27),(76.2,104.14))
 wire(P['4'],(85.09,133.35)); wire((85.09,133.35),(85.09,160.02))
+# motor PTC pair -- cavity 6 signal, cavity 7 return (S9.5)
+wire(P['6'],(60.96,138.43)); lab('MOT_TEMP_RAW', 52.07, 138.43, 0)
+s.place('C120', 60.96, 142.24, 0, **VERT)
+wire((60.96,146.05),(60.96,148.59)); glab('GND', 60.96, 148.59, 90, 'right')
+wire(P['7'],(31.75,138.43)); glab('GND', 31.75, 138.43, 180)
 # shield block
 wire(P['10'],(25.4,130.81)); wire((25.4,130.81),(25.4,140.97))
-wire((25.4,140.97),(45.72,140.97)); lab('SHIELD_ENC', 27.94, 140.97, 0)
+wire((25.4,140.97),(45.72,140.97)); lab('SHIELD_ENC', 27.94, 140.97, 0, "left top")
 for x, ref in ((25.4,'C113'), (35.56,'R118'), (45.72,'R119')):
     s.place(ref, x, 144.78, 0, **VERT)
 wire((25.4,148.59),(45.72,148.59)); glab('GND', 45.72, 148.59, 90, 'right')
@@ -157,6 +180,41 @@ for x, ref in ((177.8,'C111'), (190.5,'C112')):
 wire((177.8,101.6),(190.5,101.6)); lab('ENC_VDD', 177.8, 101.6, 0)
 wire((177.8,109.22),(190.5,109.22)); glab('GND', 190.5, 109.22, 90, 'right')
 
+# ───────────────  I. MOTOR PTC FRONT END + RAIL MONITOR (S9.5)  ─────────────
+# KTY81-210 is the divider's BOTTOM leg and lives off-board in the motor, so an
+# open reads 3.3 V and a short reads 0 V -- both outside the valid band.
+YT = 60.96
+glab('+3V3', 25.4, 49.53, 270, 'left')
+wire((25.4,49.53),(25.4,53.34))
+s.place('R129', 25.4, 57.15, 0, **VERT)
+s.place('R130', 60.96, YT, 90, **HORZ)                 # pins at x 57.15 / 64.77
+wire((25.4,YT),(57.15,YT))                             # MOT_TEMP_RAW side
+wire((64.77,YT),(99.06,YT))                            # MOT_TEMP_ADC side
+lab('MOT_TEMP_RAW', 30.48, YT, 0, "left top")          # below the wire, clear of R129's fields
+s.place('TP53', 48.26, YT, 0, ref_off=(1.27,-3.81), val_off=(1.27,-6.35))
+s.place('C121', 66.04, 64.77, 0, **VERT)
+wire((66.04,68.58),(66.04,71.12)); glab('GND', 66.04, 71.12, 90, 'right')
+# D18 sits a row lower, below C101/C102's own value text (which occupies y 64..71)
+s.place('D18', 85.09, 80.01, 180, ref_off=(3.81,-6.35), val_off=(0,6.35))
+wire((85.09,YT),(85.09,74.93))
+wire((77.47,80.01),(77.47,82.55)); glab('+3V3', 77.47, 82.55, 90, 'right')
+wire((92.71,80.01),(92.71,82.55)); glab('GND', 92.71, 82.55, 90, 'right')
+hlab('MOT_TEMP_ADC', 99.06, YT, 0)
+
+# +3V3 rail monitor -- lets firmware divide the excitation rail out exactly
+YR = 96.52                                             # clear of D18's flags above
+glab('+3V3', 25.4, 85.09, 270, 'left')
+wire((25.4,85.09),(25.4,88.9))
+s.place('R131', 25.4, 92.71, 0, **VERT)
+s.place('R132', 25.4, 104.14, 0, **VERT)
+wire((25.4,YR),(25.4,100.33))
+wire((25.4,107.95),(25.4,110.49)); glab('GND', 25.4, 110.49, 90, 'right')
+wire((25.4,YR),(68.58,YR))
+s.place('TP54', 43.18, YR, 0, ref_off=(1.27,-3.81), val_off=(1.27,-6.35))
+s.place('C122', 58.42, 100.33, 0, **VERT)
+wire((58.42,104.14),(58.42,106.68)); glab('GND', 58.42, 106.68, 90, 'right')
+hlab('MOT_TEMP_REF_ADC', 68.58, YR, 0)
+
 # ─────────────────────────────  H. TEXT NOTES  ──────────────────────────────
 NOTE_Y = 178.0
 col = [(20.32, [4,0]), (20.32,[0]), (152.4,[2]), (152.4,[3]), (20.32,[1])]
@@ -171,6 +229,26 @@ for pre in ['J4 = DEUTSCH DTM13-1', 'RM44AC SOURCE  (RLS/', 'TRANSFER FUNCTION (
 y2 = NOTE_Y
 for pre in ['REFERENCES  R105 3.0', 'ANTI-ALIAS AND PHASE']:
     t = text_by(pre); s.add_text(t, 152.4, y2, 1.27); y2 += nlines(t) * 1.9 + 4.0
+
+# S9.5 note: added literally, so it survives clear_graphics()/re-run unchanged
+MOT_NOTE = (
+ "MOTOR PTC  (S9.5)  -- EMRAX 208 stator sensor, KTY 81-210, on J4 cav 6 / 7.\\n"
+ "Cav 5 / 8 left EMPTY as a guard column; fit sealing plugs.  Own twisted pair,\\n"
+ "NOT inside the encoder shield.\\n"
+ "R129 2.20k from +3V3, sensor is the BOTTOM leg:  open -> 3.30 V,  short -> 0 V,\\n"
+ "both outside the valid 1.12 .. 2.18 V band, so a disconnected sensor is\\n"
+ "unambiguous -- the EMRAX manual requires the controller to STOP THE MOTOR on it.\\n"
+ "1135 R @ -40 C / 2000 R @ 25 C / 3392 R @ 100 C / 3817 R @ 120 C (hard limit).\\n"
+ "6.25 codes/K at the limit;  I_sensor 0.99 mA @ -40 C, under the 1 mA spec.\\n"
+ "R131/R132 read +3V3 on ADCINA3 so firmware cancels the rail:  R = R129*V/(Vr-V).\\n"
+ "Hotter = HIGHER code.  Opposite direction to the module NTC on ADCINC3.\\n"
+ "\\n"
+ "!! GATED ON EMRAX CONFIRMING REINFORCED INSULATION SENSOR-TO-WINDING.\\n"
+ "If the sensor has only basic insulation it is a TRACTIVE SYSTEM conductor\\n"
+ "(FSAE 2026 EV.1.6) and EV.6.5.3 forbids it sharing a connector with GLV -- this\\n"
+ "whole block then moves to an isolated front end on its own connector."
+)
+s.add_text(MOT_NOTE, 152.4, y2, 1.27)
 
 # ─────────────────────────────  EMIT  ───────────────────────────────────────
 from conncheck import interior
