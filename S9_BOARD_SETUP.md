@@ -1,5 +1,7 @@
 # S9 — Board setup, stackup, rules, placement
 
+> **Revised by S9.6 (2026-09-14):** the board is now installed **vertically above the module** on a DB37 90° adapter, all connectors are on the top side, and the LaunchPad sits **above** the board on male headers. §2's floorplan and §6's mounting are superseded where [`S9_6_VERTICAL_MOUNT.md`](S9_6_VERTICAL_MOUNT.md) says so; the stackup, rules, netclasses and the pin-map derivation stand.
+
 **Status: S9 exit criteria met on 2026-09-02.** 369 footprints placed (360 from the schematic + 9
 mounting holes), KiCad DRC **0 errors** at `--severity-all` (386 silkscreen warnings, all from
 reference-designator text that S11's silkscreen pass owns; 499 unconnected items = the unrouted

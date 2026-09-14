@@ -1238,7 +1238,7 @@
 		)
 		(uuid "cd3098dd-2caf-42dc-987f-34e82909e364")
 	)
-	(text "S9 LAYOUT RULES FOR THIS SHEET\n1. Sockets are PinSocket_2x10, BOTTOM side - the LaunchPad hangs below.\n2. Grid is exact: dX 43.18 mm, dY 63.5 mm (1.700 in x 2.500 in), taken\n   from the 3.0 board and re-verified in S1. Do not re-derive it.\n3. Nylon standoffs at the LaunchPad's own mounting holes.\n4. Confirm the mated stack height of the chosen socket (C5116528) against\n   the standoffs before ordering - the insulator height is not yet checked.\n5. Keep the J20 and J22 analog pins away from the J21/J23 digital runs."
+	(text "S9 LAYOUT RULES FOR THIS SHEET (revised S9.6, 2026-09-14)\n1. J20-J23 are PinHeader_2x10, TOP side, male pins up - the LaunchPad sits ABOVE\n   the board on its own bottom-side receptacles (as on the 3.0 board). S2's premise\n   'male pins on top only' was wrong.\n2. Grid is exact: dX 43.18 mm, dY 63.5 mm (1.700 in x 2.500 in), taken\n   from the 3.0 board and re-verified in S1. Do not re-derive it.\n3. Nylon standoffs at the LaunchPad's own mounting holes (H7-H9), on the top side.\n4. The LaunchPad's 129.9 x 58.4 shadow is on Dwgs.User: nothing taller than ~8 mm\n   under it; test points under it are unreachable with the LaunchPad fitted.\n5. Keep the J20 and J22 analog pins away from the J21/J23 digital runs."
 		(exclude_from_sim no)
 		(at 274.32 100.33 0)
 		(effects
@@ -2588,7 +2588,7 @@
 				)
 			)
 		)
-		(property "Footprint" "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical"
+		(property "Footprint" "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical"
 			(at 129.54 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -2621,7 +2621,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C5116528"
+		(property "LCSC" "C492427"
 			(at 129.54 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -2732,7 +2732,7 @@
 				)
 			)
 		)
-		(property "Footprint" "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical"
+		(property "Footprint" "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical"
 			(at 287.02 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -2765,7 +2765,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C5116528"
+		(property "LCSC" "C492427"
 			(at 287.02 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -3238,7 +3238,7 @@
 				)
 			)
 		)
-		(property "Footprint" "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical"
+		(property "Footprint" "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical"
 			(at 208.28 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -3271,7 +3271,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C5116528"
+		(property "LCSC" "C492427"
 			(at 208.28 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -3560,7 +3560,7 @@
 				)
 			)
 		)
-		(property "Footprint" "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical"
+		(property "Footprint" "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical"
 			(at 50.8 55.88 0)
 			(hide yes)
 			(show_name no)
@@ -3593,7 +3593,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C5116528"
+		(property "LCSC" "C492427"
 			(at 50.8 55.88 0)
 			(hide yes)
 			(show_name no)

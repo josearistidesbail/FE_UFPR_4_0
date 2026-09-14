@@ -6,13 +6,23 @@ coordinates from a floorplan expressed in board-local millimetres (origin = top-
 corner of the outline, x right, y down).  The map is applied with the MCP
 `batch_move_components` tool; this script never touches the .kicad_pcb itself.
 
-Floorplan (S9_BOARD_SETUP.md):
-  - left edge   = analog edge: J4 (encoder, top) and J3 (LEM, bottom), mating faces at x=1
-  - top edge    = service edge: J5 (vehicle DTM 8-way, vertical flange), J1 (24 V entry)
-  - bottom edge = module edge: J2 DB37, gate/fault pins at its right end
-  - right column = power region top-down (entry, 13.5 V, 5 V, 3V3) then the gate drivers
-  - bottom-left = isolated +/-15 V island (U4) beside the LEM connector
-  - BoosterPack sockets J20..J23 on B.Cu on the 43.18 x 63.5 grid, J1-pin-1 at (XG, YG)
+Floorplan (S9_BOARD_SETUP.md, revised S9.6 for the VERTICAL board — S9_6_VERTICAL_MOUNT.md):
+  The board stands vertical above the PrimeSTACK, DB37 edge DOWN, on an L-com DG9037MF
+  right-angle adapter (or the cable).  Every connector is on the TOP side.
+  - bottom edge  = module edge: J2 DB37 (right-angle socket, mating axis vertical), gate/fault
+                   pins at its right end
+  - top edge     = service edge: J5 (vehicle DTM 8-way) at the TOP-LEFT, J1 (24 V entry) top-right.
+                   J5 moved left of the LaunchPad's shadow: its vertical flange stands at the edge and
+                   the LaunchPad now overhangs that edge 17.9 mm ABOVE the board.
+  - left edge    = analog edge: J4 (encoder, upper) and J3 (LEM, lower), right-angle parts whose
+                   mating axis is horizontal on the vertical board; shifted 3.3 mm down for J5
+  - right column = power region top-down (entry, 13.5 V, 5 V, 3V3) then the gate drivers, starting
+                   at x = 120 so nothing taller than 8 mm sits under the LaunchPad's right edge
+  - bottom-left  = isolated +/-15 V island (U4) beside the LEM connector
+  - BoosterPack headers J20..J23 = PinHeader_2x10 on F.Cu (male pins UP), LaunchPad ABOVE the board
+    on its own bottom-side receptacles, component side up, same XY grid as S9 (43.18 x 63.5),
+    J1-pin-1 at (XG, YG).  Its 129.9 x 58.4 shadow (x 59.6..118.0, y -17.9..112.0) is drawn on
+    Dwgs.User: parts under it must stay below ~8 mm.
 
 Block membership is derived from the golden netlist (net families), not guessed from
 reference numbers.  Packing inside a block is a shelf packer over courtyard boxes: a
@@ -106,23 +116,26 @@ placed = {}                  # ref -> (x, y, rot, layer)
 def fix(ref, x, y, rot=0, layer='F.Cu'):
     placed[ref] = (x, y, rot, layer)
 
-# sockets on the bottom, unrotated: J1 outer-left, pin 1 at the USB (service) end,
-# handedness read from SPRUI77 Fig. 12 and matching 3.0's as-built grid.
-fix('J20', XG, YG, 0, 'B.Cu')
-fix('J21', XG + DX, YG, 0, 'B.Cu')
-fix('J22', XG, YG + DY, 0, 'B.Cu')
-fix('J23', XG + DX, YG + DY, 0, 'B.Cu')
-fix('J4', 30.6, 29.7, -90)            # encoder, mating face at x = 1.0
-fix('J3', 30.6, 78.8, -90)            # LEM
-fix('J5', 72.0, 6.35, 180)            # vehicle 8-way; its Dwgs.User edge line lies on y = 0
-fix('J1', 129.0, 5.0, 0)              # 24 V entry, Mini-Fit
+# headers on the TOP, unrotated: LaunchPad above, component side up, J1 outer-left, pin 1 at the
+# USB (service) end.  Same XY as S9's sockets (handedness from SPRUI77 Fig. 12, cross-checked on 3.0).
+fix('J20', XG, YG, 0)
+fix('J21', XG + DX, YG, 0)
+fix('J22', XG, YG + DY, 0)
+fix('J23', XG + DX, YG + DY, 0)
+fix('J5', 39.5, 6.35, 180)            # vehicle 8-way, top-left; Dwgs.User edge line on y = 0.
+                                      # flange (off-board) spans x -11.7..57.4 -> clear of the LaunchPad (59.6)
+fix('J4', 30.6, 32.9, -90)            # encoder, mating face at x = 1.0; courtyard y 12.14..53.66 (J5's housing ends at y 11.8)
+fix('J3', 30.6, 82.0, -90)            # LEM; courtyard y 61.24..102.76 (H5 sits between J4 and J3)
+fix('J1', 129.0, 5.0, 0)              # 24 V entry, Mini-Fit (vertical part -> mating axis horizontal)
 fix('J2', 116.0, H - 9.40, 0)         # DB37; pin-row-1-to-edge 9.40 mm puts the edge on y = H
-fix('U4', 28.0, 114.0, 180)           # isolated DC/DC; rot 180 puts the 24 V input pins on its right
+fix('U4', 28.0, 116.2, 180)           # isolated DC/DC below J3 (courtyard 103.0..129.4); rot 180 puts the 24 V input pins on its right
+# C1 (100 uF electrolytic, 10.5 mm tall) is packed FIRST in 'entry' (sort=True) so it lands at x >= 120,
+# clear of the LaunchPad shadow (x <= 118) -- checked on the placed board, not assumed.
 
 # mounting holes (placed by the MCP as footprints H1..H9, listed here for the record)
 HOLES = {
     'H1': (5, 5), 'H2': (W - 5, 5), 'H3': (5, H - 5), 'H4': (W - 5, H - 5),
-    'H5': (5, 54), 'H6': (W - 5, 62.5),
+    'H5': (5, 57.3), 'H6': (W - 5, 62.5),          # H5 (courtyard r 3.45) between J4 (53.66) and J3 (61.24)
     # LaunchPad standoffs, measured from SPRUI77 Fig. 12/14 relative to J1 pin 1 (+/-0.3 mm)
     'H7': (XG + 22.77, YG - 2.75), 'H8': (XG + 25.26, YG + 64.60), 'H9': (XG - 3.87, YG + 95.30),
 }
@@ -166,15 +179,15 @@ def B(*a, **k):
     b = Block(*a, **k); blocks.append(b); return b
 
 # ---- power column (x 115..145), top-down ------------------------------------------
-entry = B('entry', 115, 15, 145, 41)
+entry = B('entry', 120, 15, 145, 41, sort=True)
 entry.add('TP9', 'F1', 'Q1', 'D2', 'R1', 'D1', 'C1', 'C2', 'C3', 'C4', 'NT2', 'D4', 'R13', 'TP1')
-buck1 = B('buck1', 115, 42, 145, 58)
+buck1 = B('buck1', 120, 42, 145, 58)
 buck1.add('U1', 'C6', 'C8', 'L1', on(r'PWR_U1_'), 'C9', 'C10', 'C11', 'D5', 'R14')
-buck2 = B('buck2', 115, 59, 137, 72)                       # H6 sits at (141, 62.5)
+buck2 = B('buck2', 120, 59, 137, 73.5)                       # H6 sits at (141, 62.5)
 buck2.add('U2', 'C12', 'L2', on(r'PWR_U2_'), 'C14', 'C15', 'C16', 'C17', 'D6', 'R15')
-ldo = B('ldo', 115, 73, 145, 84)
+ldo = B('ldo', 120, 74, 145, 84.5)
 ldo.add('U3', 'C18', 'C19', 'C20', 'C21', 'C22', 'D7', 'R16')
-gate_drv = B('gate_drv', 115, 85, 145, 102)                # right of J23 (PWM on its odd pads)
+gate_drv = B('gate_drv', 120, 85, 145, 102)                # right of J23 (PWM on its odd pads)
 gate_drv.add('U5', 'C29', 'C30', 'U6', 'C31', 'C32', 'U7', 'C33', 'C34', 'C36')
 # ---- isolated island (beside U4, bottom-left) -------------------------------------
 iso = B('iso', 43, 103, 58, 118.5)
@@ -184,10 +197,10 @@ ms_ov = B('ms_ov', 66, 102.6, 77, 111.5)                       # FLT_OV: pin 16 
 ms_ov.add(on(r'FLT_OV_'))
 ms_div = B('ms_div', 78, 102.6, 89.5, 111.5)                     # Vbus / NTC dividers at pins 7, 29, 11
 ms_div.add('R57', 'R58', 'C58', 'NT3', 'TP19', 'TP21', 'R60', 'R61', 'C60', 'TP22')
-ms_flt = B('ms_flt', 90, 102.6, 126, 110.5, sort=True)                  # OC_A/B/C + OT receivers at pins 2/22/5/6
-ms_flt.add(on(r'FLT_OC_A_'), on(r'FLT_OC_B_'), on(r'FLT_OC_C_'), on(r'FLT_OT_'))
+ms_flt = B('ms_flt', 89.8, 102.6, 126, 110.5, sort=True)                  # OC_A/B/C + OT receivers at pins 2/22/5/6
+ms_flt.add(on(r'FLT_OC_A_'), on(r'FLT_OC_B_'), on(r'FLT_OC_C_'), on(r'FLT_OT_'), 'C54', 'C55', 'C56')
 db_misc = B('db_misc', 66, 111.5, 99, 119)                 # EMC caps, RTN tie, aux-15 V TPs, module-aux fuse
-db_misc.add('C64', 'C70', 'C77', 'NT4', 'TP17', 'TP18', 'F2', 'C5', 'TP5')
+db_misc.add('C57', 'C64', 'C70', 'C77', 'NT4', 'TP17', 'TP18', 'F2', 'C5', 'TP5')
 db_in = B('db_in', 100, 110.8, 126.5, 118.8, gap=0.4, sort=True)         # series 100 R + datasheet 10k/1nF at the gate pins
 db_in.add(on(r'PWM_[UVW][HL]_15V'))
 db_shield = B('db_shield', 127, 112, 137, 119)
@@ -201,7 +214,7 @@ gate_pd.add(on(r'PWM_[UVW][HL]_3V3'))
 gate_logic = B('gate_logic', 87, 84, 102, 101)
 gate_logic.add('U8', 'C35', 'JP1', on(r'DRV_EN|GATE_ILOCK|GATE_EN_3V3|LED_GATE'))
 # ---- current sense: left strip below the encoder, LEM side first, buckets last ---------
-cs = B('cs', 41, 47, 64, 102)
+cs = B('cs', 40, 56.9, 64, 102.4, gap=0.5)
 cs.add('C92', 'C93', 'C94', 'C95', 'TP37', 'R103', 'R104', 'C96')
 for ch, u in (('A', 'U12'), ('B', 'U13'), ('C', 'U14')):
     lem = on(rf'LEM_{ch}_M'); lemst = on(rf'ISNS_{ch}_LEM'); intst = on(rf'ISNS_{ch}_INT'); raw = on(rf'ISNS_{ch}_RAW')
@@ -211,12 +224,19 @@ for ch in 'ABC':
     cs.add(on(rf'ISNS_{ch}_SEL'), on(rf'ISNS_{ch}_ADC'), on(rf'ISNS_{ch}_INT$'), on(rf'ISNS_{ch}_LEM$'))
 cs_ref = B('cs_ref', 71, 85, 86, 101)                      # VREF buffer; ref buckets at J22 pads 10/18
 cs_ref.add('R101', 'C85', 'R102', 'C86', 'U15', on(r'ISNS_VREF_DIV'), 'TP36', 'C87', 'C88', 'C89', 'C90', 'C91')
+# ---- CAN connector end, right under J5 (its CAN cavities 1/8 sit at x = 45.8) ---------------
+can_end = B('can_end', 40, 12.4, 58, 18.6)
+can_end.add('D13', 'R122', 'JP6', 'TP49', 'TP50')
 # ---- encoder: left strip top, input side first, ADC clamps/buckets last -------------------
-enc = B('enc', 41, 12.2, 64, 46)
+enc = B('enc', 40, 19.2, 64, 47.4)
 enc.add('FB1', 'C97', 'C98', 'C99', 'C100', 'TP38', 'TP39', 'R108', 'R113',
         'U16', 'C103', 'C104', on(r'ENC_(SIN|COS)_[PN]$'), on(r'ENC_(SIN|COS)_OUT'),
         'D10', 'C107', 'TP40', 'D11', 'C110', 'TP41',
-        'U17', 'C111', 'C112', on(r'ENC_VREF'), 'TP44', on(r'SHIELD_ENC'))
+        'U17', 'C111', 'C112', on(r'ENC_VREF'), 'TP44')   # shield tie R118/R119/C113 -> mot block, beside J4
+# ---- motor temperature (S9.5): beside J4 cavities 6/7, buckets toward J20 pads 10/12 ------
+mot = B('mot', 40, 48, 64, 56.4, gap=0.5)
+mot.add('R129', 'C120', 'TP53', 'R130', 'D18', 'C121', 'R131', 'R132', 'TP54', 'C122',
+        'R118', 'R119', 'C113')   # + the J4 shield tie, which sits beside the connector anyway
 # ---- LaunchPad 5 V feed, between J20-2 and J22-2 ------------------------------------------
 lp = B('lp', 71, 46, 84, 56)
 lp.add('D12', 'C114', 'C115', 'TP45', 'TP46', 'TP47', 'TP48')

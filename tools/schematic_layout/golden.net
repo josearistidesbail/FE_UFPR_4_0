@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/home/jose/Kicad/FE_UFPR_4_0/FE_UFPR_4_0.kicad_sch")
-		(date "2026-09-02T11:53:17")
+		(date "2026-09-14T19:58:40")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -16759,7 +16759,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "92c08a20-3214-4c9f-99f5-4bb601c3cab7")
+			(tstamps "6994f04e-8e3b-4463-b4df-d8f726ad4d3d")
 			(units
 				(unit
 					(name "A")
@@ -16819,7 +16819,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "9da5a294-d23e-427f-a4d3-1aa36cd71222")
+			(tstamps "66ac853e-6494-4d3d-9010-1e41a043c4c9")
 			(units
 				(unit
 					(name "A")
@@ -16879,7 +16879,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "a375188d-5e20-42ae-851b-b83cc25c60f7")
+			(tstamps "e25dc5db-0e6d-43f2-b53d-f6fbdebdd9b8")
 			(units
 				(unit
 					(name "A")
@@ -17065,7 +17065,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "2637f7c5-d852-499c-9282-3ea89117513d")
+			(tstamps "72e62d5f-7a65-452a-96df-3fa0ab6e6e47")
 			(units
 				(unit
 					(name "A")
@@ -18190,7 +18190,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "3cd97d11-e64c-4473-a896-eb01bed821a2")
+			(tstamps "8dc3dee4-edf6-49f7-b900-c1a18cfbedc4")
 			(units
 				(unit
 					(name "A")
@@ -18250,7 +18250,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "89a003de-f1c5-4c29-8927-7ce60d4e802d")
+			(tstamps "85f2d44b-a84a-4339-a26e-8031ba6963ce")
 			(units
 				(unit
 					(name "A")
@@ -18310,7 +18310,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "3ee7a79c-6cc7-4df2-985a-e37ec42459bc")
+			(tstamps "a3097ecf-6883-43c2-bff9-1945ddc09161")
 			(units
 				(unit
 					(name "A")
@@ -18370,7 +18370,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "df2e12e0-72c3-4c1f-8c0a-774738ce0261")
+			(tstamps "a70e698e-6458-44d1-ad03-4edfe5cbfb3f")
 			(units
 				(unit
 					(name "A")
@@ -18829,7 +18829,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "890e93b3-d841-4c3a-8dba-672cf77ffe79")
+			(tstamps "5e84e1c8-2fe9-4d26-805d-5552ed2a8335")
 			(units
 				(unit
 					(name "A")
@@ -18886,7 +18886,7 @@
 				(names "/encoder/")
 				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
 			)
-			(tstamps "3e712d7c-c6d8-4884-91bf-a0a9349ce2dd")
+			(tstamps "811e9523-21d1-48a2-82ba-984a68b4b418")
 			(units
 				(unit
 					(name "A")
@@ -22500,13 +22500,13 @@
 		(comp
 			(ref "J20")
 			(value "LaunchPad J1+J3")
-			(footprint "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical")
+			(footprint "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical")
 			(description "Generic connector, double row, 02x10, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)")
 			(fields
 				(field
-					(name "LCSC") "C5116528")
+					(name "LCSC") "C492427")
 				(field
-					(name "Footprint") "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical")
+					(name "Footprint") "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -22520,7 +22520,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C5116528")
+				(value "C492427")
 			)
 			(property
 				(name "Sheetname")
@@ -22614,13 +22614,13 @@
 		(comp
 			(ref "J21")
 			(value "LaunchPad J4+J2")
-			(footprint "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical")
+			(footprint "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical")
 			(description "Generic connector, double row, 02x10, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)")
 			(fields
 				(field
-					(name "LCSC") "C5116528")
+					(name "LCSC") "C492427")
 				(field
-					(name "Footprint") "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical")
+					(name "Footprint") "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -22634,7 +22634,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C5116528")
+				(value "C492427")
 			)
 			(property
 				(name "Sheetname")
@@ -22728,13 +22728,13 @@
 		(comp
 			(ref "J22")
 			(value "LaunchPad J5+J7")
-			(footprint "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical")
+			(footprint "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical")
 			(description "Generic connector, double row, 02x10, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)")
 			(fields
 				(field
-					(name "LCSC") "C5116528")
+					(name "LCSC") "C492427")
 				(field
-					(name "Footprint") "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical")
+					(name "Footprint") "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -22748,7 +22748,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C5116528")
+				(value "C492427")
 			)
 			(property
 				(name "Sheetname")
@@ -22842,13 +22842,13 @@
 		(comp
 			(ref "J23")
 			(value "LaunchPad J8+J6")
-			(footprint "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical")
+			(footprint "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical")
 			(description "Generic connector, double row, 02x10, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)")
 			(fields
 				(field
-					(name "LCSC") "C5116528")
+					(name "LCSC") "C492427")
 				(field
-					(name "Footprint") "FE_UFPR_4_0:PinSocket_2x10_P2.54mm_Vertical")
+					(name "Footprint") "FE_UFPR_4_0:PinHeader_2x10_P2.54mm_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -22862,7 +22862,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C5116528")
+				(value "C492427")
 			)
 			(property
 				(name "Sheetname")

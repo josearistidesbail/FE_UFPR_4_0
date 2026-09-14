@@ -179,6 +179,7 @@ envelope (grows only if S9 placement demands).
                 MODULE EDGE (faces PrimeSTACK connector)
 ```
 
+- **[SUPERSEDED S9.6 — the headers are `PinHeader_2x10` (male) on the TOP side and the LaunchPad sits ABOVE the board on its own bottom-side receptacles, as on 3.0; the board stands vertical above the module. See `S9_6_VERTICAL_MOUNT.md`.]**
 - **BoosterPack headers: `PinSocket_2x10` (female), mounted on the BOTTOM side.**
   The stock LaunchPad only has male pins on its top face, so the interface board is
   mechanically the "BoosterPack on top": board on standoffs above the inverter, LaunchPad
