@@ -33,11 +33,11 @@ Keep the Open section short enough to read every session.
 - **[S11] 403 silkscreen DRC warnings** (394 after S9.5, +9 from the S9.6 re-placement; auto-placed reference text over pads/each other) — the silk pass fixes them together with the jumper tables and the JP2 warning text.
 - **[S11] Test points under the LaunchPad shadow are unreachable with it fitted** (TP20/23, TP36, TP42–TP50, TP53/54, …) — pull the ones the bench needs out to x < 59 or x > 119, or accept.
 - **[user] Pick the L-com DG9037MF variant** (male end must exit away from the module top face with the female end on X1) and check its ~25 mm body against the phase terminals; fallback = passive two-D-sub adapter PCB. **Bracket the board** — the two jackscrew joints carry no load. Height budget above the module: adapter ~25 + board 130 + LaunchPad overhang 17.9 mm.
-- **[team] Precharge / DC-bus contactor** — see the S9.6 decision and `S9_6_VERTICAL_MOUNT.md` §5. Also settle the GLV / shutdown-circuit voltage against the 24 V coil.
 - **[S12] Verify C492427** (male 2×10 header) — Extended, 98 935 by `/api/search`; the `headers/list` endpoint did not surface it.
 
 ## Resolved (archive)
 
+- ~~[team] Precharge / DC-bus contactor~~ — **dropped 2026-09-17 (user):** precharge is handled externally; nothing on this board, no relay, no connector, S8 not reopened. The "24 V coil vs GLV voltage" question goes with it (the separate 12 V shutdown-input assumption stays open).
 - ~~[S2] BoosterPack header gender~~ — **resolved S2:** `PinSocket_2x10`, bottom side, LaunchPad below.
 - ~~[S9] PrimeSTACK mounting pattern~~ — **resolved S9:** M8 × 14 deep on **143.2 × 242.6**, Ø9.2 through (Ø17 × 11 counterbore) on **195 × 260**, both centred on the 215 × 280 body. Both dwarf the 146 × 130 board → **adapter plate confirmed** as the mechanism. **[user] The top face carries the HV busbar terminals — set the plate's standoff height for creepage.**
 - ~~[S3] Schottky vs ideal-diode/load-switch for the LaunchPad 5 V feed~~ — **resolved S3:** plain Schottky **SS34, C8678 (JLC Basic)**; V_f ≈ 0.35 V at ~200 mA leaves the LaunchPad ≈4.63 V, ample for its own 3.3 V LDO. **Physically placed in S8** on the `launchpad` sheet at the header.

@@ -6,7 +6,7 @@ connector through a DB37 right-angle adapter, **every connector on the top side*
 **0 errors** (403 silkscreen warnings, S11's), schematic parity 0, ERC 0. The schematic changed in
 exactly one respect (the four header footprints and their LCSC field); `golden.net` was re-baselined
 with that delta and nothing else (219 nets, node sets identical). **The user routes S10/S11.**
-The precharge/contactor request is **not** in this change — see §5.
+The precharge/contactor request is **not** in this change — and was **dropped 2026-09-17** (see §5).
 
 ---
 
@@ -79,7 +79,10 @@ once the S9.5 parts existed — S9.5 had placed them by hand).
 - L-com's site returns an HTML page for the `DG9037MFx_2D.pdf` drawings to a non-browser client;
   the user pulls them.
 
-## 5. Not done: the precharge / DC-bus contactor (pending the team)
+## 5. Not done: the precharge / DC-bus contactor — DROPPED
+
+> **2026-09-17 (user): dropped — precharge is handled externally.** Nothing below was built; kept as the
+> record of why the in-inverter form was rejected.
 
 Request: the board supplies 24 V to a contactor that enables the DC bus once the bus voltage reaches a
 threshold (the accumulator's precharge would move into the inverter). The 2026 rulebook
@@ -107,4 +110,4 @@ team's decision.**
 - **[user]** Height check above the module: adapter ~25 mm + board 130 + LaunchPad overhang 17.9.
 - **[user]** Caliper the LaunchPad's receptacle height (sets the ~11 mm stack) — replaces the socket-insulator item.
 - **[S11]** Test points under the LaunchPad shadow; 403 silk warnings.
-- **[team]** Precharge architecture (§5); GLV / shutdown-circuit voltage vs the 24 V coil.
+- ~~**[team]** Precharge architecture (§5); GLV / shutdown-circuit voltage vs the 24 V coil.~~ Dropped 2026-09-17 — external.

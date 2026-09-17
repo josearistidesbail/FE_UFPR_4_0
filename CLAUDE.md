@@ -33,8 +33,8 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 direct-mounted on X1 via a DB37 90° adapter; all connectors top side; LaunchPad above the board on male
 `PinHeader_2x10` (F.Cu). 379 footprints, DRC 0 errors (`--severity-all`), ERC 0, `golden.net` = 219 nets.
 **The user routes S10/S11** — Claude's layout role is rules, placement structure, DRC review and docs.
-⚠ Pending: precharge/DC-bus contactor request (team; reopens S8 if it lands — `S9_6_VERTICAL_MOUNT.md` §5);
-EMRAX KTY insulation class (gates S9.5). Everything else open: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
+⚠ Pending: EMRAX KTY insulation class (gates S9.5). Precharge/DC-bus contactor is **dropped** — handled
+externally, nothing on this board. Everything else open: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
 ## Roadmap, documents, session rhythm
