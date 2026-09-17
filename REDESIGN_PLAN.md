@@ -1,11 +1,11 @@
 # FE_UFPR_4_0 Redesign Roadmap
 
-**Scope:** full redesign of the LaunchPad ↔ PrimeSTACK interface board as a fresh 4-layer KiCad project, one focused session per phase. Confirmed baseline decisions live in `CLAUDE.md` → Decision log. Firmware cross-reference paths and conditioning targets live in `CLAUDE.md` — this file assumes you've read it.
+**Scope:** full redesign of the LaunchPad ↔ PrimeSTACK interface board as a fresh 4-layer KiCad project, one focused session per phase. Confirmed baseline decisions live in `DECISION_LOG.md` (history) — `CLAUDE.md` holds only the current state. Firmware cross-reference paths and conditioning targets live in `CLAUDE.md` — this file assumes you've read it.
 
 ## How to use this roadmap
 
 - **One session = one numbered phase.** Don't start a session until its prerequisites are checked; don't bleed into the next phase's scope.
-- Every session follows the rhythm in `CLAUDE.md` (read → fetch → decide+log → capture → JLC-vet → ERC/DRC → update phase → commit).
+- Every session follows the rhythm in `CLAUDE.md` (read → fetch → decide + log in `DECISION_LOG.md` → capture → JLC-vet → ERC/DRC → update phase → commit; never append history to `CLAUDE.md`).
 - **JLC vetting per part:** local DB (`search_jlcpcb_parts`) for candidates → WebFetch `https://jlcsearch.tscircuit.com` for Basic/Extended + stock + price → record LCSC number in the symbol before the session ends.
 - **Exit criteria are gates.** A session isn't done until all pass (or a failure is explicitly waived in the Decision Log with a reason).
 
