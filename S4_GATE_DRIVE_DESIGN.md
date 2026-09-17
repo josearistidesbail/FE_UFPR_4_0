@@ -383,7 +383,7 @@ From the existing kit:
 | R30–R32, R36–R41 | 4.7 kΩ 0603 1 % | C23162 | reset-safe pull-downs (see §8) |
 | R33 | 1 kΩ 0603 | C21190 | `GATE_EN_3V3` pull-down |
 | R34 | 680 Ω 0603 | C23228 | D9 series |
-| R35 | 1 MΩ 0603 | C22936 | shield bleed |
+| R35 | 1 MΩ 0603 | ⚠ C22936 → **C22935** | shield bleed — `C22936` is 1 Ω, not 1 MΩ (corrected 2026-09-17) |
 | C29, C31, C33 | 1 µF 0805 X7R 50 V | C28323 | driver VDD bulk |
 | C30, C32, C34, C35 | 100 nF 0603 X7R 50 V | C14663 | driver / U8 decoupling |
 | C36 | 10 µF 1206 X5R 50 V | C13585 | `+13V5_GATE` local bulk |

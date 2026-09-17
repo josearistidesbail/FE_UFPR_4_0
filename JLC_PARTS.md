@@ -11,6 +11,15 @@ Place from these lines by default. Any new value in a later session gets vetted 
 
 All are the Uniroyal `0603WAF…T5E` series (one manufacturer across the kit ⇒ consistent TCR and one reel family).
 
+> 🛑 **`C22936` IS 1 Ω, NOT 1 MΩ — the kit row above is corrected to `C22935` (2026-09-17).**
+> Uniroyal `0603WAF100KT5E` (`C22936`) is a **1 Ω ±1 % ±400 ppm** part — JLC's own description says so and
+> JLCSearch confirms it. The 1 MΩ part is `0603WAF1004T5E` = **`C22935`**, Basic, 8 062 164 stock, $0.00096.
+> Adjacent codes, easy transposition. **Six placements still carry the wrong code: R35, R67, R77, R89,
+> R104, R118** — all signal-to-GND bleed/shield resistors, so 1 Ω would (a) hard-short `SHIELD_DB37`,
+> `SHIELD_LEM` and `SHIELD_ENC` to GND, wrecking the single-point shield scheme and recreating exactly the
+> harness ground loop 3.0 suffered, and (b) short `ISNS_A/B/C_RAW` — the module's **5 mA-limited** sensor
+> outputs — to ground at 4.7 A demanded. **Fix the six symbols before ordering.**
+
 > ✅ **`C25804` (10 k, 16 placements) re-verified live 2026-09-17: Basic, 37 165 617 in stock, $0.00084.**
 > ⚠ But `/api/search?q=C25804` returns **an empty result** for it — see the JLCSearch quirk in
 > [`TOOLING_NOTES.md`](TOOLING_NOTES.md). Always cross-check a "missing" passive against
@@ -25,7 +34,7 @@ All are the Uniroyal `0603WAF…T5E` series (one manufacturer across the kit ⇒
 | 47 | C23182 | 3.3 k | C22978 | 100 k | C25803 |
 | 100 | C22775 | 4.7 k | C23162 | 220 k | C22961 |
 | 150 | C22808 | 6.8 k | C23212 | 470 k | C23178 |
-| 220 | C22962 | 10 k | C25804 | 1 M | C22936 |
+| 220 | C22962 | 10 k | C25804 | 1 M | **C22935** ⚠ |
 | 330 | C23138 | 15 k | C22809 | | |
 | 470 | C23179 | | | | |
 
@@ -128,7 +137,7 @@ live.** Other low-stock lines under the pessimistic source: `C5369735` 362, `C52
 **1 175** in stock and 3.09 kΩ (C861371) **2 980**; the E24 value **3.00 kΩ** has 116 222.
 
 Everything else S7 places comes from the existing kit: 4.99 k 0.1 % `C723532`, 12.0 k 0.1 %
-`C326735`, 100 Ω `C22775`, 1 MΩ `C22936`, 0 Ω `C21189`, 1 nF C0G `C106246`, 2.2 nF C0G `C107043`,
+`C326735`, 100 Ω `C22775`, 1 MΩ **`C22935`** (was `C22936` = 1 Ω — see the kit-table warning), 0 Ω `C21189`, 1 nF C0G `C106246`, 2.2 nF C0G `C107043`,
 22 nF 0805 C0G `C77069`, 100 nF `C14663`, 1 µF/0805 `C28323`, 10 µF/0805 `C15850`, OPA2376 `C46316`.
 **S7 introduces no new C0G value** — it reuses 1 nF, 2.2 nF and 22 nF, which **closes the standing
 "standardise C0G values" item**: the set is still exactly four (1 nF, 2.2 nF, 4.7 nF, 22 nF).
@@ -151,7 +160,7 @@ Everything else S7 places comes from the existing kit: 4.99 k 0.1 % `C723532`, 1
 or 5.90 kΩ (1 879). **20.0 k / 12.0 k** was picked from live stock — and happens to give
 G = 0.600 exactly, landing the ADC bias on exactly 1.500 V. See `S6_CURRENT_SENSE_DESIGN.md` §6.
 
-Everything else S6 places comes from the S1/S3 kit: 1 MΩ `C22936`, 100 Ω `C22775`, 0 Ω `C21189`,
+Everything else S6 places comes from the S1/S3 kit: 1 MΩ **`C22935`** (was `C22936` = 1 Ω — see the kit-table warning), 100 Ω `C22775`, 0 Ω `C21189`,
 2.2 nF C0G `C107043`, 4.7 nF C0G `C85980`, 1 nF C0G `C106246`, 22 nF 0805 C0G `C77069`,
 100 nF `C14663`, 1 µF/0805 `C28323`, 10 µF/1206 `C13585`.
 **S6 introduces no new C0G value** — it reuses four existing lines, closing its half of the
@@ -184,7 +193,7 @@ MIC4468ZWM: 25, UCC27523D: 79). The whole TC446x quad family is out. That, not a
 preference, is why the design is 3× dual instead of 2× quad.
 
 Everything else S4 places comes from the S1/S3 kit: 100 Ω `C22775`, 10 kΩ `C25804`,
-**4.7 kΩ `C23162`**, 1 kΩ `C21190`, 680 Ω `C23228`, 1 MΩ `C22936`, 1 µF/0805 `C28323`,
+**4.7 kΩ `C23162`**, 1 kΩ `C21190`, 680 Ω `C23228`, 1 MΩ **`C22935`** (was `C22936` = 1 Ω — see the kit-table warning), 1 µF/0805 `C28323`,
 100 nF `C14663`, 10 µF/1206 `C13585`, 1 nF C0G `C106246`, red LED `C2286`.
 **S4 introduces no new C0G value** — it reuses the 1 nF line.
 
@@ -261,6 +270,15 @@ component invoice lands well above 5 × $30.79. It only converges at volume.
 as through-hole pads (not joints); the 64 `NOFIT` positions are not placed (76 SMD pads); the 4 test points
 are not parts; the 5 consigned connectors (J1–J5, 72 THT joints) are hand-soldered by the team. JLC places
 **301 parts = 700 SMD + 85 THT joints** (the 85 = four 2×10 headers + U4).
+
+### Keep the placement single-sided
+
+**Economic PCBA assembles one side only.** A double-sided placement forces **Standard PCBA, double-side**:
+setup $51.12 + stencil $16.42 + $1.53 × 63 lines + $3.58 = **$167.51** one-time, against Economic's
+**$105.39** — a flat **+$62.12**, with per-board cost unchanged. A 212 / 162 double-sided experiment on
+2026-09-17 was reverted the same day; the board is **370 F.Cu / 4 B.Cu**. Decide this on whether you need
+**B.Cu as a clean signal layer** (L2 is a solid GND plane and L3 a power pour, so F.Cu and B.Cu are the only
+signal layers), not on the $62.
 
 ### Economic vs Standard
 

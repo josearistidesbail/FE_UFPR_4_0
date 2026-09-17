@@ -352,7 +352,7 @@ New JLC lines (stock checked 2026-08-30):
 | DEUTSCH DTM13-12PB-R005 / -12PA-R005 | — | **CONSIGNED** | — | J4 / J3 |
 
 Everything else comes from the existing kit: 4.99 k 0.1 % `C723532`, 12.0 k 0.1 % `C326735`,
-100 Ω `C22775`, 1 MΩ `C22936`, 0 Ω `C21189`, 1 nF C0G `C106246`, 2.2 nF C0G `C107043`,
+100 Ω `C22775`, 1 MΩ **`C22935`** (was `C22936` = 1 Ω — see the kit-table warning), 0 Ω `C21189`, 1 nF C0G `C106246`, 2.2 nF C0G `C107043`,
 22 nF 0805 C0G `C77069`, 100 nF `C14663`, 1 µF/0805 `C28323`, 10 µF/0805 `C15850`,
 OPA2376 `C46316`. **S7 introduces no new C0G value.**
 
