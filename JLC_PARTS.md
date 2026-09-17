@@ -11,6 +11,11 @@ Place from these lines by default. Any new value in a later session gets vetted 
 
 All are the Uniroyal `0603WAF…T5E` series (one manufacturer across the kit ⇒ consistent TCR and one reel family).
 
+> ✅ **`C25804` (10 k, 16 placements) re-verified live 2026-09-17: Basic, 37 165 617 in stock, $0.00084.**
+> ⚠ But `/api/search?q=C25804` returns **an empty result** for it — see the JLCSearch quirk in
+> [`TOOLING_NOTES.md`](TOOLING_NOTES.md). Always cross-check a "missing" passive against
+> `/resistors/list.json` or `/capacitors/list.json` before believing it is gone.
+
 | Ω | LCSC | Ω | LCSC | Ω | LCSC |
 |---|---|---|---|---|---|
 | 0 (jumper) | C21189 | 680 | C23228 | 22 k | C31850 |
@@ -218,5 +223,95 @@ Board is fabbed + assembled by JLCPCB (4-layer, JLC04161H-7628 stackup).
   curl -s "https://jlcsearch.tscircuit.com/capacitors/list.json?package=0603&capacitance=1e-7&limit=200"
   ```
   Returns `is_basic`, `is_preferred`, `stock`, `price1`, `tolerance_fraction`, `voltage_rating`, `temperature_coefficient`. `curl` works and gives raw JSON — prefer it over WebFetch for this. Endpoint index: `https://jlcsearch.tscircuit.com/`.
-- Prefer Basic parts (no per-reel fee). S12 re-verifies every LCSC line against live stock before ordering (stock rots).
+- Prefer Basic **and Preferred Extended** parts — both are exempt from the **$3.07/line feeder-loading fee** on Economic PCBA. Plain Extended parts cost $3.07 per BOM line, once per order, regardless of how many are placed. S12 re-verifies every LCSC line against live stock before ordering (stock rots).
 - **Consigned / hand-solder list** (not in JLC catalog — expect to solder these): DB37, Deutsch DT/DTM connectors, LEM transducers, possibly the isolated DC/DC module.
+
+## PCBA cost model — Basic/Extended audit (2026-09-17)
+
+Every one of the 63 real LCSC lines queried live against JLCSearch. Placeholders excluded (`NOFIT` ×64,
+`CONSIGNED` ×5). Fee schedule read from JLCPCB's own price page the same day.
+
+### Part-category split
+
+| Category | Distinct lines | Placements | Feeder fee |
+|---|---|---|---|
+| Basic | 29 | 159 | exempt |
+| Preferred Extended | 4 | 6 | **exempt** |
+| Extended | **30** | 144 | **$3.07 each = $92.10** |
+
+### Cost, Economic PCBA, single-side (370 of 374 parts on F.Cu)
+
+| Item | Cost |
+|---|---|
+| Setup | $8.18 |
+| Stencil | $1.53 |
+| Feeder loading, 30 Extended lines | $92.10 |
+| Hand-soldering labour | $3.58 |
+| **One-time** | **$105.39** |
+| SMT, 700 joints × $0.0016 | $1.12 /board |
+| Manual (THT), 85 joints × $0.0164 | $1.39 /board |
+| Components (unit price × qty) | $30.79 /board |
+| **Per board** | **$33.30** |
+
+**5 boards ≈ $272**, plus the bare 4-layer 159.6 × 147.9 mm board. ⚠ The component figure is unit-price ×
+quantity; at qty 5 you actually buy JLC's minimum pack per line (often 50–100 for 0603s), so the real
+component invoice lands well above 5 × $30.79. It only converges at volume.
+
+**Joint counts are not raw pad counts.** U1's `HSOP-8-1EP_ThermalVias` footprint declares 8 *thermal vias*
+as through-hole pads (not joints); the 64 `NOFIT` positions are not placed (76 SMD pads); the 4 test points
+are not parts; the 5 consigned connectors (J1–J5, 72 THT joints) are hand-soldered by the team. JLC places
+**301 parts = 700 SMD + 85 THT joints** (the 85 = four 2×10 headers + U4).
+
+### Economic vs Standard
+
+- Economic: `8.18 + 1.53 + 30 × 3.07` = **$101.81**
+- Standard, single-side: `25.56 + 8.21 + 63 × 1.53` = **$130.16**
+
+**Economic wins.** Standard charges $1.53 per line for Basic *and* Extended alike, so it only overtakes
+Economic above **39 Extended lines**. Re-check this if the Extended count grows.
+
+### Assembly quantity ≠ PCB quantity
+
+Economic PCBA accepts **2–50 pcs** (Standard: 2–80 000). The bare-board minimum is 5, so **assembling 2 of
+5 boards** costs ≈ $172 + bare PCB instead of ≈ $272 and leaves 3 bare boards for rework and for the
+consigned-connector work. Recommended for the first article.
+
+### Feeder-fee reduction: audited, nothing cuttable — **do not re-attempt**
+
+$92.10 is 87 % of the one-time assembly cost, and all 30 lines are justified:
+
+| Group | Lines | Why it must stay Extended |
+|---|---|---|
+| Thin-film 0.1 % `RT0603BRD07…` (12 k ×18, 4.99 k ×8, 20 k ×6, 10 k ×6, 2.2 k ×2, 3 k, 1.5 k) + 47 R 0.1 % 1206 ×6 | 8 | Bought for **TCR tracking, not accuracy.** Encoder sheet note: a 1 % ratio drift = **~6° electrical**, *"never substitute a mixed-family divider here."* S5 §2.2: a thick-film Vbus pair drifts **0.6 % differentially over 60 °C = 6 V of bus error**, which matters to a UV/OV trip. The 47 R are in the current-sense difference-amp networks, where the target table demands matching. |
+| C0G (1 nF ×30, 2.2 nF ×10, 4.7 nF ×6, 22 nF ×6) | 4 | No JLC Basic C0G exists above 100 pF (S1 hard constraint). |
+| ICs (`SN74LVC2G17` ×12, `OPA2376` ×6, `UCC27524` ×3, `LMR33630`, `TPS62933`, `SN74LVC1G11`, `SQD50P06`) | 7 | No Basic equivalents; each is function-specific. |
+| Through-hole and specialty (2×10 headers ×4, `URA2415YMD-6WR3`, fuse `0451005`, PTC `1206L020`, TVS `SMCJ26A`, 100 µF elec, 22 µH `SWPA8040S`, 3.3 µH `FNR5040`, `ACT45B` CAN choke, 52.3 k 1 %) | 11 | **No through-hole part can ever be Basic** — JLC's Basic catalogue *is* the pre-loaded SMT feeder set. Checked: not one 2×10 2.54 mm header and not one 100 µF 50 V electrolytic in the catalogue is Basic. |
+
+Substitutions were actually made for R57/R58 (Vbus → `C4190`/`C22843`) and R105 (encoder chain → `C4211`)
+and then **reverted** when the sheet notes and S5 §2.2 were read; both sheets verified byte-identical
+afterwards. The only remaining lever on assembly cost is **order quantity**, and on board cost the outline
+area — 100 × 100 mm is unreachable (sum of all 374 courtyards = 11 213 mm² > 10 000 mm², and the five fixed
+connectors plus the LaunchPad header block alone are 8381 mm²).
+
+### Low-stock watch list (2026-09-17)
+
+| LCSC | Part | Stock | Used |
+|---|---|---|---|
+| `C5369735` | URA2415YMD-6WR3 | **304** | U4 (consigned anyway) |
+| `C5219272` | TPS62933FDRLR | 2 255 | 1 |
+| `C77033` | 2.2 nF C0G 0603 | 2 265 | 10 |
+| `C870760` | 47 R 0.1 % 1206 | 4 210 | 6 |
+| `C15857` | SWPA8040S220MT 22 µH | 4 688 | 1 |
+
+Fine for a 5-board run; re-check before any batch. ⚠ `CLAUDE.md` lists URA2415YMD-6WR3 as
+consigned/hand-solder, but U4 carries a real LCSC line — **decide explicitly**: consigning it drops $3.07 of
+feeder fee and $6.38/board of component cost.
+
+### Is there an API?
+
+Official: <https://api.jlcpcb.com/> — free after signup. **PCB API** (real-time bare-board quote + order +
+tracking), **Components API** (live price/stock/specs), Stencil and 3D-printing APIs. **There is no
+assembly-quote endpoint** — PCBA service fees must be computed from the table above, or read off
+<https://jlcpcb.com/quote> by uploading Gerbers + BOM + CPL (free, instant, no commitment). JLCSearch stays
+the quicker route for per-part Basic/stock/price.
+

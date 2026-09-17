@@ -20,4 +20,10 @@ New tool quirks go **here**; `CLAUDE.md` keeps only the handful of hard gates.
 - `dump.py`/`conncheck` reported both S8 sheets as "1 net, 87 unlabelled pins" while `kicad-cli` proved them fully connected — a known false alarm, still not the gate.
 - **TE `DocumentDelivery` rate-limits**: a 222-request burst earned a ~1 h 403 for this address. Probe a few names with a pause between them. A missing drawing answers HTTP 500 + HTML.
 - **JLCSearch**: `/api/search?q=<LCSC or MPN>` gives `is_basic`/`is_preferred`/stock/price for ICs too (the category endpoints only cover passives), but the two disagree on stock — treat both as snapshots.
+  ⚠ **`/api/search` silently returns `{"components":[]}` for passives that exist** (2026-09-17: `C25804`,
+  10 k 0603 Basic with **37 M in stock**, and its MPN `0603WAF1002T5E`, both come back empty). The search
+  index is incomplete. **Never conclude a part is delisted from `/api/search` alone** — cross-check
+  `/resistors/list.json?package=0603&resistance=10000` (or `/capacitors/list.json`), which is authoritative
+  for passives and returns `is_basic`/`tolerance_fraction`/`stock`/`price1`.
+  Also: **`urllib` gets HTTP 403** — the endpoint requires a `User-Agent`. Use `curl`, or set the header.
 - The MCP `batch_add_components` does not add the library symbol's `LCSC` property to every instance — `vio_layout.py` sets it for its own parts; check `grep -c '(property "LCSC"'` equals the symbol count after any MCP add.
