@@ -143,4 +143,15 @@
 		(uuid "b2000000-0000-4000-8000-000000000015")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/3dmodels/Converter_DCDC_Mornsun_URA-YMD-6WR3_THT.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
 )

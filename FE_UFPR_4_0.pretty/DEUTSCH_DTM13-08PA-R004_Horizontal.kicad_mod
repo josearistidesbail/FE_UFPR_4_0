@@ -75,4 +75,15 @@
 	(pad "6" thru_hole circle (at 2.0955 -3.175) (size 2 2) (drill 1.3) (layers "*.Cu" "*.Mask") (remove_unused_layers no))
 	(pad "7" thru_hole circle (at -2.0955 -3.175) (size 2 2) (drill 1.3) (layers "*.Cu" "*.Mask") (remove_unused_layers no))
 	(pad "8" thru_hole circle (at -6.2865 -3.175) (size 2 2) (drill 1.3) (layers "*.Cu" "*.Mask") (remove_unused_layers no))
+	(model "${KIPRJMOD}/3dmodels/DEUTSCH_DTM13-08PA-R004_Horizontal.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
 )

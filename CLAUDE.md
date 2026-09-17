@@ -29,12 +29,14 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 ## Current phase
 
-**S9.6 VERTICAL-MOUNT RE-PLACEMENT COMPLETE (2026-09-14).** Board stands vertical above the PrimeSTACK,
-direct-mounted on X1 via a DB37 90° adapter; all connectors top side; LaunchPad above the board on male
-`PinHeader_2x10` (F.Cu). 379 footprints, DRC 0 errors (`--severity-all`), ERC 0, `golden.net` = 219 nets.
-**The user routes S10/S11** — Claude's layout role is rules, placement structure, DRC review and docs.
-⚠ Pending: EMRAX KTY insulation class (gates S9.5). Precharge/DC-bus contactor is **dropped** — handled
-externally, nothing on this board. Everything else open: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
+**S9.6 RE-PLACEMENT COMPLETE (2026-09-14); ORIENTATION RE-OPENED BY THE TEAM (2026-09-17).** Placement
+is the S9.6 vertical arrangement (DB37 edge down on a 90° adapter to X1, LaunchPad above on male
+`PinHeader_2x10`), but **vertical vs horizontal is NOT settled** — keep the board orientation-agnostic:
+**every connector on the top face**, passives referenced to their own connector/IC pins, and no bracket
+or mounting-hole work until the team decides. 379 footprints, DRC 0 (`--severity-all`), ERC 0,
+`golden.net` = 219 nets. **The user routes S10/S11** — Claude's role is rules, placement, DRC and docs.
+⚠ Pending: EMRAX KTY insulation class (gates S9.5). Precharge/DC-bus contactor **dropped** (external).
+Everything else open: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
 ## Roadmap, documents, session rhythm
@@ -209,4 +211,4 @@ kept as two nets. Only temperature output is pin 29. Details: [`DB37_PINOUT.md`]
   path-qualified net name. Verify from `kicad-cli`'s `(class …)` netlist output, never by eye.
   **Power_3A is 3.7 A on 1 oz outer but only 1.1 A on 0.5 oz inner** — `+24V_*` / `PGND_MOD` on outer
   layers or ≥ 5 mm L3 pours. Board rules = JLC 4-layer capabilities (`S9_BOARD_SETUP.md` §4).
-- **Mounting:** board mounts on top of the inverter; mounting holes required (3.0 had none — only DB37 jackscrews). **S9: six Ø3.2 NPTH board holes (corners + mid-left/right, no pads — the screws must not be a ground path in a floating domain) and three Ø3.2 LaunchPad standoff holes; the PrimeSTACK pattern (M8 on 143.2 × 242.6, Ø9.2 on 195 × 260, datasheet p.5) dwarfs the board, so the adapter plate remains the mechanism.** **S9.6: the board now stands VERTICAL above the module, DB37 edge down, on a DB37 90° adapter mated to X1 (which faces the 3-phase terminal side); the LaunchPad sits ABOVE on male headers and overhangs the top edge 17.9 mm; J5 moved to the top-left; the board needs its own bracket — the connector stack carries no load.**
+- **Mounting:** board mounts on top of the inverter; mounting holes required (3.0 had none — only DB37 jackscrews). **S9: six Ø3.2 NPTH board holes (corners + mid-left/right, no pads — the screws must not be a ground path in a floating domain) and three Ø3.2 LaunchPad standoff holes; the PrimeSTACK pattern (M8 on 143.2 × 242.6, Ø9.2 on 195 × 260, datasheet p.5) dwarfs the board, so the adapter plate remains the mechanism.** **S9.6 (PROVISIONAL — the team re-opened this 2026-09-17): the board stands VERTICAL above the module, DB37 edge down, on a DB37 90° adapter mated to X1 (which faces the 3-phase terminal side); the LaunchPad sits ABOVE on male headers and overhangs the top edge 17.9 mm; J5 moved to the top-left; the board needs its own bracket — the connector stack carries no load.** Horizontal is still on the table, so **all connectors stay on the top face** and the B.Cu face is treated as the module-facing side: keep it as continuous copper as possible and put nothing there that a mount change could strand.

@@ -6942,7 +6942,7 @@
 			)
 		)
 		(property "Value" "URA2415YMD-6WR3"
-			(at 245.11 147.32 0)
+			(at 245.11 141.478 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
