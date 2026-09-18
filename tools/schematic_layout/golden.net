@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/home/jose/Kicad/FE_UFPR_4_0/FE_UFPR_4_0.kicad_sch")
-		(date "2026-09-14T19:58:40")
+		(date "2026-09-17T21:32:06")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -9980,63 +9980,6 @@
 			)
 		)
 		(comp
-			(ref "TP37")
-			(value "ISO_COM")
-			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-			(description "test point")
-			(fields
-				(field
-					(name "LCSC") "NOFIT")
-				(field
-					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description") "test point")
-			)
-			(libsource
-				(lib "FE_UFPR_4_0")
-				(part "TestPoint")
-				(description "test point")
-			)
-			(property
-				(name "LCSC")
-				(value "NOFIT")
-			)
-			(property
-				(name "Sheetname")
-				(value "current_sense")
-			)
-			(property
-				(name "Sheetfile")
-				(value "current_sense.kicad_sch")
-			)
-			(property
-				(name "ki_keywords")
-				(value "test point tp")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "Pin* Test*")
-			)
-			(sheetpath
-				(names "/current_sense/")
-				(tstamps "/4d347022-ba2f-49b9-8797-79ffc1b609ae/")
-			)
-			(tstamps "05431481-8a8c-453f-911a-2b740129fc13")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-					)
-				)
-			)
-		)
-		(comp
 			(ref "U12")
 			(value "OPA2376")
 			(footprint "FE_UFPR_4_0:SOIC-8_3.9x4.9mm_P1.27mm")
@@ -18842,63 +18785,6 @@
 			)
 		)
 		(comp
-			(ref "TP54")
-			(value "MOT_TEMP_REF")
-			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-			(description "test point")
-			(fields
-				(field
-					(name "LCSC") "NOFIT")
-				(field
-					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description") "test point")
-			)
-			(libsource
-				(lib "FE_UFPR_4_0")
-				(part "TestPoint")
-				(description "test point")
-			)
-			(property
-				(name "LCSC")
-				(value "NOFIT")
-			)
-			(property
-				(name "Sheetname")
-				(value "encoder")
-			)
-			(property
-				(name "Sheetfile")
-				(value "encoder.kicad_sch")
-			)
-			(property
-				(name "ki_keywords")
-				(value "test point tp")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "Pin* Test*")
-			)
-			(sheetpath
-				(names "/encoder/")
-				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
-			)
-			(tstamps "811e9523-21d1-48a2-82ba-984a68b4b418")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-					)
-				)
-			)
-		)
-		(comp
 			(ref "U16")
 			(value "OPA2376")
 			(footprint "FE_UFPR_4_0:SOIC-8_3.9x4.9mm_P1.27mm")
@@ -21496,63 +21382,6 @@
 			)
 		)
 		(comp
-			(ref "TP20")
-			(value "TP_VBUS_ADC")
-			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-			(description "test point")
-			(fields
-				(field
-					(name "LCSC") "NOFIT")
-				(field
-					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description") "test point")
-			)
-			(libsource
-				(lib "FE_UFPR_4_0")
-				(part "TestPoint")
-				(description "test point")
-			)
-			(property
-				(name "LCSC")
-				(value "NOFIT")
-			)
-			(property
-				(name "Sheetname")
-				(value "module_status")
-			)
-			(property
-				(name "Sheetfile")
-				(value "module_status.kicad_sch")
-			)
-			(property
-				(name "ki_keywords")
-				(value "test point tp")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "Pin* Test*")
-			)
-			(sheetpath
-				(names "/module_status/")
-				(tstamps "/a2165381-2d77-4319-9e8d-4618439f276e/")
-			)
-			(tstamps "87508050-3432-4c52-a84f-f309610bf647")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-					)
-				)
-			)
-		)
-		(comp
 			(ref "TP21")
 			(value "TP_VBUS_RTN")
 			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
@@ -21655,63 +21484,6 @@
 				(tstamps "/a2165381-2d77-4319-9e8d-4618439f276e/")
 			)
 			(tstamps "6e123386-7218-4540-b4d0-6352d9d1442e")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "TP23")
-			(value "TP_NTC_ADC")
-			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-			(description "test point")
-			(fields
-				(field
-					(name "LCSC") "NOFIT")
-				(field
-					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description") "test point")
-			)
-			(libsource
-				(lib "FE_UFPR_4_0")
-				(part "TestPoint")
-				(description "test point")
-			)
-			(property
-				(name "LCSC")
-				(value "NOFIT")
-			)
-			(property
-				(name "Sheetname")
-				(value "module_status")
-			)
-			(property
-				(name "Sheetfile")
-				(value "module_status.kicad_sch")
-			)
-			(property
-				(name "ki_keywords")
-				(value "test point tp")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "Pin* Test*")
-			)
-			(sheetpath
-				(names "/module_status/")
-				(tstamps "/a2165381-2d77-4319-9e8d-4618439f276e/")
-			)
-			(tstamps "c9e3c9ab-0cab-407b-b465-00609d16e0ac")
 			(units
 				(unit
 					(name "A")
@@ -22110,7 +21882,7 @@
 				(names "/module_status/")
 				(tstamps "/a2165381-2d77-4319-9e8d-4618439f276e/")
 			)
-			(tstamps "45ed72fc-0d8a-4c30-99c7-ed2bb606bddb" "4667ff5f-a588-41e5-aa07-de72ca7224eb"
+			(tstamps "4667ff5f-a588-41e5-aa07-de72ca7224eb" "45ed72fc-0d8a-4c30-99c7-ed2bb606bddb"
 				"00dac94d-f3d3-4afb-b90f-fa62fc4cc1c2"
 			)
 			(units
@@ -26480,12 +26252,6 @@
 				(pin "1")
 				(pintype "passive")
 			)
-			(node
-				(ref "TP54")
-				(pin "1")
-				(pinfunction "1_1")
-				(pintype "passive")
-			)
 		)
 		(net
 			(code "37")
@@ -26505,12 +26271,6 @@
 			(node
 				(ref "R62")
 				(pin "2")
-				(pintype "passive")
-			)
-			(node
-				(ref "TP23")
-				(pin "1")
-				(pinfunction "1_1")
 				(pintype "passive")
 			)
 		)
@@ -26741,12 +26501,6 @@
 			(node
 				(ref "R59")
 				(pin "2")
-				(pintype "passive")
-			)
-			(node
-				(ref "TP20")
-				(pin "1")
-				(pinfunction "1_1")
 				(pintype "passive")
 			)
 		)
@@ -30376,12 +30130,6 @@
 			(node
 				(ref "R95")
 				(pin "1")
-				(pintype "passive")
-			)
-			(node
-				(ref "TP37")
-				(pin "1")
-				(pinfunction "1_1")
 				(pintype "passive")
 			)
 			(node

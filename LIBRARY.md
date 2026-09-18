@@ -92,3 +92,5 @@ from the footprint `descr` strings and the TE customer drawings, and attached by
 | `PinHeader_2x10` **instance J20 only** | `3dmodels/LaunchPad_LAUNCHXL-F28379D_Shadow.step` (opacity 0.45) | LaunchPad envelope 129.9 × 58.4 × 1.6 at z = 11.0 mm + its four 2×10 sockets, relative to J20 pad 1 (`S9_BOARD_SETUP.md` §1.1). Replace with TI's STEP when downloaded |
 
 Off-board and therefore not modelled: the LEM LA 100-P board, the DB37 90° adapter, the PrimeSTACK.
+
+**2026-09-17 (pre-S10):** `DSUB-37_Socket_Horizontal_P2.77x2.54mm_MountingHoles` shell pads renamed `SH`/`SH` → `G1`/`G2` so they match the `DSUB-37_Socket` symbol's shield pins (`SHIELD_DB37`); the six S8 symbols (SN65HVD230, LTV-817S, SolderJumper_2_Bridged, D_TVS_Dual_CAN, Conn_02x04_Counter_Clockwise, L_CommonMode) were restored from commit `9cf0c5a` after a restore had dropped them. 50 symbols / 59 units render.
