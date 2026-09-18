@@ -94,3 +94,5 @@ from the footprint `descr` strings and the TE customer drawings, and attached by
 Off-board and therefore not modelled: the LEM LA 100-P board, the DB37 90° adapter, the PrimeSTACK.
 
 **2026-09-17 (pre-S10):** `DSUB-37_Socket_Horizontal_P2.77x2.54mm_MountingHoles` shell pads renamed `SH`/`SH` → `G1`/`G2` so they match the `DSUB-37_Socket` symbol's shield pins (`SHIELD_DB37`); the six S8 symbols (SN65HVD230, LTV-817S, SolderJumper_2_Bridged, D_TVS_Dual_CAN, Conn_02x04_Counter_Clockwise, L_CommonMode) were restored from commit `9cf0c5a` after a restore had dropped them. 50 symbols / 59 units render.
+
+**2026-09-17 (pre-S10):** added **`D_Zener_SOT-23`** — `D_Zener` with SOT-23 pin numbers (**1 = A, 3 = K**, pin 2 NC absent), default footprint `SOT-23`. Used by D2 (BZX84C15). The generic `D_Zener` (K = 1, A = 2) put the cathode on the anode pad and the anode on the NC pad. 51 symbols / 60 units render.

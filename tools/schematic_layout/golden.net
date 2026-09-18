@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/home/jose/Kicad/FE_UFPR_4_0/FE_UFPR_4_0.kicad_sch")
-		(date "2026-09-17T21:32:06")
+		(date "2026-09-17T23:05:20")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -2088,8 +2088,8 @@
 			)
 			(libsource
 				(lib "FE_UFPR_4_0")
-				(part "D_Zener")
-				(description "Zener diode")
+				(part "D_Zener_SOT-23")
+				(description "Zener diode, SOT-23 BZX84 pinout: pin 1 = A, pin 2 = NC, pin 3 = K")
 			)
 			(property
 				(name "LCSC")
@@ -2109,7 +2109,7 @@
 			)
 			(property
 				(name "ki_fp_filters")
-				(value "TO-???* *_Diode_* *SingleDiode* D_*")
+				(value "SOT?23*")
 			)
 			(sheetpath
 				(names "/power/")
@@ -2121,10 +2121,10 @@
 					(name "A")
 					(pins
 						(pin
-							(num "1")
+							(num "3")
 						)
 						(pin
-							(num "2")
+							(num "1")
 						)
 					)
 				)
@@ -23980,27 +23980,23 @@
 		)
 		(libpart
 			(lib "FE_UFPR_4_0")
-			(part "D_Zener")
-			(description "Zener diode")
+			(part "D_Zener_SOT-23")
+			(description "Zener diode, SOT-23 BZX84 pinout: pin 1 = A, pin 2 = NC, pin 3 = K")
 			(footprints
-				(fp "TO-???*")
-				(fp "*_Diode_*")
-				(fp "*SingleDiode*")
-				(fp "D_*")
+				(fp "SOT?23*")
 			)
 			(fields
 				(field
 					(name "Reference") "D")
 				(field
-					(name "Value") "D_Zener")
+					(name "Value") "D_Zener_SOT-23")
 				(field
-					(name "Footprint")
-				)
+					(name "Footprint") "FE_UFPR_4_0:SOT-23")
 				(field
 					(name "Datasheet")
 				)
 				(field
-					(name "Description") "Zener diode")
+					(name "Description") "Zener diode, SOT-23 BZX84 pinout: pin 1 = A, pin 2 = NC, pin 3 = K")
 				(field
 					(name "LCSC")
 				)
@@ -24008,12 +24004,12 @@
 			(pins
 				(pin
 					(num "1")
-					(name "K")
+					(name "A")
 					(type "passive")
 				)
 				(pin
-					(num "2")
-					(name "A")
+					(num "3")
+					(name "K")
 					(type "passive")
 				)
 			)
@@ -25499,8 +25495,8 @@
 			)
 			(node
 				(ref "D2")
-				(pin "1")
-				(pinfunction "K_1")
+				(pin "3")
+				(pinfunction "K_3")
 				(pintype "passive")
 			)
 			(node
@@ -26312,14 +26308,14 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R36")
+				(ref "R37")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U5")
-				(pin "2")
-				(pinfunction "INA_2")
+				(pin "4")
+				(pinfunction "INB_4")
 				(pintype "input")
 			)
 		)
@@ -26334,14 +26330,14 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R37")
+				(ref "R36")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U5")
-				(pin "4")
-				(pinfunction "INB_4")
+				(pin "2")
+				(pinfunction "INA_2")
 				(pintype "input")
 			)
 		)
@@ -26353,28 +26349,6 @@
 				(ref "J23")
 				(pin "5")
 				(pinfunction "Pin_5_5")
-				(pintype "passive")
-			)
-			(node
-				(ref "R38")
-				(pin "1")
-				(pintype "passive")
-			)
-			(node
-				(ref "U6")
-				(pin "2")
-				(pinfunction "INA_2")
-				(pintype "input")
-			)
-		)
-		(net
-			(code "42")
-			(name "/PWM_VL_3V3")
-			(class "Gate")
-			(node
-				(ref "J23")
-				(pin "7")
-				(pinfunction "Pin_7_7")
 				(pintype "passive")
 			)
 			(node
@@ -26390,6 +26364,28 @@
 			)
 		)
 		(net
+			(code "42")
+			(name "/PWM_VL_3V3")
+			(class "Gate")
+			(node
+				(ref "J23")
+				(pin "7")
+				(pinfunction "Pin_7_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "R38")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U6")
+				(pin "2")
+				(pinfunction "INA_2")
+				(pintype "input")
+			)
+		)
+		(net
 			(code "43")
 			(name "/PWM_WH_3V3")
 			(class "Gate")
@@ -26400,14 +26396,14 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R40")
+				(ref "R41")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U7")
-				(pin "2")
-				(pinfunction "INA_2")
+				(pin "4")
+				(pinfunction "INB_4")
 				(pintype "input")
 			)
 		)
@@ -26422,14 +26418,14 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R41")
+				(ref "R40")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U7")
-				(pin "4")
-				(pinfunction "INB_4")
+				(pin "2")
+				(pinfunction "INA_2")
 				(pintype "input")
 			)
 		)
@@ -27972,7 +27968,7 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R18")
+				(ref "R19")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -27993,14 +27989,14 @@
 			(name "/gate_drive/PWM_UH_DRV")
 			(class "Gate")
 			(node
-				(ref "R18")
+				(ref "R19")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U5")
-				(pin "7")
-				(pinfunction "OUTA_7")
+				(pin "5")
+				(pinfunction "OUTB_5")
 				(pintype "output")
 			)
 		)
@@ -28020,7 +28016,7 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R19")
+				(ref "R18")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -28041,14 +28037,14 @@
 			(name "/gate_drive/PWM_UL_DRV")
 			(class "Gate")
 			(node
-				(ref "R19")
+				(ref "R18")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U5")
-				(pin "5")
-				(pinfunction "OUTB_5")
+				(pin "7")
+				(pinfunction "OUTA_7")
 				(pintype "output")
 			)
 		)
@@ -28068,7 +28064,7 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R20")
+				(ref "R21")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -28089,14 +28085,14 @@
 			(name "/gate_drive/PWM_VH_DRV")
 			(class "Gate")
 			(node
-				(ref "R20")
+				(ref "R21")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U6")
-				(pin "7")
-				(pinfunction "OUTA_7")
+				(pin "5")
+				(pinfunction "OUTB_5")
 				(pintype "output")
 			)
 		)
@@ -28116,7 +28112,7 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R21")
+				(ref "R20")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -28137,14 +28133,14 @@
 			(name "/gate_drive/PWM_VL_DRV")
 			(class "Gate")
 			(node
-				(ref "R21")
+				(ref "R20")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U6")
-				(pin "5")
-				(pinfunction "OUTB_5")
+				(pin "7")
+				(pinfunction "OUTA_7")
 				(pintype "output")
 			)
 		)
@@ -28164,7 +28160,7 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R22")
+				(ref "R23")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -28185,14 +28181,14 @@
 			(name "/gate_drive/PWM_WH_DRV")
 			(class "Gate")
 			(node
-				(ref "R22")
+				(ref "R23")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U7")
-				(pin "7")
-				(pinfunction "OUTA_7")
+				(pin "5")
+				(pinfunction "OUTB_5")
 				(pintype "output")
 			)
 		)
@@ -28212,7 +28208,7 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "R23")
+				(ref "R22")
 				(pin "2")
 				(pintype "passive")
 			)
@@ -28233,14 +28229,14 @@
 			(name "/gate_drive/PWM_WL_DRV")
 			(class "Gate")
 			(node
-				(ref "R23")
+				(ref "R22")
 				(pin "1")
 				(pintype "passive")
 			)
 			(node
 				(ref "U7")
-				(pin "5")
-				(pinfunction "OUTB_5")
+				(pin "7")
+				(pinfunction "OUTA_7")
 				(pintype "output")
 			)
 		)
@@ -28567,8 +28563,8 @@
 			(class "Default")
 			(node
 				(ref "D2")
-				(pin "2")
-				(pinfunction "A_2")
+				(pin "1")
+				(pinfunction "A_1")
 				(pintype "passive")
 			)
 			(node

@@ -1247,7 +1247,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "FE_UFPR_4_0:D_Zener"
+		(symbol "FE_UFPR_4_0:D_Zener_SOT-23"
 			(pin_numbers
 				(hide yes)
 			)
@@ -1270,7 +1270,7 @@
 					)
 				)
 			)
-			(property "Value" "D_Zener"
+			(property "Value" "D_Zener_SOT-23"
 				(at 0 -2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1280,7 +1280,7 @@
 					)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "FE_UFPR_4_0:SOT-23"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1302,7 +1302,7 @@
 					)
 				)
 			)
-			(property "Description" "Zener diode"
+			(property "Description" "Zener diode, SOT-23 BZX84 pinout: pin 1 = A, pin 2 = NC, pin 3 = K"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1335,7 +1335,7 @@
 					)
 				)
 			)
-			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+			(property "ki_fp_filters" "SOT?23*"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1346,7 +1346,7 @@
 					)
 				)
 			)
-			(symbol "D_Zener_0_1"
+			(symbol "D_Zener_SOT-23_0_1"
 				(polyline
 					(pts
 						(xy -1.27 -1.27) (xy -1.27 1.27) (xy -0.762 1.27)
@@ -1384,7 +1384,7 @@
 					)
 				)
 			)
-			(symbol "D_Zener_1_1"
+			(symbol "D_Zener_SOT-23_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 2.54)
@@ -1395,7 +1395,7 @@
 							)
 						)
 					)
-					(number "1"
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1413,7 +1413,7 @@
 							)
 						)
 					)
-					(number "2"
+					(number "1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -12186,7 +12186,7 @@
 		)
 	)
 	(symbol
-		(lib_id "FE_UFPR_4_0:D_Zener")
+		(lib_id "FE_UFPR_4_0:D_Zener_SOT-23")
 		(at 78.74 44.45 270)
 		(unit 1)
 		(body_style 1)
@@ -12262,10 +12262,10 @@
 				)
 			)
 		)
-		(pin "1"
+		(pin "3"
 			(uuid "9b471727-6054-41d1-bb46-7e79e244d93a")
 		)
-		(pin "2"
+		(pin "1"
 			(uuid "728ed72f-88fd-4dc4-9265-398179e11c8f")
 		)
 		(instances

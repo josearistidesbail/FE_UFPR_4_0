@@ -57,10 +57,13 @@ for d,(U,ph,rpa,rpb,rsa,rsb,ca,cb,rda,rdb,tpa,tpb) in enumerate(CH):
     for pin_y, jt in ((Y-5.08,"right bottom"), (Y+5.08,"right top")):     # ENA / ENB
         b.wire((XD-10.16,pin_y),(XD-13.97,pin_y))
         b.lab('GATE_EN_3V3', XD-13.97, pin_y, 0, jt)
+    # 2026-09-17: LOW side on channel A (INA/OUTA), HIGH side on channel B, to uncross the J23
+    # inputs and the DB37 outputs on the board. The IC-side resistors (rpa/rsa) stay with the
+    # channel-A pins; the DB37-side parts (cf/rd/tp) stay with their DB37 pin, i.e. cross rows.
     #        pin_y   up    wire-end     drop-x      shunt dir
     for pin_y, up, rp, rs, cf, rd, tp, xend, xdrop, hl, fk, hk in (
-            (Y-2.54, True,  rpa, rsa, ca, rda, tpa, XD-60.96, XD-45.72, 'H', VERT,  HORZU),
-            (Y+2.54, False, rpb, rsb, cb, rdb, tpb, XD-48.26, XD-33.02, 'L', VERTL, HORZD)):
+            (Y-2.54, True,  rpa, rsa, cb, rdb, tpb, XD-60.96, XD-45.72, 'L', VERT,  HORZU),
+            (Y+2.54, False, rpb, rsb, ca, rda, tpa, XD-48.26, XD-33.02, 'H', VERTL, HORZD)):
         b.wire((XD-10.16,pin_y),(xend,pin_y))
         b.shunt(rp, xdrop, pin_y, up=up, **fk)
         b.hlab(f'PWM_{ph}{hl}_3V3', xend, pin_y, 180, "right")
