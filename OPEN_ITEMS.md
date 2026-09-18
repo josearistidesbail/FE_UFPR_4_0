@@ -6,7 +6,6 @@ Keep the Open section short enough to read every session.
 
 ## Open
 
-- **[user, S10 — before the first track] Tighten placement per [`S10_PLACEMENT_REVIEW.md`](S10_PLACEMENT_REVIEW.md) §B.** (1) 17 connector-entry 1 nF caps sit at their amplifiers/drivers instead of at the pins (S4 / S6 §5.5 / S7 put them at the pin; only C58/C60 comply — 11–75 mm). (2) ADC charge buckets 11–25 mm from the header pads on ISNS_A/B/C, MOT_TEMP, MOT_TEMP_REF, ENC_SIN (VBUS/NTC show the 3 mm target). (3) U18's C116/C117 sit at U21, 18–20 mm away; U1's CIN 7.7 mm from VIN, SW→L1 6.7 mm. (4) Minor: LEM strips ordered opposite to J3's pins, R34 67 mm from D9, JP1 + TP30–35 under the LaunchPad.
 - **[S10, trivial] H1–H4 raise four `extra_footprint` parity warnings** — set the footprints' *Not in schematic* attribute (`board_only`) or accept them.
 - **[user] `_restore_backup_2026-09-17T15-06-19-842/` (2.9 MB project copy) is committed** — add `_restore_backup*/` to `.gitignore` and `git rm -r --cached` it; nothing in it is still needed (`.kicad_pro` and `.kicad_sym` were restored from git).
 
@@ -42,14 +41,15 @@ Keep the Open section short enough to read every session.
 - **[user] Confirm the installed motor sensor is a KTY81-210, not a PT1000** — measure cold: ≈2.0 kΩ = KTY81-2xx, ≈1.1 kΩ = PT1000, ≈110 Ω = PT100. NXP discontinued the KTY81 and newer EMRAX builds ship PT1000; R129 would be re-picked.
 - **[user] `SHIELD_ENC` is hard-tied to GND by R119 (fitted 0 Ω).** If the RM44AC's cable shield bonds to its readhead body, and the readhead to the motor frame, the board's "floating island" is already chassis-referenced. Check the RLS spec; if so, unfit R119 and keep the 1 MΩ ∥ 1 nF soft tie.
 - **[S10] Route `+5V_VEH` and `CAN_RS`** — both had zero pad assignments on the board until S9.5; the router never saw them.
-- **[S11] 389 silkscreen DRC warnings** (403 after S9.6, 389 after the 2026-09-17 hand re-placement; auto-placed reference text over pads/each other) — the silk pass fixes them together with the jumper tables and the JP2 warning text.
+- **[S11] 403 silkscreen DRC warnings** (389 after the 2026-09-17 hand re-placement, 403 after the S10 tightening — stacked entry rows; auto-placed reference text over pads/each other) — the silk pass fixes them together with the jumper tables and the JP2 warning text.
 - **[S11] Test points under the LaunchPad shadow are unreachable with it fitted** (TP20/23, TP36, TP42–TP50, TP53/54, …) — pull the ones the bench needs out to x < 59 or x > 119, or accept.
 - **[user] Pick the L-com DG9037MF variant** (male end must exit away from the module top face with the female end on X1) and check its ~25 mm body against the phase terminals; fallback = passive two-D-sub adapter PCB. **Bracket the board** — the two jackscrew joints carry no load. Height budget above the module: adapter ~25 + board 130 + LaunchPad overhang 17.9 mm.
 - **[S12] Verify C492427** (male 2×10 header) — Extended, 98 935 by `/api/search`; the `headers/list` endpoint did not surface it.
 
 ## Resolved (archive)
 
-- ~~[BLOCKS S10 ROUTING] netclass regression in `.kicad_pro`~~ — **resolved 2026-09-17 (pre-S10 validation):** `CAN` class + `*PWM_*_3V3` / `*CAN_H*` / `*CAN_L*` / `*MOT_TEMP_*` re-added; `kicad-cli` `(class …)` output = Analog 61 / CAN 4 / Gate 23 / Power_1A 9 / Power_3A 5 / Default 117. The same 15:06 restore had also dropped the six S8 symbols from `FE_UFPR_4_0.kicad_sym` — restored from `9cf0c5a`, ERC 0. Details: `DECISION_LOG.md` 2026-09-17 pre-S10 entries.
+- ~~[user, S10] Tighten placement per `S10_PLACEMENT_REVIEW.md` §B~~ — **applied 2026-09-17 by `tools/board_layout/tighten_s10.py`** (review §D): entry caps 2.3–7.6 mm from their pins, all eleven ADC buckets 3.1 mm from the header pads (SIN/COS identical), U18 100 nF 2.4 mm, U1 CIN 2.4 mm, R34 at D9, JP1 out of the shadow. DRC 0 errors, courtyards 0. Left as-is: U15↔ISNS_VREF caps ≈32 mm, U1 SW→L1 6.7 mm, D9 on the bottom edge, TP30–35 under the LaunchPad. **[user] review in the GUI; `9802b1b` is the pre-move state.**
+- ~~[BLOCKS S10 ROUTING] netclass regression in `.kicad_pro`~~ — **resolved 2026-09-17 (pre-S10 validation):** `CAN` class + `*PWM_*_3V3` / `*CAN_H*` / `*CAN_L*` / `*MOT_TEMP_*` re-added; `kicad-cli` `(class …)` output = Analog 61 / CAN 4 / Gate 23 / Power_1A 9 / Power_3A 5 / Default 117. The same 15:06 restore had also dropped the six S8 symbols from `FE_UFPR_4_0.kicad_sym` — restored from `9cf0c5a`, ERC 0 — **and reset the board rule minimums to KiCad defaults** (hole-to-hole 0.25, annular 0.10, clearance 0): S9 `rules` block restored from the backup the same day, DRC 0 errors. Details: `DECISION_LOG.md` 2026-09-17 pre-S10 entries.
 
 - ~~[team] Precharge / DC-bus contactor~~ — **dropped 2026-09-17 (user):** precharge is handled externally; nothing on this board, no relay, no connector, S8 not reopened. The "24 V coil vs GLV voltage" question goes with it (the separate 12 V shutdown-input assumption stays open).
 - ~~[S2] BoosterPack header gender~~ — **resolved S2:** `PinSocket_2x10`, bottom side, LaunchPad below.

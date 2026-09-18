@@ -77,3 +77,29 @@ ENC_SIN vs ENC_COS chains are also not geometrically matched (SIN's C107 at 12.7
 - Floorplan: encoder top-left (J4 → U16/U17 → J20), current sense bottom-left (J3 → U12–U14 → J22), power tree top-right (J1 → F1 → Q1 → C1/D1 → U1/L1 → U2/L2 → U3), gate drivers bottom-right over the DB37 gate pins, fault receivers bottom-right, ±15 V island bottom-left. NT2 star at the 24 V entry, NT3 at the Vbus divider, NT4 at J2-12/13, NT1 at U4.
 - Schematic delta vs golden is exactly the three deleted test points; ERC would be 0 again once the six symbols are restored.
 - 370 footprints; unconnected 499 = unrouted, expected.
+
+## D. Applied 2026-09-17 — `tools/board_layout/tighten_s10.py` (user's go: "can you try and move them?")
+
+The script holds every move as an explicit `{ref: (x, y, rot)}`, checks pad orientation (signal pad toward the
+connector / header) and courtyard-bbox overlaps, and saves through `pcbnew`. Re-run it on a board at the
+2026-09-17 state to reproduce; the user reviews in the GUI and reverts via git if disliked (commit `9802b1b`
+is the pre-move state).
+
+| Site | What moved | Result |
+|---|---|---|
+| DB37 strip | 16 entry caps (C37–C42, C44–C48, C58, C60, C64/C70/C77) in one row at y 207.5, each above its pin at 1.8 mm pitch; their shunt R (R24–R29, R42–R46, R67/R77/R89) in a row at y 204.3; TP10–TP15, TP22, TP47 in a row at y 201.1; F2 vertical beside C5 | cap-to-pin **2.3–6.6 mm** (was 11–75) |
+| J3 | C65/C72/C79 at x 169.0 on the pin rows, outside the housing courtyard (like the user's C99/C100 at J4) | 7.6 mm (housing-limited; was 19–46) |
+| J22 | cap column x 200.6 / 100 Ω column x 204.0, one cell per pin (C86/R102, C82/R98, C75/R86, C68/R74, C85/R101); U15 + C88 shifted 4.2 mm right | bucket **3.1 mm**, R 6.6 mm on all five (was 6.8–25.5) |
+| J20 | same pattern: C61, C121/R130, C122/R131 (+R132), C59 (kept vertical), C110/R117, C107/R112; R113 up 1.8 mm, R115 right 0.1 mm, C104 under U16 | bucket **3.1 mm** on all six; **SIN and COS geometrically identical** |
+| U18 | C116 into R121's slot beside pins 2/3, C117 below it, R121 above the IC | 100 nF **2.4 mm**, 1 µF 4.2 mm (was 18–20) |
+| U1 | C2 beside VIN/GND (pad-to-pad 2.4 / 2.8 mm), C3 beside it, C11 down 2.3 mm | CIN 2.4 mm (was 7.7) |
+| Misc | R34 beside D9 (was 67 mm); JP1 vertical between TP51/TP52, 0.7 mm outside the LaunchPad edge | — |
+
+Gates after the move: `kicad-cli pcb drc --severity-all --schematic-parity` **0 errors**, 403 silk warnings
+(199 overlap / 199 over copper / 5 edge — S11), parity = H1–H4 only, 0 courtyard overlaps; netlist identical
+to `golden.net`; rendered and inspected at 49 px/mm.
+
+**Residuals (not moved, by choice):** U15's buffered `ISNS_VREF` reaches its channel caps at ≈32 mm (the
+channel column is full); U1 SW→L1 stays 6.7 mm (L1 is boxed in by U1 and C8); D9 stays at the bottom edge,
+which faces the module on a vertical board; TP30–TP35 stay under the LaunchPad; the raw `ISNS_x_RAW` and
+`VBUS/NTC` runs from J2 to their amplifiers are unchanged (the entry RC now sits at the pin, which was the point).

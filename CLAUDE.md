@@ -34,8 +34,8 @@ Orientation still open (vertical per S9.6, horizontal on the table) — every co
 passives referenced to their own connector/IC pins. 370 footprints (TP20/23/37/54 and holes H5–H9 removed),
 DRC 0 errors (`--severity-all`; 389 silk warnings → S11; parity = 4 board-only holes H1–H4), ERC 0,
 `golden.net` re-baselined = 219 nets, netclasses 6 classes / 28 patterns verified from the netlist.
-**Next: the user tightens placement per [`S10_PLACEMENT_REVIEW.md`](S10_PLACEMENT_REVIEW.md) §B (entry caps
-at connectors, ADC buckets at header pins, U18/U1 decoupling), then routes S10/S11** — Claude does rules, DRC, docs.
+**§B tightening applied by `tools/board_layout/tighten_s10.py` (entry caps at pins, ADC buckets 3.1 mm from
+header pads, U18/U1 decoupling) — user reviews, then routes S10/S11** (`9802b1b` = pre-move state). Claude does rules, DRC, docs.
 ⚠ Pending: EMRAX KTY insulation class. Precharge/DC-bus contactor **dropped** (external). Rest: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
@@ -53,8 +53,8 @@ Full DB37 derivation + 3.0 comparison: [`DB37_PINOUT.md`](DB37_PINOUT.md).
 **Layout of the directory:** `FE_UFPR_4_0.kicad_{pro,sch,pcb,dru}` + 7 sub-sheets (`power`, `gate_drive`,
 `module_status`, `current_sense`, `encoder`, `launchpad`, `vehicle_io`); project libs
 `FE_UFPR_4_0.kicad_sym` / `.pretty`; `tools/schematic_layout/` (sheet generators, `canon.py`,
-`golden.net`, README with the KiCad traps); `tools/board_layout/` (`place_s9.py` reproduces the full
-placement — re-run it rather than hand-moving blocks; `swap_lp_headers.py`, `add_lp_shadow.py`);
+`golden.net`, README with the KiCad traps); `tools/board_layout/` (`place_s9.py` = the S9.6 generator, superseded by the user's hand placement;
+`tighten_s10.py` = the S10 entry-cap/bucket moves; `swap_lp_headers.py`, `add_lp_shadow.py`);
 `datasheets/` — PrimeSTACK DS (**p.2** controller interface, **p.5** mechanical, **p.6** DB37 pinout),
 SPRUI77 (LaunchPad, header Tables 1–4), RLS RM44 (**p.10** analog outputs, **p.20** order code), LEM LA 100-P,
 TE DTM13 customer drawings, LTV-817, ACT45B, SN65HVD230, and `ECU AM06.pdf` / `TCC.pdf` (reference only).
@@ -78,7 +78,8 @@ decisions to `DECISION_LOG.md` → capture in KiCad (MCP) → JLC-vet every new 
 - A tool's success message is not its output — check the artifact. An inherited blocker is a claim — re-test it.
 - Temp exports go to the session scratchpad, not the project directory.
 - A restore / `discard_or_reload` (`_restore_backup_*`) can roll back `.kicad_pro` **and** `.kicad_sym` — afterwards
-  check 6 classes / 28 patterns in the `(class …)` netlist output and that ERC shows no `lib_symbol_issues`.
+  diff the whole `board.design_settings` + `net_settings` blocks against the last good commit (6 classes / 28 patterns,
+  S9 minimums: clearance/track 0.127, hole-to-hole 0.5, annular 0.125) and check ERC shows no `lib_symbol_issues`.
   DRC runs with `--schematic-parity` (it is the only check comparing footprint pad names to symbol pins).
 
 ## Firmware cross-reference (AUTHORITATIVE)
