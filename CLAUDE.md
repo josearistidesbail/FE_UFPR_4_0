@@ -31,8 +31,8 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 **ROUTED + S11 PRE-FAB PASS APPLIED (2026-09-23): DRC 0 ERRORS / 0 UNCONNECTED / PARITY CLEAN, ERC 0, 7 SILK WARNINGS (all by design).**
 598 vias, In1 solid GND, `.kicad_dru` single-spoke waiver for C11/C13/L2/U17. H1–H4 are Ø4.3 M4 (`MountingHole_4.3mm_M4_ISO7380`,
-`board_only`; H2 hardware constraint in `OPEN_ITEMS.md`). 52 passive refdes hidden on silk (`tools/board_layout/prefab_s11.applied.json`).
-User to decide: net-name silk labels on the test points (`prefab_s11.py --tp-only --tp-labels=only`, 38/48 fit, 6 keep `TPxx`). Next: S12 (`REDESIGN_PLAN.md`) —
+`board_only`; H2 hardware constraint in `OPEN_ITEMS.md`). 49 passive refdes hidden on silk (`tools/board_layout/prefab_s11.applied.json`);
+test points carry their **net name** on silk, not `TPxx` (`tp_labels.applied.json`; TP2/28/32 excepted). Next: S12 (`REDESIGN_PLAN.md`) —
 JLC re-verification, BOM/CPL, fab package, firmware handoff. Review: [`S11_PREFAB_REVIEW.md`](S11_PREFAB_REVIEW.md) §6.
 ⚠ KiCad **Local History is disabled** (`TOOLING_NOTES.md`); **never `pcbnew.SaveBoard` into the project dir** — it rewrites `.kicad_pro`;
 restart the MCP server after any hand edit of `.kicad_pro`. Orientation still open; pending EMRAX KTY insulation class. Rest: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).

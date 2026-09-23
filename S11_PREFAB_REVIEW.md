@@ -160,6 +160,10 @@ part's fab body, ≥ 0.5 mm from the edge; candidates on the four sides of the c
 The script saves through `pcbnew.SaveBoard` into scratch only (it rewrites the `.kicad_pro` next to whatever it saves — `TOOLING_NOTES.md`);
 the board's round-trip is byte-identical, so `git diff` is exactly the pass. Zone fills around H1–H4 are stale in the file until the GUI refills (B).
 
-**Studied, user's call: net-name labels on the test points.** `--tp-only --tp-labels=only` (name replaces the `TPxx` on silk, falls back to `TPxx`
-where the name does not fit), run on the applied board: 38 of 48 names fit, TP2/10/12/19/28/32 keep `TPxx`, TP11/13/21/22 (DB37 / VBUS entry
-row) stay blank as today. `--tp-labels=both` (name beside the `TPxx`, from scratch): 34 of 48. DRC stays at the 7 warnings above in both modes.
+**Applied on the user's go (2026-09-23): net-name labels on the test points** (`tp_labels.applied.json`). `--tp-only --tp-labels=only` (name replaces
+the `TPxx` on silk, falls back to `TPxx` where the name does not fit) placed 38 of 48 on the committed board; `--tp-labels=both` (name beside the
+`TPxx`, from scratch) would have managed 34. The DB37 row was then fixed by hand in `tools/board_layout/tp_db37_labels.py`: the six PWM pads sit on
+a 2.6–3.25 mm pitch, so the two full names that fitted landed 3.5 mm off the row — replaced by one 2-letter label per pad (`WH WL VH VL UH UL`, 2.1 mm
+above each pad) under a `PWM 15V` legend, plus `VBUS` (TP19, in the old `TP19` slot; R57's reference up 0.3 mm), `RTN` (TP21; J2's reference down
+0.2 mm) and `NTC` (TP22, clear of NT3). C44's reference had no free side left and is hidden. Final: 36 full names + 6 + 3 short, TP2/TP28/TP32 keep
+`TPxx`, no blank test point. DRC unchanged (7 warnings). Every label is a footprint-owned F.SilkS user text, so it moves with its test point.
