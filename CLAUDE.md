@@ -105,7 +105,7 @@ Never contradict these without logging a decision; the final board must answer `
 | Over-temperature fault | GPIO64 (in, pull-up) | software read only |
 | DC-link OV fault | GPIO52 (in, pull-up) | software read only |
 | Encoder SIN / COS | ADCINA2 / ADCINB2 | RM44AC, 1 sin/cos cycle per mech rev (**datasheet order code `01S`, S7**); ×10 pole pairs electrical. **S7: `RES_SINCOS_BIAS_CODE` 3072 → 2039, `RES_SINCOS_AMPL_CODE` 990 → 1745** |
-| Phase current A / B / **C** | ADCINB4 / ADCINC4 / **ADCINA5** | **S6: channel C added on ADCINA5 = J7-66**, suggested ADC-A SOC1. J7-65…69 carry the whole block on five contiguous pins. KCL reconstruction becomes optional |
+| Phase current A / B / C | **ADCINA5** / ADCINC4 / **ADCINB4** | **A↔C swapped 2026-09-22** for routing: A = J7-66 (J22.12), C = J7-68 (J22.16); firmware must swap its A/C channel defines (S12). S6 added channel C; J7-65…69 carry the whole block on five contiguous pins. KCL reconstruction optional |
 | Current offset refs | ADCINA4 (J7-69) / ADCINB5 (J7-65) | **S6: KEPT** — both read the buffered `ISNS_VREF` ≈1.4685 V through their own 100 Ω + 22 nF buckets. Same node on two converters ⇒ a free ADC-A vs ADC-B cross-check |
 | Vbus sense | ADCINC2 (J3-27) | module outputs 6.5 V @ 900 VDC. **S5: `VBUS_DIVIDER_RATIO` 297.14 → 341.538**, full scale 1024.6 V, 0.250150 V/code |
 | **Motor temperature** | **ADCINB3** (J3-25) | **chosen S9.5** — EMRAX 208 stator **KTY81-210** on J4 cavities 6/7. PTC: **hotter = HIGHER code**, opposite to the module NTC. Fault window rejects `<1400` / `>3100` → stop the motor (EMRAX requires it) |

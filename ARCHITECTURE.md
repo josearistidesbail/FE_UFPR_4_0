@@ -245,7 +245,7 @@ dominant, layout-critical cargo); module-side raw signals export from there.
 | `SHIELD_DB37` | *internal to gate_drive* | DB37 pin 1 "true earth/shield" + shell G1/G2 → 1 nF ∥ 1 MΩ ∥ JP2 → GND |
 | `MOD_AUX15V_1` `MOD_AUX15V_2` | *internal to gate_drive* | DB37 9/27 = module **15 V/50 mA supply output**; test points TP17/TP18 only |
 | `ISNS_A_RAW` `ISNS_B_RAW` `ISNS_C_RAW` + `ISNS_RTN` | gate_drive (DB37 30/31/32 + return) → current_sense | internal sensors ~8 mV/A, bias bench item #3 |
-| `ISNS_A_ADC` `ISNS_B_ADC` `ISNS_C_ADC` | current_sense → launchpad | ADCINB4 / ADCINC4 / S8 pin; 1.5 V ± 1.4 V @ ≥±300 A |
+| `ISNS_A_ADC` `ISNS_B_ADC` `ISNS_C_ADC` | current_sense → launchpad | ADCINA5 / ADCINC4 / ADCINB4 (A↔C swapped 2026-09-22); 1.5 V ± 1.4 V @ ≥±300 A |
 | `ISNS_REF_A_ADC` `ISNS_REF_B_ADC` | current_sense → launchpad | ADCINA4 / ADCINB5 bias taps (keep/drop S6) |
 | `ENC_SIN_ADC` `ENC_COS_ADC` | encoder → launchpad | ADCINA2 / ADCINB2, 1.5 V ± 1.4 V matched |
 | `CAN_TX_3V3` / `CAN_RX_3V3` | launchpad ↔ vehicle_io | GPIO pair chosen in S8 |

@@ -1,0 +1,9 @@
+(version 1)
+
+# S9: JLCPCB 4-layer floors are 0.09 mm track/space; the netclass clearances (0.20-0.30 mm)
+# are routing discipline, not fab limits.  A fine-pitch package cannot meet them between its
+# own pads, so pad-to-pad inside U2 (TPS62933F, SOT-583, 0.5 mm pitch) drops to 0.15 mm,
+# which is still 1.6x the JLC floor.
+(rule "U2 SOT-583 pad-to-pad"
+	(condition "A.Type == 'Pad' && B.Type == 'Pad' && A.memberOfFootprint('U2') && B.memberOfFootprint('U2')")
+	(constraint clearance (min 0.15mm)))

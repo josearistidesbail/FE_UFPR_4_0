@@ -333,6 +333,9 @@ worst case. S3's supply choice survives unchanged.
 
 **`ISNS_C_ADC` → ADCINA5 → BoosterPack site-2 `J7-66`** (SPRUI77 Table 3, GPIO94).
 
+> ⚠ **Superseded 2026-09-22:** `ISNS_A_ADC` and `ISNS_C_ADC` were swapped for routing — A is now on
+> J7-66 / ADCINA5, C on J7-68 / ADCINB4 (see `DECISION_LOG.md`). The table below is the S6 allocation.
+
 S5 had left ADC-A SOC1 free and nominated ADCINA3 (J3-26) or ADCINA5 (J7-66). ADCINA5 wins on a
 layout argument that only shows up when you read the header table: the current-sense signals occupy
 **five contiguous pins on one header**.

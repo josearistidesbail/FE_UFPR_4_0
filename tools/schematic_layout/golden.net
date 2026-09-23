@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/home/jose/Kicad/FE_UFPR_4_0/FE_UFPR_4_0.kicad_sch")
-		(date "2026-09-17T23:05:20")
+		(date "2026-09-22T21:56:35")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -25986,8 +25986,8 @@
 			)
 			(node
 				(ref "J22")
-				(pin "16")
-				(pinfunction "Pin_16_16")
+				(pin "12")
+				(pinfunction "Pin_12_12")
 				(pintype "passive")
 			)
 			(node
@@ -26080,8 +26080,8 @@
 			)
 			(node
 				(ref "J22")
-				(pin "12")
-				(pinfunction "Pin_12_12")
+				(pin "16")
+				(pinfunction "Pin_16_16")
 				(pintype "passive")
 			)
 			(node

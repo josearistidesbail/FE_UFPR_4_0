@@ -285,9 +285,9 @@ mismatches; the remaining 47 socket pins are explicit no-connects.** The table:
 | `GND` | GND | J2-20 | J21.2 | OK | C1.2, C10.2, C100.2, C101.2, C102.2, C103.2 … |
 | `GND` | GND | J7-62 | J22.4 | OK | C1.2, C10.2, C100.2, C101.2, C102.2, C103.2 … |
 | `GND` | GND | J6-60 | J23.2 | OK | C1.2, C10.2, C100.2, C101.2, C102.2, C103.2 … |
-| `ISNS_A_ADC` | ADCINB4 | J7-68 | J22.16 | OK | C68.1, R74.2 |
+| `ISNS_A_ADC` | ADCINB4 | J7-68 | J22.16 | OK | C68.1, R74.2 — **swapped with C 2026-09-22: now ADCINA5 / J7-66 / J22.12** |
 | `ISNS_B_ADC` | ADCINC4 | J7-67 | J22.14 | OK | C75.1, R86.2 |
-| `ISNS_C_ADC` | ADCINA5 | J7-66 | J22.12 | OK | C82.1, R98.2 |
+| `ISNS_C_ADC` | ADCINA5 | J7-66 | J22.12 | OK | C82.1, R98.2 — **now ADCINB4 / J7-68 / J22.16** |
 | `ISNS_REF_A_ADC` | ADCINA4 | J7-69 | J22.18 | OK | C85.1, R101.2 |
 | `ISNS_REF_B_ADC` | ADCINB5 | J7-65 | J22.10 | OK | C86.1, R102.2 |
 | `ISR_PROBE_3V3` | GPIO67 | J1-5 | J20.9 | OK | TP48.1 |
