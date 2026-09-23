@@ -138,3 +138,28 @@ schematic/library items (§2-A/J/L), DRC zero with waivers logged, then the S12 
 firmware handoff, `v4.0-release` tag). Open hardware questions that do not block the order but do
 block bring-up are unchanged in `OPEN_ITEMS.md` (KTY insulation class, DTM cavity numbering, DB37
 MPN, orientation/bracket).
+
+## 6. Pre-fab pass applied (2026-09-23, `tools/board_layout/prefab_s11.py`)
+
+| Item | Before | After |
+|---|---|---|
+| DRC errors / unconnected | 0 / 0 | 0 / 0 |
+| Schematic parity | 4 `extra_footprint` (H1–H4) | 0 (`board_only`) |
+| `via_dangling` | 1 (spare `+5V`) | 0 (deleted) |
+| Silk warnings | 368 (169 over copper, 199 overlap) + 5 edge | 3 overlap (R24 outline × J2 outline) + 4 edge (J2/J5 bodies, by design) |
+| References on silk | 363 visible, unplaced | 311 placed by search, 52 hidden (36 R, 12 C, TP11/13/21/22) |
+| Jumper pad-number labels | 15 | 10 (5 removed, 3 nudged) |
+| Silk title | `MOTOR CONTROLLER V3` ×2 | `FE_UFPR 4.0 - FSAE - 2026-09` (F), `FE_UFPR 4.0 - FORMULA UFPR` (B) |
+| H1–H4 | Ø3.2 M3 | Ø4.3 M4 `MountingHole_4.3mm_M4_ISO7380` (user); H2 clears Q1's courtyard by 0.2 mm — no washer there |
+| ERC | 1 (`power_pin_not_driven` U4.1) | 0 (`PWR_FLAG` #FLG07 on `PGND_MOD` at NT2) |
+| Netlist vs `golden.net` | identical | identical (power symbols are not exported) |
+
+Placement rule for a reference: 1.0 / 0.15 mm text, no pad within 0.2 mm, no silk graphic within 0.15 mm, no other reference, not over another
+part's fab body, ≥ 0.5 mm from the edge; candidates on the four sides of the courtyard at gaps 0.2–3 mm (4 mm for J/U/TP/JP/D), sliding in
+0.5 mm steps, upright first then rotated; when nothing fits the reference is hidden (JLC places from the CPL, `${REFERENCE}` stays on F.Fab).
+The script saves through `pcbnew.SaveBoard` into scratch only (it rewrites the `.kicad_pro` next to whatever it saves — `TOOLING_NOTES.md`);
+the board's round-trip is byte-identical, so `git diff` is exactly the pass. Zone fills around H1–H4 are stale in the file until the GUI refills (B).
+
+**Studied, user's call: net-name labels on the test points.** `--tp-only --tp-labels=only` (name replaces the `TPxx` on silk, falls back to `TPxx`
+where the name does not fit), run on the applied board: 38 of 48 names fit, TP2/10/12/19/28/32 keep `TPxx`, TP11/13/21/22 (DB37 / VBUS entry
+row) stay blank as today. `--tp-labels=both` (name beside the `TPxx`, from scratch): 34 of 48. DRC stays at the 7 warnings above in both modes.

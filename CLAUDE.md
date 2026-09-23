@@ -29,13 +29,13 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 ## Current phase
 
-**ROUTED (user, 2026-09-23, `cbd091b`) + S11 GND STITCHING APPLIED; DRC 0 ERRORS / 0 UNCONNECTED.**
-598 vias, In1 solid GND, `.kicad_dru` single-spoke waiver for C11/C13/L2/U17. Remaining before S12:
-silk pass (`MOTOR CONTROLLER V3` text, 368 refdes warnings), spare `+5V` via, H1–H4 `board_only`,
-`PWR_FLAG` on `PGND_MOD` (ERC), then re-baseline `golden.net`. Full review: [`S11_PREFAB_REVIEW.md`](S11_PREFAB_REVIEW.md).
-⚠ KiCad **Local History is disabled** (its corrupt `.history/` rolled the project back twice — `TOOLING_NOTES.md`);
-restart the MCP server after any hand edit of `.kicad_pro`. Orientation still open; precharge dropped (external).
-Pending: EMRAX KTY insulation class. Rest: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
+**ROUTED + S11 PRE-FAB PASS APPLIED (2026-09-23): DRC 0 ERRORS / 0 UNCONNECTED / PARITY CLEAN, ERC 0, 7 SILK WARNINGS (all by design).**
+598 vias, In1 solid GND, `.kicad_dru` single-spoke waiver for C11/C13/L2/U17. H1–H4 are Ø4.3 M4 (`MountingHole_4.3mm_M4_ISO7380`,
+`board_only`; H2 hardware constraint in `OPEN_ITEMS.md`). 52 passive refdes hidden on silk (`tools/board_layout/prefab_s11.applied.json`).
+User to decide: net-name silk labels on the test points (`prefab_s11.py --tp-only --tp-labels=only`, 38/48 fit, 6 keep `TPxx`). Next: S12 (`REDESIGN_PLAN.md`) —
+JLC re-verification, BOM/CPL, fab package, firmware handoff. Review: [`S11_PREFAB_REVIEW.md`](S11_PREFAB_REVIEW.md) §6.
+⚠ KiCad **Local History is disabled** (`TOOLING_NOTES.md`); **never `pcbnew.SaveBoard` into the project dir** — it rewrites `.kicad_pro`;
+restart the MCP server after any hand edit of `.kicad_pro`. Orientation still open; pending EMRAX KTY insulation class. Rest: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
 ## Roadmap, documents, session rhythm
@@ -76,7 +76,7 @@ decisions to `DECISION_LOG.md` → capture in KiCad (MCP) → JLC-vet every new 
   has an `LCSC` property. After external `.kicad_pcb` edits, `open_project` before the next MCP write.
 - A tool's success message is not its output — check the artifact. An inherited blocker is a claim — re-test it.
 - Temp exports go to the session scratchpad, not the project directory.
-- A restore / `discard_or_reload` (`_restore_backup_*`) can roll back `.kicad_pro` **and** `.kicad_sym` — afterwards
+- A restore / `discard_or_reload` (`_restore_backup_*`) — or any script's `pcbnew.SaveBoard` into the project dir — can roll back `.kicad_pro` **and** `.kicad_sym` — afterwards
   diff the whole `board.design_settings` + `net_settings` blocks against the last good commit (6 classes / 28 patterns,
   S9 minimums: clearance/track 0.127, hole-to-hole 0.5, annular 0.125) and check ERC shows no `lib_symbol_issues`.
   DRC runs with `--schematic-parity` (it is the only check comparing footprint pad names to symbol pins).

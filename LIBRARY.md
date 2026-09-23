@@ -61,7 +61,7 @@ re-export SVGs after any library edit, and never import a symbol whose definitio
 
 ### Footprint library inventory
 
-`R_0603/0805/1206/2512` · `C_0603/0805/1206/1210` · `L_0805/1206` · `PinHeader_2x10_P2.54mm_Vertical` · `PinSocket_2x10_P2.54mm_Vertical` · `DSUB-37_Socket_Horizontal_P2.77x2.54mm_MountingHoles` · `TestPoint_Pad_D1.5mm` · `TestPoint_THTPad_D1.5mm_Drill0.7mm` · `MountingHole_3.2mm_M3` · `MountingHole_3.2mm_M3_Pad` · `SolderJumper-2_P1.3mm_Open` · `SolderJumper-3_P1.3mm_Open_NumberLabels`
+`R_0603/0805/1206/2512` · `C_0603/0805/1206/1210` · `L_0805/1206` · `PinHeader_2x10_P2.54mm_Vertical` · `PinSocket_2x10_P2.54mm_Vertical` · `DSUB-37_Socket_Horizontal_P2.77x2.54mm_MountingHoles` · `TestPoint_Pad_D1.5mm` · `TestPoint_THTPad_D1.5mm_Drill0.7mm` · `MountingHole_3.2mm_M3` · `MountingHole_3.2mm_M3_Pad` · `MountingHole_4.3mm_M4_ISO7380` · `SolderJumper-2_P1.3mm_Open` · `SolderJumper-3_P1.3mm_Open_NumberLabels`
 
 **Appended in S4 (38 → 40 footprints):** `SOIC-8_3.9x4.9mm_P1.27mm` · `SOT-23-6` — both straight re-exports of KiCad standards.
 
@@ -92,6 +92,8 @@ from the footprint `descr` strings and the TE customer drawings, and attached by
 | `PinHeader_2x10` **instance J20 only** | `3dmodels/LaunchPad_LAUNCHXL-F28379D_Shadow.step` (opacity 0.45) | LaunchPad envelope 129.9 × 58.4 × 1.6 at z = 11.0 mm + its four 2×10 sockets, relative to J20 pad 1 (`S9_BOARD_SETUP.md` §1.1). Replace with TI's STEP when downloaded |
 
 Off-board and therefore not modelled: the LEM LA 100-P board, the DB37 90° adapter, the PrimeSTACK.
+
+**2026-09-23 (S11):** `MountingHole_4.3mm_M4_ISO7380` — straight re-export of KiCad's MountingHole lib (Ø4.3 NPTH, button-head courtyard r 4.05); H1–H4 moved to it (M3 → M4, user). `MountingHole_3.2mm_M3` / `_Pad` stay in the lib, now unused. Renders (`kicad-cli fp export svg`).
 
 **2026-09-17 (pre-S10):** `DSUB-37_Socket_Horizontal_P2.77x2.54mm_MountingHoles` shell pads renamed `SH`/`SH` → `G1`/`G2` so they match the `DSUB-37_Socket` symbol's shield pins (`SHIELD_DB37`); the six S8 symbols (SN65HVD230, LTV-817S, SolderJumper_2_Bridged, D_TVS_Dual_CAN, Conn_02x04_Counter_Clockwise, L_CommonMode) were restored from commit `9cf0c5a` after a restore had dropped them. 50 symbols / 59 units render.
 
