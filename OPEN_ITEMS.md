@@ -6,6 +6,12 @@ Keep the Open section short enough to read every session.
 
 ## Open
 
+- **[user, S10] Refill zones (B) on first open** — `fix_s10_u1.py` changed every zone's clearance to 0.3 mm and made the `PWR_U1_SW` zone solid, but the saved fills are the old ones.
+- **[user, S10] `ISNS_B_RAW` track vs TP33 pad 1: 0.10 mm, Analog needs 0.30** — the only clearance error on the board (2026-09-23 DRC).
+- **[user, S10] 35 `starved_thermal` errors remain** (0603 GND pads on the priority-0 GND zone with one spoke: C11, C13, C21, C41, C54, C59, C60, C68, C75, C82, C83, C85, C87, C89, C91, C110, C112, C114, C122, R26, R29, R32, R77, U2.4, U8.2, U11.2/3, U17.4, U18.2, U20.4, U21.2, L2.2, C11 in +13V5) — either a local pour with solid pads, a short stub to the plane, or `min_resolved_spokes` 1 for those footprints.
+- **[user, S10] `SW_MAIN_3V3` still open** (TP51 ↔ JP1 ↔ J21.20); 51 unconnected items in total.
+- **[user, S10] ERC error `power_pin_not_driven`, U4 pin 1 (`-Vin` on `PGND_MOD`)** — since U4/C23/C24 moved to `+24V_MOD`/`PGND_MOD`; add a PWR_FLAG or a power-output pin on `PGND_MOD`.
+- **[user] Find what rolled `.kicad_pro` back twice (2026-09-17, 2026-09-22)** — both times CAN class + rules block went to KiCad defaults; `DECISION_LOG.md` 2026-09-23. Until found, diff `board.design_settings` + `net_settings` against `586d0da` at every session start.
 - **[S10, trivial] H1–H4 raise four `extra_footprint` parity warnings** — set the footprints' *Not in schematic* attribute (`board_only`) or accept them.
 - **[user] `_restore_backup_2026-09-17T15-06-19-842/` (2.9 MB project copy) is committed** — add `_restore_backup*/` to `.gitignore` and `git rm -r --cached` it; nothing in it is still needed (`.kicad_pro` and `.kicad_sym` were restored from git).
 

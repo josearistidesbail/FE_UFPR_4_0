@@ -2118,7 +2118,7 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 69.85) (xy 184.15 69.85)
+			(xy 177.8 69.85) (xy 190.5 69.85)
 		)
 		(stroke
 			(width 0)
@@ -2218,7 +2218,7 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 82.55) (xy 184.15 82.55)
+			(xy 177.8 82.55) (xy 190.5 82.55)
 		)
 		(stroke
 			(width 0)
@@ -2768,16 +2768,6 @@
 	)
 	(wire
 		(pts
-			(xy 184.15 69.85) (xy 190.5 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bafc432c-62bc-4135-b143-427957365d6c")
-	)
-	(wire
-		(pts
 			(xy 120.65 59.69) (xy 120.65 67.31)
 		)
 		(stroke
@@ -2995,16 +2985,6 @@
 			(type default)
 		)
 		(uuid "e44141fd-51d4-4788-80bb-7f5b4665105d")
-	)
-	(wire
-		(pts
-			(xy 184.15 82.55) (xy 190.5 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e6d21e01-2c74-47fa-b0ba-219ee1ed8f1a")
 	)
 	(wire
 		(pts
@@ -6924,95 +6904,6 @@
 		)
 	)
 	(symbol
-		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 184.15 69.85 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "922b3fbe-cb2b-4528-9c65-5211275a014b")
-		(property "Reference" "TP42"
-			(at 182.88 66.04 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "ENC_VREF3V"
-			(at 182.88 63.5 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 184.15 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 184.15 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 184.15 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "NOFIT"
-			(at 184.15 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "66b4ec53-aa5e-491e-b783-cbcd15e50543")
-		)
-		(instances
-			(project "FE_UFPR_4_0"
-				(path "/0cde0ae3-e31e-4592-8212-8a072a248a80/c87dd457-99fd-4c81-82bb-75763b6537d2"
-					(reference "TP42")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "FE_UFPR_4_0:BAT54S")
 		(at 226.06 157.48 180)
 		(unit 1)
@@ -8639,95 +8530,6 @@
 			(project "FE_UFPR_4_0"
 				(path "/0cde0ae3-e31e-4592-8212-8a072a248a80/c87dd457-99fd-4c81-82bb-75763b6537d2"
 					(reference "TP38")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "FE_UFPR_4_0:TestPoint")
-		(at 184.15 82.55 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "e02e07ea-9ef5-4987-91a6-b2d66ac7f3b3")
-		(property "Reference" "TP43"
-			(at 182.88 78.74 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "ENC_VREF_HI"
-			(at 182.88 76.2 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "FE_UFPR_4_0:TestPoint_Pad_D1.5mm"
-			(at 184.15 82.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 184.15 82.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "test point"
-			(at 184.15 82.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "NOFIT"
-			(at 184.15 82.55 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "770fa22f-ef6f-4fd1-87b2-fa870a76576f")
-		)
-		(instances
-			(project "FE_UFPR_4_0"
-				(path "/0cde0ae3-e31e-4592-8212-8a072a248a80/c87dd457-99fd-4c81-82bb-75763b6537d2"
-					(reference "TP43")
 					(unit 1)
 				)
 			)

@@ -7,3 +7,22 @@
 (rule "U2 SOT-583 pad-to-pad"
 	(condition "A.Type == 'Pad' && B.Type == 'Pad' && A.memberOfFootprint('U2') && B.memberOfFootprint('U2')")
 	(constraint clearance (min 0.15mm)))
+
+# S10 (2026-09-23): the pad-to-pad rule is not enough to *leave* the package.  Pins 2 (EN) and
+# 3 (VIN) sit between the two GND pins (1, 4); GND is Power_3A with 0.30 mm clearance, and a
+# track of any width centred on a 0.30 mm pad at 0.50 mm pitch is 0.35 mm - w/2 from the GND
+# pad edge, so it needs w <= 0.10 mm to keep 0.30 mm: impossible.  Anything touching U2's pads
+# gets the same 0.15 mm floor, and so do two items that both cross U2's courtyard (the two
+# escapes from pins 2 and 3 are 0.5 mm apart: 0.20-0.225 mm edge to edge, less than the
+# 0.25 mm Power_1A clearance).  Zones keep their own clearance setting (KiCad uses the larger).
+(rule "U2 SOT-583 escape"
+	(condition "(A.memberOfFootprint('U2') || A.intersectsCourtyard('U2')) && (B.memberOfFootprint('U2') || B.intersectsCourtyard('U2'))")
+	(constraint clearance (min 0.15mm)))
+
+# U2's pads connect solid to any zone (GND pins 1/4, SW pin 5, VIN pin 3): the two GND zones
+# and the PWR_U2_SW zone could only put one thermal spoke on them (starved_thermal), and the
+# input/SW loop of a 0.5 mm-pitch buck must not hang on a spoke.  Same intent as U1's
+# footprint-level solid connection, expressed as a rule because the board is open in the GUI.
+(rule "U2 solid zone connection"
+	(condition "A.memberOfFootprint('U2')")
+	(constraint zone_connection solid))

@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/home/jose/Kicad/FE_UFPR_4_0/FE_UFPR_4_0.kicad_sch")
-		(date "2026-09-22T21:56:35")
+		(date "2026-09-23T13:31:14")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -18557,120 +18557,6 @@
 			)
 		)
 		(comp
-			(ref "TP42")
-			(value "ENC_VREF3V")
-			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-			(description "test point")
-			(fields
-				(field
-					(name "LCSC") "NOFIT")
-				(field
-					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description") "test point")
-			)
-			(libsource
-				(lib "FE_UFPR_4_0")
-				(part "TestPoint")
-				(description "test point")
-			)
-			(property
-				(name "LCSC")
-				(value "NOFIT")
-			)
-			(property
-				(name "Sheetname")
-				(value "encoder")
-			)
-			(property
-				(name "Sheetfile")
-				(value "encoder.kicad_sch")
-			)
-			(property
-				(name "ki_keywords")
-				(value "test point tp")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "Pin* Test*")
-			)
-			(sheetpath
-				(names "/encoder/")
-				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
-			)
-			(tstamps "922b3fbe-cb2b-4528-9c65-5211275a014b")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-					)
-				)
-			)
-		)
-		(comp
-			(ref "TP43")
-			(value "ENC_VREF_HI")
-			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-			(description "test point")
-			(fields
-				(field
-					(name "LCSC") "NOFIT")
-				(field
-					(name "Footprint") "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
-				(field
-					(name "Datasheet")
-				)
-				(field
-					(name "Description") "test point")
-			)
-			(libsource
-				(lib "FE_UFPR_4_0")
-				(part "TestPoint")
-				(description "test point")
-			)
-			(property
-				(name "LCSC")
-				(value "NOFIT")
-			)
-			(property
-				(name "Sheetname")
-				(value "encoder")
-			)
-			(property
-				(name "Sheetfile")
-				(value "encoder.kicad_sch")
-			)
-			(property
-				(name "ki_keywords")
-				(value "test point tp")
-			)
-			(property
-				(name "ki_fp_filters")
-				(value "Pin* Test*")
-			)
-			(sheetpath
-				(names "/encoder/")
-				(tstamps "/c87dd457-99fd-4c81-82bb-75763b6537d2/")
-			)
-			(tstamps "e02e07ea-9ef5-4987-91a6-b2d66ac7f3b3")
-			(units
-				(unit
-					(name "A")
-					(pins
-						(pin
-							(num "1")
-						)
-					)
-				)
-			)
-		)
-		(comp
 			(ref "TP44")
 			(value "ENC_VDD")
 			(footprint "FE_UFPR_4_0:TestPoint_Pad_D1.5mm")
@@ -25425,6 +25311,16 @@
 			(name "+24V_MOD")
 			(class "Power_3A")
 			(node
+				(ref "C23")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C24")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
 				(ref "C5")
 				(pin "1")
 				(pintype "passive")
@@ -25452,6 +25348,12 @@
 				(pinfunction "1_1")
 				(pintype "passive")
 			)
+			(node
+				(ref "U4")
+				(pin "2")
+				(pinfunction "+Vin_2")
+				(pintype "power_in")
+			)
 		)
 		(net
 			(code "8")
@@ -25464,16 +25366,6 @@
 			)
 			(node
 				(ref "C2")
-				(pin "1")
-				(pintype "passive")
-			)
-			(node
-				(ref "C23")
-				(pin "1")
-				(pintype "passive")
-			)
-			(node
-				(ref "C24")
 				(pin "1")
 				(pintype "passive")
 			)
@@ -25530,12 +25422,6 @@
 				(ref "U1")
 				(pin "2")
 				(pinfunction "VIN_2")
-				(pintype "power_in")
-			)
-			(node
-				(ref "U4")
-				(pin "2")
-				(pinfunction "+Vin_2")
 				(pintype "power_in")
 			)
 		)
@@ -27658,12 +27544,6 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "TP42")
-				(pin "1")
-				(pinfunction "1_1")
-				(pintype "passive")
-			)
-			(node
 				(ref "U17")
 				(pin "1")
 				(pinfunction "OUTA_1")
@@ -27714,12 +27594,6 @@
 			(node
 				(ref "R115")
 				(pin "1")
-				(pintype "passive")
-			)
-			(node
-				(ref "TP43")
-				(pin "1")
-				(pinfunction "1_1")
 				(pintype "passive")
 			)
 			(node
@@ -29146,16 +29020,6 @@
 				(pintype "passive")
 			)
 			(node
-				(ref "C23")
-				(pin "2")
-				(pintype "passive")
-			)
-			(node
-				(ref "C24")
-				(pin "2")
-				(pintype "passive")
-			)
-			(node
 				(ref "C29")
 				(pin "2")
 				(pintype "passive")
@@ -29946,12 +29810,6 @@
 				(pintype "power_in")
 			)
 			(node
-				(ref "U4")
-				(pin "1")
-				(pinfunction "-Vin_1")
-				(pintype "power_in")
-			)
-			(node
 				(ref "U5")
 				(pin "3")
 				(pinfunction "GND_3")
@@ -30322,6 +30180,16 @@
 			(name "PGND_MOD")
 			(class "Power_3A")
 			(node
+				(ref "C23")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C24")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
 				(ref "J2")
 				(pin "10")
 				(pinfunction "10_10")
@@ -30338,6 +30206,12 @@
 				(pin "1")
 				(pinfunction "1_1")
 				(pintype "passive")
+			)
+			(node
+				(ref "U4")
+				(pin "1")
+				(pinfunction "-Vin_1")
+				(pintype "power_in")
 			)
 		)
 		(net
