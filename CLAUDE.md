@@ -29,13 +29,13 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 ## Current phase
 
-**ROUTED + S11 PRE-FAB PASS APPLIED (2026-09-23): DRC 0 ERRORS / 0 UNCONNECTED / PARITY CLEAN, ERC 0, 7 SILK WARNINGS (all by design).**
-598 vias, In1 solid GND, `.kicad_dru` single-spoke waiver for C11/C13/L2/U17. H1–H4 are Ø4.3 M4 (`MountingHole_4.3mm_M4_ISO7380`,
-`board_only`; H2 hardware constraint in `OPEN_ITEMS.md`). 49 passive refdes hidden on silk (`tools/board_layout/prefab_s11.applied.json`);
-test points carry their **net name** on silk, not `TPxx` (`tp_labels.applied.json`; TP2/28/32 excepted). **Next: S12 — start from
-[`S12_PREP.md`](S12_PREP.md)** (exports + `tools/fab/` scripts dry-run, JLC baseline 2026-09-23, CPL audit list, handoff pre-fill, bring-up seeds).
-⚠ KiCad **Local History is disabled** (`TOOLING_NOTES.md`); **never `pcbnew.SaveBoard` into the project dir** — it rewrites `.kicad_pro`;
-restart the MCP server after any hand edit of `.kicad_pro`. Orientation still open; pending EMRAX KTY insulation class. Rest: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
+**S12 FAB PACKAGE BUILT (2026-09-23): `fab/` = gerbers + JLC BOM/CPL + verify record. DRC 0 / 0 unconnected / parity 0 (7 by-design silk warnings), ERC 0, netlist = `golden.net`.**
+BOM: 71 LCSC lines / 63 codes, **0 unvetted** (`C22936` 1 Ω defect on six 1 MΩ positions fixed → `C22935`); $140.62 parts + $92.10 feeders / 5 boards. Decisions: U4 JLC-placed,
+Economic single-side PCBA with the 12 B.Cu parts hand-soldered, `HW_NAME "FE_UFPR_4_0"`, no coating before bring-up. **Not yet orderable: the CPL rotation offsets
+(`tools/fab/jlc_rotations.json`) are seeded from the community table, not confirmed — check JLC's placement preview first (`S12_FAB_PACKAGE.md` §3), then tag `v4.0-release`**
+(tagged `v4.0-fab-candidate` now). Rebuild the package with `sh tools/fab/make_package.sh`. Firmware side: [`S12_FIRMWARE_HANDOFF.md`](S12_FIRMWARE_HANDOFF.md) §13.
+⚠ KiCad **Local History is disabled** (`TOOLING_NOTES.md`); **never `pcbnew.SaveBoard` into the project dir** — it rewrites `.kicad_pro`. Orientation/bracket, DB37 MPN, H2 hardware,
+DTM cavity numbering, KTY insulation class still open: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
 ## Roadmap, documents, session rhythm
@@ -46,13 +46,14 @@ grounding, LaunchPad jumper policy, root net table), [`S3_POWER_DESIGN.md`](S3_P
 [`S4_GATE_DRIVE_DESIGN.md`](S4_GATE_DRIVE_DESIGN.md), [`S5_MODULE_STATUS_DESIGN.md`](S5_MODULE_STATUS_DESIGN.md),
 [`S6_CURRENT_SENSE_DESIGN.md`](S6_CURRENT_SENSE_DESIGN.md), [`S7_ENCODER_DESIGN.md`](S7_ENCODER_DESIGN.md),
 [`S8_INTEGRATION_DESIGN.md`](S8_INTEGRATION_DESIGN.md), [`S9_BOARD_SETUP.md`](S9_BOARD_SETUP.md),
-[`S9_5_MOTOR_TEMP_DESIGN.md`](S9_5_MOTOR_TEMP_DESIGN.md), [`S9_6_VERTICAL_MOUNT.md`](S9_6_VERTICAL_MOUNT.md).
+[`S9_5_MOTOR_TEMP_DESIGN.md`](S9_5_MOTOR_TEMP_DESIGN.md), [`S9_6_VERTICAL_MOUNT.md`](S9_6_VERTICAL_MOUNT.md),
+[`S12_FAB_PACKAGE.md`](S12_FAB_PACKAGE.md) (fab package, CPL audit, assembly + bring-up), [`S12_FIRMWARE_HANDOFF.md`](S12_FIRMWARE_HANDOFF.md).
 Full DB37 derivation + 3.0 comparison: [`DB37_PINOUT.md`](DB37_PINOUT.md).
 
 **Layout of the directory:** `FE_UFPR_4_0.kicad_{pro,sch,pcb,dru}` + 7 sub-sheets (`power`, `gate_drive`,
 `module_status`, `current_sense`, `encoder`, `launchpad`, `vehicle_io`); project libs
 `FE_UFPR_4_0.kicad_sym` / `.pretty`; `tools/schematic_layout/` (sheet generators, `canon.py`,
-`golden.net`, README with the KiCad traps); `tools/board_layout/` (`place_s9.py` = the S9.6 generator, superseded by the user's hand placement;
+`golden.net`, README with the KiCad traps); `tools/fab/` (`make_package.sh` → `fab/`, `jlc_verify.py`, `jlc_bomcpl.py`, `jlc_rotations.json`); `tools/board_layout/` (`place_s9.py` = the S9.6 generator, superseded by the user's hand placement;
 `tighten_s10.py` = the S10 entry-cap/bucket moves; `swap_lp_headers.py`, `add_lp_shadow.py`);
 `datasheets/` — PrimeSTACK DS (**p.2** controller interface, **p.5** mechanical, **p.6** DB37 pinout),
 SPRUI77 (LaunchPad, header Tables 1–4), RLS RM44 (**p.10** analog outputs, **p.20** order code), LEM LA 100-P,
@@ -111,7 +112,7 @@ Never contradict these without logging a decision; the final board must answer `
 | **+3V3 rail monitor** | **ADCINA3** (J3-26) | **chosen S9.5** — 10.0k/10.0k 0.1 % divider; firmware cancels the excitation rail exactly, `R = 2200·V/(V_rail−V)`. Without it the LDO's ±2 % is ±10 K, larger than the sensor's own ±4.7 K |
 | NTC channel | **ADCINC3** (ADC-C ch3) | **chosen S5** — BoosterPack site-1 **J3-24**; suggest **ADC-C SOC2** (after the SOC1/Vbus EOC that fires the ISR). ADC-D is NOT on the headers. Divider rated for 10 V |
 | Status LED | GPIO31 | LaunchPad's own D9 — nothing needed on the board |
-| ISR scope probe | GPIO67 | expose a test point (pin unverified on Control_V2) |
+| ISR scope probe | GPIO67 | J1-5 → TP48 `ISR_PROBE_3V3` (verified S12 against SPRUI77 + netlist) |
 | SCI-A debug | GPIO42/43 | LaunchPad USB (XDS100v2) backchannel — **no board connector needed** |
 | **CAN-A TX / RX** | **GPIO4 / GPIO5** | **chosen S8** — BoosterPack **J4-36 / J4-35**, on the `J4+J2` connector, which carries nothing else analog. ⚠ **CAN-B is not routable on this board**: its only free header TX is GPIO16 (J4-33) and *every* header `CANRXB` (GPIO7, GPIO10) is consumed by the PWM bus. The LaunchPad's own transceiver is CAN-**B** (GPIO12/GPIO17) and **neither pin reaches the headers**, so the J12 0 Ω links cannot contend with us |
 | **Main switch / start** | **GPIO29 / GPIO59** | **chosen S8** — **J2-11 / J2-14**, the same two pins 3.0 used for `MAIN_SWITCH` / `ENGINE_START`. Keeps every vehicle-facing digital signal on the one connector with CAN. Not defined in `hw_control_v2.h` — S12 hands them over |

@@ -34,3 +34,6 @@ _restore_backup*/
 
 # stitch_s11.py idempotency sidecar (the applied plan is tools/board_layout/stitch_s11.applied.json)
 *.kicad_pcb.stitched.json
+
+# S12 fab package: the zip is rebuilt by tools/fab/make_package.sh
+/fab/*.zip

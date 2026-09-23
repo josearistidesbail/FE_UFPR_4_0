@@ -1,0 +1,1891 @@
+{
+ "boards": 5,
+ "date": "2026-09-23",
+ "lines": [
+  {
+   "lcsc": "C2836439",
+   "refs": "C1",
+   "value": "100uF 50V",
+   "footprint": "CP_Elec_8x10.5",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "RVT100UF50V67RV0040",
+   "package": "SMD,D8xL10.2mm",
+   "stock": 42082,
+   "price": 0.0842,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+105\u2103 10.2mm 100uF 146mA@120Hz 2000hrs@105\u2103 50V 8mm \u00b120% SMD,D8xL10.2mm Aluminum Elec"
+  },
+  {
+   "lcsc": "C13585",
+   "refs": "C2,C3,C5,C9,C10,C14,C23,C36,C92,C94",
+   "value": "10uF 50V",
+   "footprint": "C_1206_3216Metric",
+   "qty": 10,
+   "need": 50,
+   "flags": [],
+   "mfr": "CL31A106KBHNNNE",
+   "package": "1206",
+   "stock": 1877266,
+   "price": 0.1757,
+   "basic": true,
+   "preferred": false,
+   "descr": "10uF 50V X5R \u00b110% 1206 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C14663",
+   "refs": "C4,C8,C11,C12,C15,C19,C22,C24,C26,C28,C30,C32,C34,C35,C54-C56,C84,C87-C90,C93,C95,C98,C103,C111,C115,C116,C118,C119",
+   "value": "100nF 50V",
+   "footprint": "C_0603_1608Metric",
+   "qty": 31,
+   "need": 155,
+   "flags": [],
+   "mfr": "CC0603KRX7R9BB104",
+   "package": "0603",
+   "stock": 12618106,
+   "price": 0.0106,
+   "basic": true,
+   "preferred": false,
+   "descr": "100nF 50V X7R \u00b110% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C15849",
+   "refs": "C6",
+   "value": "1uF 50V",
+   "footprint": "C_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "CL10A105KB8NNNC",
+   "package": "0603",
+   "stock": 5979916,
+   "price": 0.0297,
+   "basic": true,
+   "preferred": false,
+   "descr": "1uF 50V X5R \u00b110% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C1622",
+   "refs": "C13",
+   "value": "47nF 50V",
+   "footprint": "C_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "CL10B473KB8NNNC",
+   "package": "0603",
+   "stock": 414711,
+   "price": 0.0087,
+   "basic": true,
+   "preferred": false,
+   "descr": "47nF 50V X7R \u00b110% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C15850",
+   "refs": "C16-C18,C20,C21,C25,C27,C97,C114",
+   "value": "10uF 25V",
+   "footprint": "C_0805_2012Metric",
+   "qty": 9,
+   "need": 45,
+   "flags": [],
+   "mfr": "CL21A106KAYNNNE",
+   "package": "0805",
+   "stock": 3505306,
+   "price": 0.0773,
+   "basic": true,
+   "preferred": false,
+   "descr": "10uF 25V X5R \u00b110% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C28323",
+   "refs": "C29,C31,C33,C57,C83,C91,C101,C102,C104,C112,C117",
+   "value": "1uF 50V",
+   "footprint": "C_0805_2012Metric",
+   "qty": 11,
+   "need": 55,
+   "flags": [],
+   "mfr": "CL21B105KBFNNNE",
+   "package": "0805",
+   "stock": 2084641,
+   "price": 0.0469,
+   "basic": true,
+   "preferred": false,
+   "descr": "1uF 50V X7R \u00b110% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C106246",
+   "refs": "C37-C53,C58,C60,C64,C65,C70,C72,C77,C79,C96,C99,C100,C113,C120",
+   "value": "1nF C0G",
+   "footprint": "C_0603_1608Metric",
+   "qty": 30,
+   "need": 150,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "CC0603JRNPO9BN102",
+   "package": "0603",
+   "stock": 127722,
+   "price": 0.0075,
+   "basic": false,
+   "preferred": false,
+   "descr": "1nF 50V NP0 \u00b15% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C77069",
+   "refs": "C59,C61,C68,C75,C82,C85,C86,C107,C110,C121,C122",
+   "value": "22nF C0G",
+   "footprint": "C_0805_2012Metric",
+   "qty": 11,
+   "need": 55,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "GRM21B5C1H223JA01L",
+   "package": "0805",
+   "stock": 48685,
+   "price": 0.0759,
+   "basic": false,
+   "preferred": false,
+   "descr": "22nF 50V C0G \u00b15% 0805 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C77033",
+   "refs": "C62,C63,C69,C71,C76,C78,C105,C106,C108,C109",
+   "value": "2.2nF C0G",
+   "footprint": "C_0603_1608Metric",
+   "qty": 10,
+   "need": 50,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "GRM1885C1H222JA01D",
+   "package": "0603",
+   "stock": 2265,
+   "price": 0.0228,
+   "basic": false,
+   "preferred": false,
+   "descr": "2.2nF 50V C0G \u00b15% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C85980",
+   "refs": "C66,C67,C73,C74,C80,C81",
+   "value": "4.7nF C0G",
+   "footprint": "C_0603_1608Metric",
+   "qty": 6,
+   "need": 30,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "GRM1885C1H472JA01D",
+   "package": "0603",
+   "stock": 49830,
+   "price": 0.0222,
+   "basic": false,
+   "preferred": false,
+   "descr": "4.7nF 50V C0G \u00b15% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+  },
+  {
+   "lcsc": "C310042",
+   "refs": "D1",
+   "value": "SMCJ26A",
+   "footprint": "D_SMC",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "SMCJ26A/TR13",
+   "package": "SMC(DO-214AB)",
+   "stock": 7293,
+   "price": 0.1444,
+   "basic": false,
+   "preferred": false,
+   "descr": "-65\u2103~+150\u2103 1.5kW 1uA 26V 28.9V 35.7A 42.1V TVS Unidirectional SMC(DO-214AB) ESD and Surge "
+  },
+  {
+   "lcsc": "C19077472",
+   "refs": "D2",
+   "value": "BZX84C15",
+   "footprint": "SOT-23",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "BZX84C15",
+   "package": "SOT-23",
+   "stock": 11303,
+   "price": 0.0193,
+   "basic": false,
+   "preferred": true,
+   "descr": ""
+  },
+  {
+   "lcsc": "C2286",
+   "refs": "D4",
+   "value": "red +24V_PROT",
+   "footprint": "LED_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "KT-0603R",
+   "package": "0603",
+   "stock": 8154450,
+   "price": 0.0073,
+   "basic": true,
+   "preferred": false,
+   "descr": "-40\u2103~+85\u2103 1.8V~2.4V 120\u00b0 20mA 300mcd 40mW 615nm~630nm 645nm Discrete Diode Red Water Clear"
+  },
+  {
+   "lcsc": "C2286",
+   "refs": "D5",
+   "value": "red +13V5_GATE",
+   "footprint": "LED_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "KT-0603R",
+   "package": "0603",
+   "stock": 8154450,
+   "price": 0.0073,
+   "basic": true,
+   "preferred": false,
+   "descr": "-40\u2103~+85\u2103 1.8V~2.4V 120\u00b0 20mA 300mcd 40mW 615nm~630nm 645nm Discrete Diode Red Water Clear"
+  },
+  {
+   "lcsc": "C2286",
+   "refs": "D6",
+   "value": "red +5V",
+   "footprint": "LED_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "KT-0603R",
+   "package": "0603",
+   "stock": 8154450,
+   "price": 0.0073,
+   "basic": true,
+   "preferred": false,
+   "descr": "-40\u2103~+85\u2103 1.8V~2.4V 120\u00b0 20mA 300mcd 40mW 615nm~630nm 645nm Discrete Diode Red Water Clear"
+  },
+  {
+   "lcsc": "C2286",
+   "refs": "D7",
+   "value": "red +3V3",
+   "footprint": "LED_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "KT-0603R",
+   "package": "0603",
+   "stock": 8154450,
+   "price": 0.0073,
+   "basic": true,
+   "preferred": false,
+   "descr": "-40\u2103~+85\u2103 1.8V~2.4V 120\u00b0 20mA 300mcd 40mW 615nm~630nm 645nm Discrete Diode Red Water Clear"
+  },
+  {
+   "lcsc": "C2286",
+   "refs": "D8",
+   "value": "red +15V_ISO",
+   "footprint": "LED_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "KT-0603R",
+   "package": "0603",
+   "stock": 8154450,
+   "price": 0.0073,
+   "basic": true,
+   "preferred": false,
+   "descr": "-40\u2103~+85\u2103 1.8V~2.4V 120\u00b0 20mA 300mcd 40mW 615nm~630nm 645nm Discrete Diode Red Water Clear"
+  },
+  {
+   "lcsc": "C2286",
+   "refs": "D9",
+   "value": "RED GATE_EN",
+   "footprint": "LED_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "KT-0603R",
+   "package": "0603",
+   "stock": 8154450,
+   "price": 0.0073,
+   "basic": true,
+   "preferred": false,
+   "descr": "-40\u2103~+85\u2103 1.8V~2.4V 120\u00b0 20mA 300mcd 40mW 615nm~630nm 645nm Discrete Diode Red Water Clear"
+  },
+  {
+   "lcsc": "C7420333",
+   "refs": "D10,D11,D18",
+   "value": "BAT54S",
+   "footprint": "SOT-23",
+   "qty": 3,
+   "need": 15,
+   "flags": [],
+   "mfr": "BAT54S",
+   "package": "SOT-23",
+   "stock": 314690,
+   "price": 0.0126,
+   "basic": false,
+   "preferred": true,
+   "descr": "1 Pair Series Connection 200mA 2uA@30V 30V 400mV@10mA 600mA SOT-23 Schottky Diodes ROHS"
+  },
+  {
+   "lcsc": "C8678",
+   "refs": "D12,D16",
+   "value": "SS34",
+   "footprint": "D_SMA",
+   "qty": 2,
+   "need": 10,
+   "flags": [],
+   "mfr": "SS34",
+   "package": "SMA(DO-214AC)",
+   "stock": 3557042,
+   "price": 0.0303,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+125\u2103 3A 40V 500uA@40V 550mV@3A Independent SMA(DO-214AC) Schottky Diodes ROHS"
+  },
+  {
+   "lcsc": "C32677",
+   "refs": "D13",
+   "value": "PSM712",
+   "footprint": "SOT-23",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "PSM712-LF-T7",
+   "package": "SOT-23",
+   "stock": 317834,
+   "price": 0.3233,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+150\u2103 12V 13.3V 19V 1uA\u300120uA 30A@8/20us\u300134A@8/20us 600W@8/20us 75pF IEC 61000-4-2\u3001IEC"
+  },
+  {
+   "lcsc": "C81598",
+   "refs": "D14,D15",
+   "value": "1N4148W",
+   "footprint": "D_SOD-123",
+   "qty": 2,
+   "need": 10,
+   "flags": [],
+   "mfr": "1N4148W",
+   "package": "SOD-123",
+   "stock": 3538406,
+   "price": 0.0113,
+   "basic": true,
+   "preferred": false,
+   "descr": "150mA 1A 1V@50mA 1uA@75V 400mW 4ns 75V Independent SOD-123 Switching Diodes ROHS"
+  },
+  {
+   "lcsc": "C2925443",
+   "refs": "D17",
+   "value": "SMAJ5.0A",
+   "footprint": "D_SMA",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "SMAJ5.0A",
+   "package": "SMA(DO-214AC)",
+   "stock": 64985,
+   "price": 0.0388,
+   "basic": false,
+   "preferred": true,
+   "descr": "-55\u2103~+150\u2103 400W 43.5A 5V 6.4V 800uA 9.2V IEC 61000-4-2 TVS Unidirectional SMA(DO-214AC) ES"
+  },
+  {
+   "lcsc": "C48467",
+   "refs": "F1",
+   "value": "5A 125V",
+   "footprint": "Fuse_2410_6125Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "0451005.MRL",
+   "package": "2410",
+   "stock": 28138,
+   "price": 0.2563,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+125\u2103 125V 125V 2.5mm 5.566 50A 5A 6.1mm Surface Mount Fuse 2410 Disposable fuses ROH"
+  },
+  {
+   "lcsc": "C182445",
+   "refs": "F2",
+   "value": "3A 63V",
+   "footprint": "Fuse_1206_3216Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "12H1300C",
+   "package": "1206",
+   "stock": 43061,
+   "price": 0.0384,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+125\u2103 1.6mm 2.79 3.2mm 3A 50A 63V Surface Mount Fuse 1206 Disposable fuses ROHS"
+  },
+  {
+   "lcsc": "C7542932",
+   "refs": "F3",
+   "value": "0.2A 30V 1206L020",
+   "footprint": "Fuse_1206_3216Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "1206L020/30NR",
+   "package": "1206",
+   "stock": 141752,
+   "price": 0.0393,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+85\u2103 1.9mm 100ms 1mm 2.7\u03a9 200mA 3.6mm 30V 350m\u03a9 40A 460mA 800mW 1206 Resettable Fuses"
+  },
+  {
+   "lcsc": "C1017",
+   "refs": "FB1",
+   "value": "600R@100MHz",
+   "footprint": "L_0805_2012Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "GZ2012D601TF",
+   "package": "0805",
+   "stock": 369732,
+   "price": 0.0326,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+125\u2103 1 300m\u03a9 500mA 600\u03a9@100MHz \u00b125% 0805 Ferrite Beads ROHS"
+  },
+  {
+   "lcsc": "CONSIGNED",
+   "refs": "J1",
+   "value": "Mini-Fit Jr 5566-02A",
+   "footprint": "Molex_Mini-Fit_Jr_5566-02A_2x01_P4.20mm_Vertical",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "CONSIGNED",
+   "refs": "J2",
+   "value": "DSUB-37_Socket",
+   "footprint": "DSUB-37_Socket_Horizontal_P2.77x2.54mm_MountingHoles",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "CONSIGNED",
+   "refs": "J3",
+   "value": "LEM DTM13-12PA-R005 key A",
+   "footprint": "DEUTSCH_DTM13-12P-R005_Horizontal",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "CONSIGNED",
+   "refs": "J4",
+   "value": "ENC DTM13-12PB-R005 key B",
+   "footprint": "DEUTSCH_DTM13-12P-R005_Horizontal",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "CONSIGNED",
+   "refs": "J5",
+   "value": "VEH DTM13-08PA-R004 key A",
+   "footprint": "DEUTSCH_DTM13-08PA-R004_Horizontal",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "C492427",
+   "refs": "J20",
+   "value": "LaunchPad J1+J3",
+   "footprint": "PinHeader_2x10_P2.54mm_Vertical",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "PZ254V-12-20P",
+   "package": "\u63d2\u4ef6,P=2.54mm",
+   "stock": 98935,
+   "price": 0.1377,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+105\u2103 2 2.54mm 2.54mm 2.5mm 20P 2x10P 3mm 6mm Black Brass Pin Header Through Hole \u63d2\u4ef6,"
+  },
+  {
+   "lcsc": "C492427",
+   "refs": "J21",
+   "value": "LaunchPad J4+J2",
+   "footprint": "PinHeader_2x10_P2.54mm_Vertical",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "PZ254V-12-20P",
+   "package": "\u63d2\u4ef6,P=2.54mm",
+   "stock": 98935,
+   "price": 0.1377,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+105\u2103 2 2.54mm 2.54mm 2.5mm 20P 2x10P 3mm 6mm Black Brass Pin Header Through Hole \u63d2\u4ef6,"
+  },
+  {
+   "lcsc": "C492427",
+   "refs": "J22",
+   "value": "LaunchPad J5+J7",
+   "footprint": "PinHeader_2x10_P2.54mm_Vertical",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "PZ254V-12-20P",
+   "package": "\u63d2\u4ef6,P=2.54mm",
+   "stock": 98935,
+   "price": 0.1377,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+105\u2103 2 2.54mm 2.54mm 2.5mm 20P 2x10P 3mm 6mm Black Brass Pin Header Through Hole \u63d2\u4ef6,"
+  },
+  {
+   "lcsc": "C492427",
+   "refs": "J23",
+   "value": "LaunchPad J8+J6",
+   "footprint": "PinHeader_2x10_P2.54mm_Vertical",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "PZ254V-12-20P",
+   "package": "\u63d2\u4ef6,P=2.54mm",
+   "stock": 98935,
+   "price": 0.1377,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+105\u2103 2 2.54mm 2.54mm 2.5mm 20P 2x10P 3mm 6mm Black Brass Pin Header Through Hole \u63d2\u4ef6,"
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "JP1",
+   "value": "ILOCK_SEL",
+   "footprint": "SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "JP2",
+   "value": "SHLD_TIE",
+   "footprint": "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "JP3",
+   "value": "SRC SEL A",
+   "footprint": "SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "JP4",
+   "value": "SRC SEL B",
+   "footprint": "SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "JP5",
+   "value": "SRC SEL C",
+   "footprint": "SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "JP6",
+   "value": "CAN TERM bridged=120R",
+   "footprint": "SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "C15857",
+   "refs": "L1",
+   "value": "22uH",
+   "footprint": "L_Sunlord_SWPA8040S",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "SWPA8040S220MT",
+   "package": "SMD,8x8mm",
+   "stock": 4688,
+   "price": 0.1601,
+   "basic": false,
+   "preferred": false,
+   "descr": "2.1A 2.4A 22uH 69m\u03a9 \u00b120% SMD,8x8mm Power Inductors ROHS"
+  },
+  {
+   "lcsc": "C167960",
+   "refs": "L2",
+   "value": "3.3uH",
+   "footprint": "L_Changjiang_FNR5040S",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "FNR5040S3R3NT",
+   "package": "SMD,5x5mm",
+   "stock": 5331,
+   "price": 0.0599,
+   "basic": false,
+   "preferred": false,
+   "descr": "3.3uH 3.9A 31m\u03a9 4.45A Magnetic Shielded Inductor \u00b130% SMD,5x5mm Power Inductors ROHS"
+  },
+  {
+   "lcsc": "C88056",
+   "refs": "L3",
+   "value": "ACT45B-101-2P-TL003",
+   "footprint": "L_CommonMode_TDK_ACT45B",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "ACT45B-101-2P-TL003",
+   "package": "SMD-4P,4.5x3.2mm",
+   "stock": 38604,
+   "price": 0.3396,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+150\u2103 100uH@100kHz 150mA 2 2\u03a9 5.8k\u03a9@10MHz 50V SMD-4P,4.5x3.2mm Common Mode Filters RO"
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "NT1",
+   "value": "ISO_COM-GND",
+   "footprint": "NetTie-2_SMD_Pad0.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "NT2",
+   "value": "PGND_MOD-GND star",
+   "footprint": "NetTie-2_SMD_Pad0.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "NT3",
+   "value": "VBUS_RTN_TIE",
+   "footprint": "NetTie-2_SMD_Pad0.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "NT4",
+   "value": "ISNS_RTN-GND",
+   "footprint": "NetTie-2_SMD_Pad0.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "C3281500",
+   "refs": "Q1",
+   "value": "SQD50P06-15L",
+   "footprint": "TO-252-2",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "SQD50P06-15L_GE3",
+   "package": "TO-252",
+   "stock": 7471,
+   "price": 1.4259,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+175\u2103 1 P-Channel 136W 15.5m\u03a9@10V 2.5V 410pF 5.91nF 50A 606pF 60V 98nC@10V P-Channel "
+  },
+  {
+   "lcsc": "C25803",
+   "refs": "R1,R2,R8",
+   "value": "100k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 3,
+   "need": 15,
+   "flags": [],
+   "mfr": "0603WAF1003T5E",
+   "package": "0603",
+   "stock": 7990119,
+   "price": 0.0016,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100k\u03a9 100mW 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface "
+  },
+  {
+   "lcsc": "C25804",
+   "refs": "R3,R11,R13,R24-R29,R47-R51,R120,R121",
+   "value": "10k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 16,
+   "need": 80,
+   "flags": [],
+   "mfr": "0603WAF1002T5E",
+   "package": "0603",
+   "stock": 37165617,
+   "price": 0.000842857,
+   "basic": true,
+   "preferred": false,
+   "descr": "resistors endpoint: 10000 ohm 0.01"
+  },
+  {
+   "lcsc": "C22807",
+   "refs": "R5",
+   "value": "150k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "0603WAF1503T5E",
+   "package": "0603",
+   "stock": 414154,
+   "price": 0.0014,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 150k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface "
+  },
+  {
+   "lcsc": "C22790",
+   "refs": "R6,R60",
+   "value": "12k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 2,
+   "need": 10,
+   "flags": [],
+   "mfr": "0603WAF1202T5E",
+   "package": "0603",
+   "stock": 442690,
+   "price": 0.0035,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 12k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C4216",
+   "refs": "R9",
+   "value": "33k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "0603WAF3302T5E",
+   "package": "0603",
+   "stock": 696981,
+   "price": 0.0013,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 33k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C23198",
+   "refs": "R10",
+   "value": "52.3k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "0603WAF5232T5E",
+   "package": "0603",
+   "stock": 50873,
+   "price": 0.0014,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 52.3k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface"
+  },
+  {
+   "lcsc": "C21189",
+   "refs": "R12,R103,R119",
+   "value": "0R",
+   "footprint": "R_0603_1608Metric",
+   "qty": 3,
+   "need": 15,
+   "flags": [],
+   "mfr": "0603WAF0000T5E",
+   "package": "0603",
+   "stock": 6153233,
+   "price": 0.0019,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 0\u03a9 100mW 75V Thick Film Resistor \u00b11% 0603 Chip Resistor - Surface Mount ROHS"
+  },
+  {
+   "lcsc": "C23162",
+   "refs": "R14,R30-R32,R36-R46,R52-R56,R61",
+   "value": "4.7k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 21,
+   "need": 105,
+   "flags": [],
+   "mfr": "0603WAF4701T5E",
+   "package": "0603",
+   "stock": 7433362,
+   "price": 0.0015,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 4.7k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface "
+  },
+  {
+   "lcsc": "C22843",
+   "refs": "R15",
+   "value": "1.5k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "0603WAF1501T5E",
+   "package": "0603",
+   "stock": 1163865,
+   "price": 0.0012,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 1.5k\u03a9 100mW 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface "
+  },
+  {
+   "lcsc": "C23228",
+   "refs": "R16,R34",
+   "value": "680R",
+   "footprint": "R_0603_1608Metric",
+   "qty": 2,
+   "need": 10,
+   "flags": [],
+   "mfr": "0603WAF6800T5E",
+   "package": "0603",
+   "stock": 923432,
+   "price": 0.0013,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 680\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C23212",
+   "refs": "R17",
+   "value": "6.8k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "0603WAF6801T5E",
+   "package": "0603",
+   "stock": 368873,
+   "price": 0.0018,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 6.8k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface "
+  },
+  {
+   "lcsc": "C22775",
+   "refs": "R18-R23,R74,R86,R98,R101,R102,R112,R117",
+   "value": "100R",
+   "footprint": "R_0603_1608Metric",
+   "qty": 13,
+   "need": 65,
+   "flags": [],
+   "mfr": "0603WAF1000T5E",
+   "package": "0603",
+   "stock": 7325193,
+   "price": 0.0023,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 100\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C21190",
+   "refs": "R33",
+   "value": "1k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "0603WAF1001T5E",
+   "package": "0603",
+   "stock": 8013731,
+   "price": 0.0039,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 1k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface Mo"
+  },
+  {
+   "lcsc": "C22935",
+   "refs": "R35,R67,R77,R89,R104,R118",
+   "value": "1M",
+   "footprint": "R_0603_1608Metric",
+   "qty": 6,
+   "need": 30,
+   "flags": [],
+   "mfr": "0603WAF1004T5E",
+   "package": "0603",
+   "stock": 2601258,
+   "price": 0.0019,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 1M\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface Mo"
+  },
+  {
+   "lcsc": "C861295",
+   "refs": "R57,R129",
+   "value": "2.20k 0.1%",
+   "footprint": "R_0603_1608Metric",
+   "qty": 2,
+   "need": 10,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "RT0603BRD072K2L",
+   "package": "0603",
+   "stock": 78470,
+   "price": 0.0329,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 2.2k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface "
+  },
+  {
+   "lcsc": "C705741",
+   "refs": "R58",
+   "value": "1.50k 0.1%",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "RT0603BRD071K5L",
+   "package": "0603",
+   "stock": 8319,
+   "price": 0.0318,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 1.5k\u03a9 100mW 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface "
+  },
+  {
+   "lcsc": "C22978",
+   "refs": "R59,R62,R130",
+   "value": "3.3k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 3,
+   "need": 15,
+   "flags": [],
+   "mfr": "0603WAF3301T5E",
+   "package": "0603",
+   "stock": 1199741,
+   "price": 0.0019,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 3.3k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface "
+  },
+  {
+   "lcsc": "C723637",
+   "refs": "R63,R64,R75,R78,R87,R90",
+   "value": "20.0k 0.1%",
+   "footprint": "R_0603_1608Metric",
+   "qty": 6,
+   "need": 30,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "RT0603BRD0720KL",
+   "package": "0603",
+   "stock": 121239,
+   "price": 0.0316,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 20k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C326735",
+   "refs": "R65,R66,R70,R71,R76,R79,R82,R83,R88,R91,R94,R95,R99,R107,R109,R111,R114,R116",
+   "value": "12.0k 0.1%",
+   "footprint": "R_0603_1608Metric",
+   "qty": 18,
+   "need": 90,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "RT0603BRD0712KL",
+   "package": "0603",
+   "stock": 10395,
+   "price": 0.0321,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 12k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C870760",
+   "refs": "R68,R69,R80,R81,R92,R93",
+   "value": "47.0R 0.1%",
+   "footprint": "R_1206_3216Metric",
+   "qty": 6,
+   "need": 30,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "RT1206BRD0747RL",
+   "package": "1206",
+   "stock": 4210,
+   "price": 0.0809,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 200V 250mW 47\u03a9 Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 1206 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C723532",
+   "refs": "R72,R73,R84,R85,R96,R97,R100,R106",
+   "value": "4.99k 0.1%",
+   "footprint": "R_0603_1608Metric",
+   "qty": 8,
+   "need": 40,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "RT0603BRD074K99L",
+   "package": "0603",
+   "stock": 47194,
+   "price": 0.0318,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 4.99k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface"
+  },
+  {
+   "lcsc": "C136963",
+   "refs": "R105",
+   "value": "3.00k 0.1%",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "RT0603BRD073KL",
+   "package": "0603",
+   "stock": 30010,
+   "price": 0.0287,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 3k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface Mo"
+  },
+  {
+   "lcsc": "C95204",
+   "refs": "R108,R110,R113,R115,R131,R132",
+   "value": "10.0k 0.1%",
+   "footprint": "R_0603_1608Metric",
+   "qty": 6,
+   "need": 30,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "RT0603BRD0710KL",
+   "package": "0603",
+   "stock": 389486,
+   "price": 0.0241,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 10k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C22787",
+   "refs": "R122",
+   "value": "120R",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "0603WAF1200T5E",
+   "package": "0603",
+   "stock": 1475830,
+   "price": 0.0016,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 120\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C4190",
+   "refs": "R123-R128",
+   "value": "2.2k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 6,
+   "need": 30,
+   "flags": [],
+   "mfr": "0603WAF2201T5E",
+   "package": "0603",
+   "stock": 2001135,
+   "price": 0.0014,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 2.2k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface "
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP1",
+   "value": "+24V_PROT",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP2",
+   "value": "+13V5_GATE",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP3",
+   "value": "+5V",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP4",
+   "value": "+3V3",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP5",
+   "value": "+24V_MOD",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP6",
+   "value": "+15V_ISO",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP7",
+   "value": "-15V_ISO",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP8",
+   "value": "ISO_COM",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP9",
+   "value": "GND",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP10",
+   "value": "TP_PWM_UH",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP11",
+   "value": "TP_PWM_UL",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP12",
+   "value": "TP_PWM_VH",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP13",
+   "value": "TP_PWM_VL",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP14",
+   "value": "TP_PWM_WH",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP15",
+   "value": "TP_PWM_WL",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP16",
+   "value": "TP_GATE_EN",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP17",
+   "value": "TP_MOD15V_1",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP18",
+   "value": "TP_MOD15V_2",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP19",
+   "value": "TP_VBUS_RAW",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP21",
+   "value": "TP_VBUS_RTN",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP22",
+   "value": "TP_NTC_RAW",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP24",
+   "value": "TP_FLT_OC_A",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP25",
+   "value": "TP_FLT_OC_B",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP26",
+   "value": "TP_FLT_OC_C",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP27",
+   "value": "TP_FLT_OT",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP28",
+   "value": "TP_FLT_OV",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP29",
+   "value": "TP_FLT_OC_A_15V",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP30",
+   "value": "ISNS_A_INT",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP31",
+   "value": "ISNS_A_LEM",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP32",
+   "value": "ISNS_B_INT",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP33",
+   "value": "ISNS_B_LEM",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP34",
+   "value": "ISNS_C_INT",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP35",
+   "value": "ISNS_C_LEM",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP36",
+   "value": "ISNS_VREF",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP38",
+   "value": "ENC_SIN_RAW",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP39",
+   "value": "ENC_COS_RAW",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP40",
+   "value": "ENC_SIN_ADC",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP41",
+   "value": "ENC_COS_ADC",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP44",
+   "value": "ENC_VDD",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP45",
+   "value": "+5V_LP",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP46,TP47",
+   "value": "GND",
+   "footprint": "TestPoint_THTPad_D1.5mm_Drill0.7mm",
+   "qty": 2,
+   "need": 10,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP48",
+   "value": "ISR_PROBE_3V3",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP49",
+   "value": "CAN_H",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP50",
+   "value": "CAN_L",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP51",
+   "value": "SW_MAIN_3V3",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP52",
+   "value": "SW_START_3V3",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "NOFIT",
+   "refs": "TP53",
+   "value": "MOT_TEMP_RAW",
+   "footprint": "TestPoint_Pad_D1.5mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "PLACEHOLDER"
+   ]
+  },
+  {
+   "lcsc": "C841384",
+   "refs": "U1",
+   "value": "LMR33630ADDAR",
+   "footprint": "Texas_HSOP-8-1EP_3.9x4.9mm_P1.27mm_ThermalVias",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED",
+    "PACKAGE_MISMATCH ESOP-8"
+   ],
+   "mfr": "LMR33630ADDAR",
+   "package": "ESOP-8",
+   "stock": 9908,
+   "price": 0.6947,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+125\u2103@(TJ) 1 1V~24V 24uA 3.8V~36V 3A 400kHz Adjustable Buck Buck Built-in Yes ESOP-8 "
+  },
+  {
+   "lcsc": "C5219272",
+   "refs": "U2",
+   "value": "TPS62933FDRLR",
+   "footprint": "SOT-583-8",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "TPS62933FDRLR",
+   "package": "SOT-583",
+   "stock": 3486,
+   "price": 1.0787,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+150\u2103@(TJ) 1 125uA 2.2MHz 3.8V~30V 3A 800mV~22V Adjustable Buck Buck Built-in Yes SOT"
+  },
+  {
+   "lcsc": "C6186",
+   "refs": "U3",
+   "value": "AMS1117-3.3",
+   "footprint": "SOT-223-3_TabPin2",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "AMS1117-3.3",
+   "package": "SOT-223",
+   "stock": 2007447,
+   "price": 0.2003,
+   "basic": true,
+   "preferred": false,
+   "descr": "-40\u2103~+125\u2103 0.003%Vout 1 1.1V@(800mA) 15V 1A 3.3V 5mA 72dB@(120Hz) Fixed Over Current Prote"
+  },
+  {
+   "lcsc": "C5369735",
+   "refs": "U4",
+   "value": "URA2415YMD-6WR3",
+   "footprint": "Converter_DCDC_Mornsun_URA-YMD-6WR3_THT",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "URA2415YMD-6WR3",
+   "package": "DIP,25.4x25.4mm",
+   "stock": 304,
+   "price": 6.3753,
+   "basic": false,
+   "preferred": false,
+   "descr": ""
+  },
+  {
+   "lcsc": "C465729",
+   "refs": "U5-U7",
+   "value": "UCC27524DR",
+   "footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
+   "qty": 3,
+   "need": 15,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "UCC27524DR",
+   "package": "SOIC-8",
+   "stock": 9550,
+   "price": 0.4035,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+140\u2103 1.9V~2.3V 1V~1.4V 2 4.5V~18V 5A 5A 7ns 9ns Low Side MOSFET Under Voltage Protec"
+  },
+  {
+   "lcsc": "C22046",
+   "refs": "U8",
+   "value": "SN74LVC1G11DBVR",
+   "footprint": "SOT-23-6",
+   "qty": 1,
+   "need": 5,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "SN74LVC1G11DBVR",
+   "package": "SOT-23-6",
+   "stock": 10443,
+   "price": 0.1829,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+125\u2103 1 1.2V\u30011.9V\u30012.3V\u30013.8V 1.65V~5.5V 1.7V~2V 10uA 3.5ns@5V,50pF 300mV\u3001450mV\u3001550mV 3"
+  },
+  {
+   "lcsc": "C10429",
+   "refs": "U9-U11,U21",
+   "value": "SN74LVC2G17DBVR",
+   "footprint": "SOT-23-6",
+   "qty": 4,
+   "need": 20,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "SN74LVC2G17DBVR",
+   "package": "SOT-23-6",
+   "stock": 107122,
+   "price": 0.3346,
+   "basic": false,
+   "preferred": false,
+   "descr": "-40\u2103~+85\u2103 1 1.65V~5.5V 10uA 2 32mA 32mA 5.4ns@3.3V,50pF 74LVC Schmitt trigger SOT-23-6 Buf"
+  },
+  {
+   "lcsc": "C46316",
+   "refs": "U12-U17",
+   "value": "OPA2376",
+   "footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
+   "qty": 6,
+   "need": 30,
+   "flags": [
+    "EXTENDED"
+   ],
+   "mfr": "OPA2376AIDR",
+   "package": "SOIC-8",
+   "stock": 10213,
+   "price": 0.9762,
+   "basic": false,
+   "preferred": false,
+   "descr": "-2.75V~-1.1V\u30011.1V~2.75V -40\u2103~+125\u2103 0.2pA 0.2pA 2 2.2V~5.5V 260nV/\u2103 2V/us 30mA 5.5MHz 5uV 7"
+  },
+  {
+   "lcsc": "C12084",
+   "refs": "U18",
+   "value": "SN65HVD230DR",
+   "footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
+   "qty": 1,
+   "need": 5,
+   "flags": [],
+   "mfr": "SN65HVD230DR",
+   "package": "SOIC-8",
+   "stock": 91835,
+   "price": 0.6898,
+   "basic": false,
+   "preferred": true,
+   "descr": "-40\u2103~+85\u2103 17mA 1Mbps 370uA 3V~3.6V CAN Transceiver SOIC-8 CAN Transceivers ROHS"
+  },
+  {
+   "lcsc": "C109227",
+   "refs": "U19,U20",
+   "value": "LTV-817S-TA1-C",
+   "footprint": "Optocoupler_LTV-817S_SMD-4P",
+   "qty": 2,
+   "need": 10,
+   "flags": [],
+   "mfr": "LTV-817S-TA1-C",
+   "package": "SMD-4P",
+   "stock": 597938,
+   "price": 0.0749,
+   "basic": true,
+   "preferred": false,
+   "descr": "-30\u2103~+110\u2103 1 1.2V 100mV@1mA,20mA 35V 3us 4us@2mA,100\u03a9 50% 50mA 50mA 5kV 600% 6V DC Phototr"
+  }
+ ]
+}

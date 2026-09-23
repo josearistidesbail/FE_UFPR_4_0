@@ -7,7 +7,7 @@ Usage:
   python3 tools/fab/jlc_verify.py SCRATCH/bom.csv [--boards 5] [--out SCRATCH/jlc_verify.json] [--md SCRATCH/jlc_verify.md]
 
 Flags per line: NOT_FOUND, OUT_OF_STOCK, LOW_STOCK (< boards x qty x 3), EXTENDED (feeder fee),
-PACKAGE_MISMATCH (JLC package string vs the KiCad footprint size).  Placeholders (NOFIT, CONSIGNED) are
+PACKAGE_MISMATCH (JLC package string vs the KiCad footprint size), VALUE_MISMATCH (R/C value vs JLC's description).  Placeholders (NOFIT, CONSIGNED) are
 listed, not queried.  JLCSearch is a snapshot mirror - treat stock as indicative (TOOLING_NOTES.md).
 """
 import csv, json, re, subprocess, sys, time
@@ -38,6 +38,22 @@ def fetch(code):
             err = e; time.sleep(2)
     return {'error': str(err)}
 
+_MULT = {'p': 1e-12, 'n': 1e-9, 'u': 1e-6, 'm': 1e-3, 'k': 1e3, 'M': 1e6, 'R': 1, '': 1}
+def bom_value(v):
+    """'1M' / '4.7k' / '47.0R 0.1%' / '0R' -> ohms; '2.2nF C0G' / '10uF 25V' -> farads; else None"""
+    m = re.match(r'\s*([\d.]+)\s*([pnum]?)F\b', v)
+    if m: return ('F', float(m[1]) * _MULT[m[2]])
+    m = re.match(r'\s*([\d.]+)\s*([kMR]?)(?:\s|$|\s*[Ω%])', v)
+    if m and not re.search(r'[VA]\b', v.split()[0]): return ('R', float(m[1]) * _MULT[m[2]])
+    return None
+def jlc_value(descr):
+    """first '4.7kΩ' / '1MΩ' / '2.2nF' token of JLC's description"""
+    m = re.search(r'(?<![\w.])([\d.]+)([kM]?)Ω', descr)
+    if m: return ('R', float(m[1]) * _MULT[m[2]])
+    m = re.search(r'(?<![\w.])([\d.]+)([pnum])F\b', descr)
+    if m: return ('F', float(m[1]) * _MULT[m[2]])
+    return None
+
 def fp_size(footprint):
     m = re.search(r'_(0402|0603|0805|1206|1210|2010|2512|2410)_', footprint)
     if m: return m.group(1)
@@ -63,6 +79,11 @@ for r in rows:
     if not (rec['basic'] or rec['preferred']): rec['flags'].append('EXTENDED')
     sz = fp_size(rec['footprint']); pk = (rec['package'] or '')
     if sz and sz not in pk and not (sz == 'SOIC-8' and 'SOP-8' in pk) and not (sz == 'TO-252' and 'TO-252' in pk): rec['flags'].append(f'PACKAGE_MISMATCH {pk}')
+    # value check: the BOM value against JLC's own description (this is what catches C22936 = 1 R sold as '1M')
+    if rec['footprint'].startswith(('R_', 'C_')):
+        bv, jv = bom_value(rec['value']), jlc_value(c.get('description') or '')
+        if bv and jv and (bv[0] != jv[0] or abs(bv[1] - jv[1]) > 0.011 * max(bv[1], 1e-15)):
+            rec['flags'].append(f'VALUE_MISMATCH jlc={jv[1]:g}{jv[0]}')
     res.append(rec)
 
 n_real = sum(1 for x in res if 'PLACEHOLDER' not in x['flags'])
