@@ -6,11 +6,12 @@ Keep the Open section short enough to read every session.
 
 ## Open
 
-- **[user, S10] `ISNS_B_RAW` track vs TP33 pad 1: 0.10 mm, Analog needs 0.30** — the only clearance error on the board (2026-09-23 DRC).
-- **[user, S10] 35 `starved_thermal` errors remain** (0603 GND pads on the priority-0 GND zone with one spoke: C11, C13, C21, C41, C54, C59, C60, C68, C75, C82, C83, C85, C87, C89, C91, C110, C112, C114, C122, R26, R29, R32, R77, U2.4, U8.2, U11.2/3, U17.4, U18.2, U20.4, U21.2, L2.2, C11 in +13V5) — either a local pour with solid pads, a short stub to the plane, or `min_resolved_spokes` 1 for those footprints.
-- **[user, S10] `SW_MAIN_3V3` still open** (TP51 ↔ JP1 ↔ J21.20); 51 unconnected items in total.
 - **[user, S10] ERC error `power_pin_not_driven`, U4 pin 1 (`-Vin` on `PGND_MOD`)** — since U4/C23/C24 moved to `+24V_MOD`/`PGND_MOD`; add a PWR_FLAG or a power-output pin on `PGND_MOD`.
-- **[S10, trivial] H1–H4 raise four `extra_footprint` parity warnings** — set the footprints' *Not in schematic* attribute (`board_only`) or accept them.
+- **[S11, trivial] H1–H4 raise four `extra_footprint` parity warnings** — add `board_only` to the four footprints' `(attr …)`.
+- **[user, S11] Spare `+5V` via at (208.34, 181.40)** is connected on B.Cu only (`via_dangling`) — delete or use it.
+- **[S11] Silkscreen text still reads `MOTOR CONTROLLER V3`** on both faces — replace with board name / rev / date in the silk pass.
+- **[S11] 368 silk warnings are all reference designators** (152 over pads, 113 over their own outline, 65 ref-on-ref, 17 over PTH) — options in `S11_PREFAB_REVIEW.md` §2-I.
+- **[user] Test points under the LaunchPad shadow** (TP16, TP22, TP27, TP30–TP34, TP47) are unreachable with it fitted — pull out or accept.
 
 - **[user / team — GATES MECHANICAL, affects S10/S11 placement] Board orientation is re-opened (2026-09-17).** S9.6 placed the board **vertical** above the PrimeSTACK (DB37 edge down, 90° adapter to X1, LaunchPad above on male headers, J5 top-left) and `CLAUDE.md` asserted that as settled; the team is **not** decided and **horizontal is still on the table**. Until it lands, the board is kept orientation-agnostic:
   - **Every connector stays on the top face** (already true — J1/DB37, J3, J4, J5, the LaunchPad headers). Do not move any of them to B.Cu.
@@ -45,13 +46,13 @@ Keep the Open section short enough to read every session.
 - **[user] Confirm the installed motor sensor is a KTY81-210, not a PT1000** — measure cold: ≈2.0 kΩ = KTY81-2xx, ≈1.1 kΩ = PT1000, ≈110 Ω = PT100. NXP discontinued the KTY81 and newer EMRAX builds ship PT1000; R129 would be re-picked.
 - **[user] `SHIELD_ENC` is hard-tied to GND by R119 (fitted 0 Ω).** If the RM44AC's cable shield bonds to its readhead body, and the readhead to the motor frame, the board's "floating island" is already chassis-referenced. Check the RLS spec; if so, unfit R119 and keep the 1 MΩ ∥ 1 nF soft tie.
 - **[S10] Route `+5V_VEH` and `CAN_RS`** — both had zero pad assignments on the board until S9.5; the router never saw them.
-- **[S11] 403 silkscreen DRC warnings** (389 after the 2026-09-17 hand re-placement, 403 after the S10 tightening — stacked entry rows; auto-placed reference text over pads/each other) — the silk pass fixes them together with the jumper tables and the JP2 warning text.
-- **[S11] Test points under the LaunchPad shadow are unreachable with it fitted** (TP20/23, TP36, TP42–TP50, TP53/54, …) — pull the ones the bench needs out to x < 59 or x > 119, or accept.
 - **[user] Pick the L-com DG9037MF variant** (male end must exit away from the module top face with the female end on X1) and check its ~25 mm body against the phase terminals; fallback = passive two-D-sub adapter PCB. **Bracket the board** — the two jackscrew joints carry no load. Height budget above the module: adapter ~25 + board 130 + LaunchPad overhang 17.9 mm.
 - **[S12] Verify C492427** (male 2×10 header) — Extended, 98 935 by `/api/search`; the `headers/list` endpoint did not surface it.
 
 ## Resolved (archive)
 
+- ~~[user, S10] `ISNS_B_RAW` vs TP33 clearance, `SW_MAIN_3V3` open, the six routing gaps~~ — **closed by the user 2026-09-23.**
+- ~~[user, S10] 33 `starved_thermal` errors~~ — **resolved 2026-09-23 by the S11 stitching pass** (`tools/board_layout/stitch_s11.py`: 326 GND/thermal vias + 154 stubs, +13V5 via array moved, six net-less vias assigned; three floating GND pins U8.2/U11.3/C107.2 fixed) plus a `min_resolved_spokes 1` waiver for C11/C13/L2/U17 in the `.kicad_dru`. DRC 0 errors / 0 unconnected. `S11_PREFAB_REVIEW.md`.
 - ~~[user] Find what rolled `.kicad_pro` back twice~~ — **found 2026-09-23: KiCad 10 Local History restores from a corrupt `.history/` repo (S7-era files), plus the MCP backend's stale project model on board saves.** Local History disabled, repo renamed, `_restore_backup*/` ignored and untracked, `FE_UFPR_4_0.kicad_sym` restored from the 2026-09-22 backup (60 units render, ERC 0 lib issues, netlist IDENTICAL). Details: `TOOLING_NOTES.md`, `DECISION_LOG.md` 2026-09-23.
 - ~~[user, S10] Refill zones (B) on first open~~ — done: DRC on `cbd091b` gives identical counts with and without `--refill-zones`.
 - ~~[user, S10] Tighten placement per `S10_PLACEMENT_REVIEW.md` §B~~ — **applied 2026-09-17 by `tools/board_layout/tighten_s10.py`** (review §D): entry caps 2.3–7.6 mm from their pins, all eleven ADC buckets 3.1 mm from the header pads (SIN/COS identical), U18 100 nF 2.4 mm, U1 CIN 2.4 mm, R34 at D9, JP1 out of the shadow. DRC 0 errors, courtyards 0. Left as-is: U15↔ISNS_VREF caps ≈32 mm, U1 SW→L1 6.7 mm, D9 on the bottom edge, TP30–35 under the LaunchPad. **[user] review in the GUI; `9802b1b` is the pre-move state.**

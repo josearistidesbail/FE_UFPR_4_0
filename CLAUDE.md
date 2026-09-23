@@ -29,14 +29,13 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 ## Current phase
 
-**PLACEMENT HAND-REDONE BY THE USER (2026-09-17, commits d0a6293…c15b0ef); PRE-ROUTING VALIDATION PASSED.**
-Orientation still open (vertical per S9.6, horizontal on the table) — every connector on the top face,
-passives referenced to their own connector/IC pins. 370 footprints (TP20/23/37/54 and holes H5–H9 removed),
-DRC 0 errors (`--severity-all`; 389 silk warnings → S11; parity = 4 board-only holes H1–H4), ERC 0,
-`golden.net` re-baselined = 219 nets, netclasses 6 classes / 28 patterns verified from the netlist.
-**§B tightening applied by `tools/board_layout/tighten_s10.py` (entry caps at pins, ADC buckets 3.1 mm from
-header pads, U18/U1 decoupling) — user reviews, then routes S10/S11** (`9802b1b` = pre-move state). Claude does rules, DRC, docs.
-⚠ Pending: EMRAX KTY insulation class. Precharge/DC-bus contactor **dropped** (external). Rest: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
+**ROUTED (user, 2026-09-23, `cbd091b`) + S11 GND STITCHING APPLIED; DRC 0 ERRORS / 0 UNCONNECTED.**
+598 vias, In1 solid GND, `.kicad_dru` single-spoke waiver for C11/C13/L2/U17. Remaining before S12:
+silk pass (`MOTOR CONTROLLER V3` text, 368 refdes warnings), spare `+5V` via, H1–H4 `board_only`,
+`PWR_FLAG` on `PGND_MOD` (ERC), then re-baseline `golden.net`. Full review: [`S11_PREFAB_REVIEW.md`](S11_PREFAB_REVIEW.md).
+⚠ KiCad **Local History is disabled** (its corrupt `.history/` rolled the project back twice — `TOOLING_NOTES.md`);
+restart the MCP server after any hand edit of `.kicad_pro`. Orientation still open; precharge dropped (external).
+Pending: EMRAX KTY insulation class. Rest: [`OPEN_ITEMS.md`](OPEN_ITEMS.md).
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
 ## Roadmap, documents, session rhythm
