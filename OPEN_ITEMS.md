@@ -6,14 +6,11 @@ Keep the Open section short enough to read every session.
 
 ## Open
 
-- **[user, S10] Refill zones (B) on first open** — `fix_s10_u1.py` changed every zone's clearance to 0.3 mm and made the `PWR_U1_SW` zone solid, but the saved fills are the old ones.
 - **[user, S10] `ISNS_B_RAW` track vs TP33 pad 1: 0.10 mm, Analog needs 0.30** — the only clearance error on the board (2026-09-23 DRC).
 - **[user, S10] 35 `starved_thermal` errors remain** (0603 GND pads on the priority-0 GND zone with one spoke: C11, C13, C21, C41, C54, C59, C60, C68, C75, C82, C83, C85, C87, C89, C91, C110, C112, C114, C122, R26, R29, R32, R77, U2.4, U8.2, U11.2/3, U17.4, U18.2, U20.4, U21.2, L2.2, C11 in +13V5) — either a local pour with solid pads, a short stub to the plane, or `min_resolved_spokes` 1 for those footprints.
 - **[user, S10] `SW_MAIN_3V3` still open** (TP51 ↔ JP1 ↔ J21.20); 51 unconnected items in total.
 - **[user, S10] ERC error `power_pin_not_driven`, U4 pin 1 (`-Vin` on `PGND_MOD`)** — since U4/C23/C24 moved to `+24V_MOD`/`PGND_MOD`; add a PWR_FLAG or a power-output pin on `PGND_MOD`.
-- **[user] Find what rolled `.kicad_pro` back twice (2026-09-17, 2026-09-22)** — both times CAN class + rules block went to KiCad defaults; `DECISION_LOG.md` 2026-09-23. Until found, diff `board.design_settings` + `net_settings` against `586d0da` at every session start.
 - **[S10, trivial] H1–H4 raise four `extra_footprint` parity warnings** — set the footprints' *Not in schematic* attribute (`board_only`) or accept them.
-- **[user] `_restore_backup_2026-09-17T15-06-19-842/` (2.9 MB project copy) is committed** — add `_restore_backup*/` to `.gitignore` and `git rm -r --cached` it; nothing in it is still needed (`.kicad_pro` and `.kicad_sym` were restored from git).
 
 - **[user / team — GATES MECHANICAL, affects S10/S11 placement] Board orientation is re-opened (2026-09-17).** S9.6 placed the board **vertical** above the PrimeSTACK (DB37 edge down, 90° adapter to X1, LaunchPad above on male headers, J5 top-left) and `CLAUDE.md` asserted that as settled; the team is **not** decided and **horizontal is still on the table**. Until it lands, the board is kept orientation-agnostic:
   - **Every connector stays on the top face** (already true — J1/DB37, J3, J4, J5, the LaunchPad headers). Do not move any of them to B.Cu.
@@ -55,6 +52,8 @@ Keep the Open section short enough to read every session.
 
 ## Resolved (archive)
 
+- ~~[user] Find what rolled `.kicad_pro` back twice~~ — **found 2026-09-23: KiCad 10 Local History restores from a corrupt `.history/` repo (S7-era files), plus the MCP backend's stale project model on board saves.** Local History disabled, repo renamed, `_restore_backup*/` ignored and untracked, `FE_UFPR_4_0.kicad_sym` restored from the 2026-09-22 backup (60 units render, ERC 0 lib issues, netlist IDENTICAL). Details: `TOOLING_NOTES.md`, `DECISION_LOG.md` 2026-09-23.
+- ~~[user, S10] Refill zones (B) on first open~~ — done: DRC on `cbd091b` gives identical counts with and without `--refill-zones`.
 - ~~[user, S10] Tighten placement per `S10_PLACEMENT_REVIEW.md` §B~~ — **applied 2026-09-17 by `tools/board_layout/tighten_s10.py`** (review §D): entry caps 2.3–7.6 mm from their pins, all eleven ADC buckets 3.1 mm from the header pads (SIN/COS identical), U18 100 nF 2.4 mm, U1 CIN 2.4 mm, R34 at D9, JP1 out of the shadow. DRC 0 errors, courtyards 0. Left as-is: U15↔ISNS_VREF caps ≈32 mm, U1 SW→L1 6.7 mm, D9 on the bottom edge, TP30–35 under the LaunchPad. **[user] review in the GUI; `9802b1b` is the pre-move state.**
 - ~~[BLOCKS S10 ROUTING] netclass regression in `.kicad_pro`~~ — **resolved 2026-09-17 (pre-S10 validation):** `CAN` class + `*PWM_*_3V3` / `*CAN_H*` / `*CAN_L*` / `*MOT_TEMP_*` re-added; `kicad-cli` `(class …)` output = Analog 61 / CAN 4 / Gate 23 / Power_1A 9 / Power_3A 5 / Default 117. The same 15:06 restore had also dropped the six S8 symbols from `FE_UFPR_4_0.kicad_sym` — restored from `9cf0c5a`, ERC 0 — **and reset the board rule minimums to KiCad defaults** (hole-to-hole 0.25, annular 0.10, clearance 0): S9 `rules` block restored from the backup the same day, DRC 0 errors. Details: `DECISION_LOG.md` 2026-09-17 pre-S10 entries.
 
