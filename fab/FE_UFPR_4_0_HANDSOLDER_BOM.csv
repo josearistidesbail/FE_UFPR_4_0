@@ -3,7 +3,7 @@ C15850,10uF 25V,C_0805_2012Metric,"C25,C27",2,4,6,bottom side (Economic PCBA is 
 C14663,100nF 50V,C_0603_1608Metric,"C26,C28,C119",3,6,9,bottom side (Economic PCBA is single-side)
 C106246,1nF C0G,C_0603_1608Metric,"C113,C120",2,4,6,bottom side (Economic PCBA is single-side)
 C2925443,SMAJ5.0A,D_SMA,D17,1,2,3,bottom side (Economic PCBA is single-side)
-C492427,LaunchPad J8+J6,PinHeader_2x10_P2.54mm_Vertical,"J20,J21,J22,J23",4,8,12,deselected at JLC (cost)
+C492427,LaunchPad J5+J7,PinHeader_2x10_P2.54mm_Vertical,"J20,J21,J22,J23",4,8,12,deselected at JLC (cost)
 C25803,100k,R_0603_1608Metric,R2,1,2,3,bottom side (Economic PCBA is single-side)
 C25804,10k,R_0603_1608Metric,R3,1,2,3,bottom side (Economic PCBA is single-side)
 C22935,1M,R_0603_1608Metric,R118,1,2,3,bottom side (Economic PCBA is single-side)
