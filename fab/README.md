@@ -1,5 +1,7 @@
 # fab/ — JLCPCB order package, FE_UFPR 4.0 (`v4.0-release`)
 
+> ⚠ **STALE since 2026-09-23:** J3/J4/J5 were swapped to vertical DT15 headers and the board is not yet re-placed/re-routed. Do not order from these files; rebuild with `make_package.sh` after DRC is back to 0 (`OPEN_ITEMS.md`).
+
 Rebuilt from the committed KiCad files by `sh tools/fab/make_package.sh [boards]` (needs `kicad-cli` 10, `python3`, `curl`, `zip`;
 refuses to run while KiCad has the board or a sheet open). Everything here is derived — edit the design, not these files.
 

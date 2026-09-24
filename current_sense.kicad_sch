@@ -1884,7 +1884,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "J3 REVISED IN S7: Micro-Fit 3.0 2x4 -> DEUTSCH DTM13-12PA-R005, 12-way right-angle, KEY A (consigned)\n  1  +15V_ISO      12  ISO_COM       S6 chose Micro-Fit only because TE's DTM13 drawing was\n  2  LEM_A_M       11  ISO_COM       believed to be login-gated. It is not: TE's DocumentDelivery\n  3  LEM_B_M       10  ISO_COM       endpoint serves the dimensioned customer drawing freely, so\n  4  LEM_C_M        9  ISO_COM       the footprint is now derived honestly and the team-standard\n  5  -15V_ISO       8  ISO_COM       connector the user specified is back on the board.\n  6  SHIELD_LEM     7  n/c\n  The 12-way's four spare ways are spent on ISO_COM so that EVERY rail and EVERY sensor output has\n  its return on the physically ADJACENT contact (1-12, 2-11, 3-10, 4-9, 5-8). The 2x4 could not do this.\n  KEYING: J3 is key A, J4 (encoder) is key B. A key-A plug cannot enter a key-B receptacle, so the\n  hazard CLAUDE.md flags -- +/-15 V mis-mated into an RM44AC -- is now prevented MECHANICALLY by the\n  connector itself rather than by way-count, and it survives any future re-pinning of either harness.\n  ** Cavity numbering is extrapolated from TE's 8-way drawing; confirm against the molded numbers. **"
+	(text "J3 = DEUTSCH DT15-12PA, 12-way VERTICAL flanged receptacle, KEY A  (TE student samples, 2026-09-23)\n  1  +15V_ISO      12  ISO_COM       Swapped 2026-09-23 from the right-angle DTM13-12PA-R005:\n  2  LEM_A_M       11  ISO_COM       connectors come only as TE samples, no board-sized DTM header\n  3  LEM_B_M       10  ISO_COM       is sampleable, DT15-12PA is. DT = size-16 contacts (13 A);\n  4  LEM_C_M        9  ISO_COM       plug DT06-12SA + W12S wedgelock, contacts 0462-201-16141 or\n  5  -15V_ISO       8  ISO_COM       1062-16-0122 (stamped) - all sampleable. Pin numbers = the\n  6  SHIELD_LEM     7  n/c           cavity numbers printed on TE drawing C-DT15-12PX sheet 1.\n  The four spare ways stay on ISO_COM so that EVERY rail and EVERY sensor output has its\n  return on the physically ADJACENT contact (1-12, 2-11, 3-10, 4-9, 5-8).\n  KEYING: J3 is key A, J4 (encoder) is key B. A key-A plug cannot enter a key-B receptacle,\n  so +/-15 V can never be mis-mated into the RM44AC - prevented MECHANICALLY by the connector.\n  Mounting: 35.26 x 59.21 body on the board, flange 15.5 mm up, 4x #4-20 Plastite screws\n  from the board UNDERSIDE (heads on B.Cu - keep copper clear of the B.CrtYd circles)."
 		(exclude_from_sim no)
 		(at 289.56 90.17 0)
 		(effects
@@ -11933,7 +11933,7 @@
 				)
 			)
 		)
-		(property "Value" "LEM DTM13-12PA-R005 key A"
+		(property "Value" "LEM DT15-12PA key A"
 			(at 224.79 152.4 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11943,7 +11943,7 @@
 				)
 			)
 		)
-		(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DTM13-12P-R005_Horizontal"
+		(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DT15-12P_Vertical"
 			(at 224.79 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -11987,7 +11987,7 @@
 				)
 			)
 		)
-		(property "MPN" "DTM13-12PA-R005"
+		(property "MPN" "DT15-12PA"
 			(at 309.88 214.63 0)
 			(hide yes)
 			(show_name no)

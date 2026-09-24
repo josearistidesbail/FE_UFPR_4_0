@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/home/jose/Kicad/FE_UFPR_4_0/FE_UFPR_4_0.kicad_sch")
-		(date "2026-09-23T13:31:14")
+		(date "2026-09-23T23:20:12")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -6711,18 +6711,18 @@
 		)
 		(comp
 			(ref "J3")
-			(value "LEM DTM13-12PA-R005 key A")
-			(footprint "FE_UFPR_4_0:DEUTSCH_DTM13-12P-R005_Horizontal")
+			(value "LEM DT15-12PA key A")
+			(footprint "FE_UFPR_4_0:DEUTSCH_DT15-12P_Vertical")
 			(description "Generic connector, double row, 02x04, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)")
 			(fields
 				(field
 					(name "LCSC") "CONSIGNED")
 				(field
-					(name "MPN") "DTM13-12PA-R005")
+					(name "MPN") "DT15-12PA")
 				(field
 					(name "Manufacturer") "TE Connectivity / DEUTSCH")
 				(field
-					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DTM13-12P-R005_Horizontal")
+					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DT15-12P_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -6740,7 +6740,7 @@
 			)
 			(property
 				(name "MPN")
-				(value "DTM13-12PA-R005")
+				(value "DT15-12PA")
 			)
 			(property
 				(name "Manufacturer")
@@ -7307,7 +7307,7 @@
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C22936")
+					(name "LCSC") "C22935")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -7323,7 +7323,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C22936")
+				(value "C22935")
 			)
 			(property
 				(name "Sheetname")
@@ -7907,7 +7907,7 @@
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C22936")
+					(name "LCSC") "C22935")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -7923,7 +7923,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C22936")
+				(value "C22935")
 			)
 			(property
 				(name "Sheetname")
@@ -8627,7 +8627,7 @@
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C22936")
+					(name "LCSC") "C22935")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -8643,7 +8643,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C22936")
+				(value "C22935")
 			)
 			(property
 				(name "Sheetname")
@@ -9527,7 +9527,7 @@
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C22936")
+					(name "LCSC") "C22935")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -9543,7 +9543,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C22936")
+				(value "C22935")
 			)
 			(property
 				(name "Sheetname")
@@ -10864,14 +10864,18 @@
 		)
 		(comp
 			(ref "J5")
-			(value "VEH DTM13-08PA-R004 key A")
-			(footprint "FE_UFPR_4_0:DEUTSCH_DTM13-08PA-R004_Horizontal")
+			(value "VEH DT15-08PD key D")
+			(footprint "FE_UFPR_4_0:DEUTSCH_DT15-08P_Vertical")
 			(description "Generic connector, double row, 02x04, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)")
 			(fields
 				(field
 					(name "LCSC") "CONSIGNED")
 				(field
-					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DTM13-08PA-R004_Horizontal")
+					(name "MPN") "DT15-08PD")
+				(field
+					(name "Manufacturer") "TE Connectivity / DEUTSCH")
+				(field
+					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DT15-08P_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -10886,6 +10890,14 @@
 			(property
 				(name "LCSC")
 				(value "CONSIGNED")
+			)
+			(property
+				(name "MPN")
+				(value "DT15-08PD")
+			)
+			(property
+				(name "Manufacturer")
+				(value "TE Connectivity / DEUTSCH")
 			)
 			(property
 				(name "Sheetname")
@@ -12085,7 +12097,7 @@
 				(names "/vehicle_io/")
 				(tstamps "/1dbda7e8-fea8-4374-8822-c8926fcae792/")
 			)
-			(tstamps "caef2866-e5d7-488e-9dbb-0d9e64820a2a" "ca91de93-445b-440c-8707-e3840a2525af"
+			(tstamps "ca91de93-445b-440c-8707-e3840a2525af" "caef2866-e5d7-488e-9dbb-0d9e64820a2a"
 				"93748f0e-8881-417b-aebc-de568014b6a9"
 			)
 			(units
@@ -14405,7 +14417,7 @@
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C22936")
+					(name "LCSC") "C22935")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -14421,7 +14433,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C22936")
+				(value "C22935")
 			)
 			(property
 				(name "Sheetname")
@@ -17088,18 +17100,18 @@
 		)
 		(comp
 			(ref "J4")
-			(value "ENC DTM13-12PB-R005 key B")
-			(footprint "FE_UFPR_4_0:DEUTSCH_DTM13-12P-R005_Horizontal")
+			(value "ENC DT15-12PB key B")
+			(footprint "FE_UFPR_4_0:DEUTSCH_DT15-12P_Vertical")
 			(description "Generic connector, double row, 02x06, counter clockwise pin numbering scheme (similar to DIP package numbering), script generated (kicad-library-utils/schlib/autogen/connector/)")
 			(fields
 				(field
 					(name "LCSC") "CONSIGNED")
 				(field
-					(name "MPN") "DTM13-12PB-R005")
+					(name "MPN") "DT15-12PB")
 				(field
 					(name "Manufacturer") "TE Connectivity / DEUTSCH")
 				(field
-					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DTM13-12P-R005_Horizontal")
+					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DT15-12P_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -17117,7 +17129,7 @@
 			)
 			(property
 				(name "MPN")
-				(value "DTM13-12PB-R005")
+				(value "DT15-12PB")
 			)
 			(property
 				(name "Manufacturer")
@@ -17975,7 +17987,7 @@
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C22936")
+					(name "LCSC") "C22935")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -17991,7 +18003,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C22936")
+				(value "C22935")
 			)
 			(property
 				(name "Sheetname")
@@ -23163,7 +23175,7 @@
 				(field
 					(name "Value") "Conn_02x04_Counter_Clockwise")
 				(field
-					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DTM13-08PA-R004_Horizontal")
+					(name "Footprint") "FE_UFPR_4_0:DEUTSCH_DT15-08P_Vertical")
 				(field
 					(name "Datasheet")
 				)

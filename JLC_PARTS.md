@@ -108,7 +108,7 @@ Price ≈ $0.85–1.46 / 1000, stock 0.5 M–37 M on every line. **0.1 % gain/di
 | **SMAJ5.0A** TVS, SMA | C2925443 | **Preferred** | 64 985 | D17 on `+5V_VEH` |
 | **1206L020/30NR** polyfuse 0.2 A hold / 0.46 A trip, 30 V | C7542932 | Ext | 141 752 | F3 on `+5V_VEH` |
 | **120 Ω 0603 1 %** 0603WAF1200T5E | C22787 | **Basic** | 1.34 M | R122 CAN termination (new kit line) |
-| **DEUTSCH DTM13-08PA-R004** 8-way, key A | — | **CONSIGNED** | — | J5 vehicle connector — a **vertical-flange** part, see the S8 doc |
+| ~~**DEUTSCH DTM13-08PA-R004** 8-way, key A~~ → **DT15-08PD** (vertical, key D, TE sample) | — | **CONSIGNED** | — | J5 vehicle connector — swapped 2026-09-23, `DECISION_LOG.md`; plug DT06-08SD not sampleable |
 
 Everything else S8 places comes from the existing kit: SS34 `C8678` (the LaunchPad 5 V feed
 resolved in S3, placed on `launchpad`, and a second one as the `+5V_VEH` back-feed block), 10 µF/0805
@@ -131,7 +131,7 @@ live.** Other low-stock lines under the pessimistic source: `C5369735` 362, `C52
 | **3.00 kΩ 0603 0.1 %** Yageo RT0603BRD073KL | C136963 | Ext | 116 222 | R105 — reference-chain top |
 | **BAT54S** dual series Schottky, SOT-23 | C7420333 | **Preferred** | 314 690 | D10/D11 — ADC clamp to +3V3/GND |
 | **Ferrite 600 Ω @100 MHz** GZ2012D601TF, 0805 | C1017 | **Basic** | 369 732 | FB1 — encoder supply. **Must be a ferrite, not a resistor**: the reference chain hangs off the same node, so only a near-zero DCR keeps the bias cancellation exact |
-| **DEUTSCH DTM13-12PA-R005** (key A) / **-12PB-R005** (key B) | — | **CONSIGNED** | — | J3 (LEM) / J4 (encoder) |
+| ~~**DEUTSCH DTM13-12PA-R005** (key A) / **-12PB-R005** (key B)~~ → **DT15-12PA** (sample) / **DT15-12PB** (not sampleable) | — | **CONSIGNED** | — | J3 (LEM) / J4 (encoder) — vertical DT15 since 2026-09-23; plugs DT06-12SA (sample) / DT06-12SB (buy), W12S, size-16 contacts |
 
 ⚠ **Fourth time: pick the value from live stock, not the E96 table.** 3.01 kΩ 0.1 % (C705772) has
 **1 175** in stock and 3.09 kΩ (C861371) **2 980**; the E24 value **3.00 kΩ** has 116 222.

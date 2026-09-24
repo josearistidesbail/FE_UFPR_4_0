@@ -503,7 +503,7 @@
 					)
 				)
 			)
-			(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DTM13-08PA-R004_Horizontal"
+			(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DT15-08P_Vertical"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -3436,7 +3436,7 @@
 		)
 		(uuid "8c5f2713-8a2e-429c-982b-9e8291379b24")
 	)
-	(text "J5 - VEHICLE CONNECTOR: DEUTSCH DTM13-08PA-R004, 8-way, key A (CONSIGNED)\ncav 1  CAN_H          cav 8  CAN_L         (twisted pair, adjacent cavities)\ncav 2  +5V_VEH out    cav 7  GND           (ECU isolated-side supply, PROVISIONAL)\ncav 3  SW_MAIN_IN     cav 6  SW_MAIN_RTN   (FSAE shutdown circuit, car-referenced)\ncav 4  SW_START_IN    cav 5  SW_START_RTN  (start button, car-referenced)\nEvery function sits on a physically adjacent pair (1-8, 2-7, 3-6, 4-5).\nWHY 8-WAY: the two DTM13-12P-R005 on this board use keys A and B, and TE's\nboard-mount DTM13 family exists only in 8- and 12-way. A 12-way plug cannot\nenter this 8-way receptacle, so mis-mating the LEM or encoder harness into the\nvehicle socket (or vice versa) is impossible by way-count.\n!! -R004 is a VERTICAL PANEL FLANGE (68.58 x 33.02 + 4 ears, slots 8.89 x 2.54),\nnot a flat base like the 12-way -R005: flange + housing hang beyond the board\nedge and the flange reaches 4.4 mm below the board. Only the 8 pins hold it.\nS9 must (a) put the board edge on the footprint's Dwgs.User line and (b) add a\nbracket or panel to the flange slots. Cavity numbers taken from the 8-way\ndrawing (which labels them): near row 1-4, far row 5-8 - confirm on a real\nDTM06-08SA before crimping, like J3/J4."
+	(text "J5 - VEHICLE CONNECTOR: DEUTSCH DT15-08PD, 8-way VERTICAL (180 deg) flanged receptacle, key D  (TE student-sample program, 2026-09-23)\ncav 1  CAN_H          cav 8  CAN_L         (twisted pair, adjacent cavities)\ncav 2  +5V_VEH out    cav 7  GND           (ECU isolated-side supply, PROVISIONAL)\ncav 3  SW_MAIN_IN     cav 6  SW_MAIN_RTN   (FSAE shutdown circuit, car-referenced)\ncav 4  SW_START_IN    cav 5  SW_START_RTN  (start button, car-referenced)\nEvery function sits on a physically adjacent pair (1-8, 2-7, 3-6, 4-5).\nSwapped 2026-09-23 from the right-angle DTM13-08PA-R004 (whose panel flange hung past the board edge).\nWHY 8-WAY / KEY D: J3 and J4 are 12-way keys A/B; a 12-way plug cannot enter this 8-way receptacle,\nand key D also excludes every key-A/B/C 8-way plug. DT15-08PD is the only vertical 8-way header in\nTE's sample program; its plug DT06-08SD is NOT sampleable (DT06-08SA, key A, is) - settle the plug\nsource before crimping. Plug + W8S wedgelock, size-16 contacts 0462-201-16141 / 1062-16-0122.\nPin numbers = cavity numbers on TE drawing C-DT15-08PX sheets 1-2 (mating face: pin 1 bottom-left,\n1-4 up the left column, 5-8 down the right). Recommended PCB layout is printed on sheet 2.\nBoard side: 35.26 x 55.12 body on the board, flange 15.5 mm up, 4x #4-20 Plastite screws from the\nboard UNDERSIDE (heads on B.Cu - keep copper clear of the B.CrtYd circles)."
 		(exclude_from_sim no)
 		(at 220.98 20.32 0)
 		(effects
@@ -7712,7 +7712,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "VEH DTM13-08PA-R004 key A"
+		(property "Value" "VEH DT15-08PD key D"
 			(at 36.83 87.63 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7723,7 +7723,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DTM13-08PA-R004_Horizontal"
+		(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DT15-08P_Vertical"
 			(at 45.72 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -7757,6 +7757,28 @@
 			)
 		)
 		(property "LCSC" "CONSIGNED"
+			(at 45.72 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "DT15-08PD"
+			(at 45.72 73.66 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Manufacturer" "TE Connectivity / DEUTSCH"
 			(at 45.72 73.66 0)
 			(hide yes)
 			(show_name no)

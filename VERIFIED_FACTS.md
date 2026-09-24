@@ -29,6 +29,8 @@ board top and only the 8 pins retain the part. S7's comparison table had assumed
 it — corrected. TE's repository holds **no** `DTM13-12PC/12PD`, `DTM13-08PB` or `DT13-08/12PA` drawing
 under any flange suffix tried (probed slowly after a 222-request burst earned a temporary 403).
 
+**Verified 2026-09-23 on te.com (logged-in browser) and from TE drawings C-DT15-12PX rev D2 / C-DT15-08PX-XXXX rev A (`datasheets/`):** TE **does** list vertical DTM headers — `DTM15-12PA/PB/PC/PD` (drawing C-DTM15-12PX rev B2: 60.96 × 33.02 panel flange, PCB screwed to the rear face, 4.19 mm pin pitch, cavities 1–6 / 12–7 printed) — the S7 "no vertical DTM13" result was a name miss; there is **no vertical 8-way DTM**. TE sample program ("Amostras disponíveis"): DTM headers → only the four 101 mm EEC-325X4 telematics parts; DT → DT15-12PA, DTF15-12PA, DT15-08PD, DT13-08PA, DT06-12SA, DT06-08SA, W12S, W8S, 0462-201-16141, 1062-16-0122 **yes**; DT06-12SB, DT06-08SD, DTM15-*, DTM13-12PA/PB-R005, DTM13-08PA-R004 **no**. DT 12-way cavity numbers are printed on the drawing (mating face: pin 1 bottom-left, 1–6 up the left column, 7–12 down the right); the 8-way has TE's own "Recommended PCB layout" on sheet 2 (pin holes Ø1.88 +0.13, screw holes Ø3.43 +0.13, rows ±2.73 / ±7.175, columns ±4.56, screws 21.34 × 27.2). Body = flange outline on the board, flange face 15.52 mm up, 30.1 mm overall, pins 3.1 mm below.
+
 **Verified in S4 from the PrimeSTACK datasheet (`datasheets/`, pages 2 and 6) — no longer assumptions:**
 DB37 pin functions for all 37 pins incl. TOP/BOT within each half-bridge; **fault = HIGH**
 ("open collector, logic low = no fault", max 15 mA); every analog output rated **load max 5 mA**;
