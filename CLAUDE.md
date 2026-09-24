@@ -31,8 +31,8 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 **S12.6 BOARD RE-PLACED AND RE-ROUTED FOR THE VERTICAL DT15 HEADERS (2026-09-24, branch `dt15-vertical`):** the board grew 32 mm to the left
 (**178 × 130 mm**, left edge x = 96.0), J5 sits top-left, J4 beside it against the encoder front-end, J3 bottom-left beside U4; every satellite
-moved under its connector, 12 B.Cu rule areas keep copper/vias away from the #4-20 screw heads. **DRC 0 errors / 0 unconnected / parity 0, 6 by-design
-silk warnings (R24↔J2 ×3, J2 edge ×2, the user's 0.7 mm author text vs the 0.8 mm text_height rule); net membership = `golden.net`; ERC 0.** `fab/` rebuilt 2026-09-24 on the new
+moved under its connector, 12 B.Cu rule areas keep copper/vias away from the #4-20 screw heads. **DRC 0 errors / 0 unconnected / parity 0, 5 by-design
+silk warnings (R24↔J2 ×3, J2 edge ×2); net membership = `golden.net`; ERC 0.** `fab/` rebuilt 2026-09-24 on the new
 origin (96.0,219.9); trace lengths reviewed (`DECISION_LOG.md`). Not done yet: JLC placement preview (CPL rotations), then tag. H1 moved to
 (101, 95); no hole in the new bottom-left corner yet (orientation/bracket still open). Harness side: DT06-12SB and DT06-08SD are not TE samples
 (`OPEN_ITEMS.md`). ⚠ Local History disabled; never `pcbnew.SaveBoard` into the project dir (`TOOLING_NOTES.md`). DB37 MPN, H2, KTY class still open.

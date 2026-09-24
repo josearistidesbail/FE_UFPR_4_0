@@ -75499,12 +75499,12 @@
 		(uuid "c14885d4-cb7e-46ad-9856-359daa458ff4")
 	)
 	(gr_text "by José Aristides Bail\n"
-		(at 140.6 176.8 0)
+		(at 138.4 176.8 0)
 		(layer "F.SilkS")
 		(uuid "ad044a74-8cbc-4dd1-b4d9-a91dac165655")
 		(effects
 			(font
-				(size 0.7 0.7)
+				(size 1 1)
 				(thickness 0.175)
 				(bold yes)
 			)
