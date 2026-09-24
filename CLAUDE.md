@@ -30,8 +30,8 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 ## Current phase
 
 **S12 FAB PACKAGE BUILT (2026-09-23): `fab/` = gerbers + JLC BOM/CPL + verify record. DRC 0 / 0 unconnected / parity 0 (7 by-design silk warnings), ERC 0, netlist = `golden.net`.**
-BOM: 71 LCSC lines / 63 codes, **0 unvetted** (`C22936` 1 Ω defect on six 1 MΩ positions fixed → `C22935`); $140.62 parts + $92.10 feeders / 5 boards. Decisions: U4 JLC-placed,
-Economic single-side PCBA with the 12 B.Cu parts hand-soldered, `HW_NAME "FE_UFPR_4_0"`, no coating before bring-up. **Not yet orderable: the CPL rotation offsets
+BOM: 71 LCSC lines / 63 codes, **0 unvetted** (`C22936` 1 Ω defect on six 1 MΩ positions fixed → `C22935`); $140.62 parts + $92.10 feeders / 5 boards. Order matched at JLC 2026-09-24 (`fab/jlc_order_2026-09-24.xlsx`, $92.68 parts):
+Economic single-side PCBA; hand-soldered by the team = 12 B.Cu parts + J20–J23 + U4 + U12–U17 (shopping list `fab/FE_UFPR_4_0_HANDSOLDER_BOM.csv`), `HW_NAME "FE_UFPR_4_0"`, no coating before bring-up. **Not yet orderable: the CPL rotation offsets
 (`tools/fab/jlc_rotations.json`) are seeded from the community table, not confirmed — check JLC's placement preview first (`S12_FAB_PACKAGE.md` §3), then tag `v4.0-release`**
 (tagged `v4.0-fab-candidate` now). Rebuild the package with `sh tools/fab/make_package.sh`. Firmware side: [`S12_FIRMWARE_HANDOFF.md`](S12_FIRMWARE_HANDOFF.md) §13.
 ⚠ KiCad **Local History is disabled** (`TOOLING_NOTES.md`); **never `pcbnew.SaveBoard` into the project dir** — it rewrites `.kicad_pro`. Orientation/bracket, DB37 MPN, H2 hardware,

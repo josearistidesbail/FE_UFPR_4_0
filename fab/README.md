@@ -10,6 +10,8 @@ refuses to run while KiCad has the board or a sheet open). Everything here is de
 | `FE_UFPR_4_0_CPL.csv` | CPL | Designator, Mid X, Mid Y, Layer, Rotation. Origin = board bottom-left corner, Y up. Rotations = KiCad + `tools/fab/jlc_rotations.json` offsets — **confirm on JLC's placement preview before paying** (`S12_FAB_PACKAGE.md` §3) |
 | `jlc_verify.md` / `.json` | — | live stock/price/Basic/value check of every LCSC line on the day the package was built |
 | `kicad_bom.csv` | — | raw `kicad-cli` BOM (includes NOFIT/CONSIGNED placeholders) — the input the two files above were made from |
+| **`FE_UFPR_4_0_HANDSOLDER_BOM.csv`** | — | **shopping list for everything the team solders** (bottom-side parts, the lines deselected at JLC, the five connectors): LCSC code where one exists, per-board / run / suggested order quantities with spares |
+| `jlc_order_2026-09-24.xlsx` | — | JLC's BOM-matching export of the order as placed (64 lines selected, $92.68 parts) |
 
 ## PCB options (JLC quote page)
 
@@ -29,7 +31,7 @@ refuses to run while KiCad has the board or a sheet open). Everything here is de
 
 | Option | Value |
 |---|---|
-| Service | **Economic, single side (top)** with the 12 bottom parts hand-soldered *(decision D2 — if Standard two-sided is chosen instead, rebuild without `--hand-solder`)* |
+| Service | **Economic, single side (top)**; hand-soldered by the team: the 12 bottom parts (D2) and, deselected for cost on 2026-09-24, J20–J23 / U4 / U12–U17 (edit `HAND=` in `make_package.sh` to change) |
 | Qty | 5 |
 | Tooling holes | let JLC add them (the board has no free edge strip reserved; check they land clear of J2/J5 overhangs in the preview) |
 | Confirm parts placement | **yes** — this is the rotation/polarity check |
@@ -38,6 +40,6 @@ refuses to run while KiCad has the board or a sheet open). Everything here is de
 ## Not in the BOM — team supplies and solders
 
 J1 Molex Mini-Fit Jr 5566-02A · J2 SUB-D 37 socket right-angle (UNC 4-40 jackscrews) · J3 DTM13-12PA-R005 · J4 DTM13-12PB-R005 ·
-J5 DTM13-08PA-R004 · 12 bottom-side SMD (R2, R3, D17, C119, C25–C28, R118, R119, C113, C120 — values in `S12_FAB_PACKAGE.md` §2/§4)
-. U4 is JLC-placed (D1). Solder jumper defaults after assembly: JP1 1-2, JP2 open, JP3/4/5 1-2, JP6 bridged
+J5 DTM13-08PA-R004 · 12 bottom-side SMD (R2, R3, D17, C119, C25–C28, R118, R119, C113, C120) · 4× 2×10 headers J20–J23 · U4 URA2415YMD-6WR3 · 6× OPA2376AIDR U12–U17.
+Codes and quantities: `FE_UFPR_4_0_HANDSOLDER_BOM.csv`. Solder jumper defaults after assembly: JP1 1-2, JP2 open, JP3/4/5 1-2, JP6 bridged
 (`S12_FAB_PACKAGE.md` §4).

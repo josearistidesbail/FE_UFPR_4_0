@@ -4,7 +4,7 @@
   kicad-cli sch export bom --fields 'Reference,Value,Footprint,LCSC,${QUANTITY}' --labels 'Reference,Value,Footprint,LCSC,Qty' \
       --group-by 'Value,Footprint,LCSC' -o SCRATCH/bom.csv FE_UFPR_4_0.kicad_sch
   kicad-cli pcb export pos --format csv --units mm --side both --use-drill-file-origin -o SCRATCH/pos.csv FE_UFPR_4_0.kicad_pcb
-  python3 tools/fab/jlc_bomcpl.py SCRATCH/bom.csv SCRATCH/pos.csv OUTDIR [--rotations tools/fab/jlc_rotations.json] [--origin X,Y] [--hand-solder R2,R3,...]
+  python3 tools/fab/jlc_bomcpl.py SCRATCH/bom.csv SCRATCH/pos.csv OUTDIR [--rotations tools/fab/jlc_rotations.json] [--origin X,Y] [--hand-solder R2,R3,...] [--boards 5]
 
 Writes OUTDIR/FE_UFPR_4_0_BOM.csv (Comment, Designator, Footprint, LCSC Part #) and OUTDIR/FE_UFPR_4_0_CPL.csv
 (Designator, Mid X, Mid Y, Layer, Rotation).  Lines whose LCSC is NOFIT / CONSIGNED / empty are dropped from
@@ -16,7 +16,12 @@ bottom-left corner, e.g. 127.95,219.9) rebases them so that corner is (0,0) with
 expects when the board has no aux origin.  Rotations are normalised to 0..360.  Rotation-table keys are footprint-name
 PREFIXES (longest match wins); keys starting with `_` are comments.  Bottom-side rotation is left as KiCad reports it
 (plus the table offset) - check D17 (the only polarised bottom part) in the preview.  `--hand-solder` drops the
-listed references from both files (Economic single-side PCBA: the 12 B.Cu parts) and prints them for the assembly sheet.
+listed references from both files (Economic single-side PCBA: the 12 B.Cu parts, plus whatever was deselected at
+JLC) and prints them.  Those parts, together with the CONSIGNED connectors, go to OUTDIR/FE_UFPR_4_0_HANDSOLDER_BOM.csv:
+the shopping list for the team (LCSC code where one exists, MPN/value otherwise, per-board and run quantities, and a
+suggested order quantity with spares: passives/diodes +20 % (min +5), ICs +5, connectors/headers +2, modules +1).
+BOM lines are grouped by footprint + LCSC (not by value), so six LEDs whose values carry different rail names become
+ONE JLC line instead of six "Unconfirmed / multiple lines matched to the same part" warnings.
 """
 import csv, json, os, sys
 
@@ -25,6 +30,7 @@ ROT = json.load(open(sys.argv[sys.argv.index('--rotations') + 1])) if '--rotatio
 ROT = {k: v for k, v in ROT.items() if not k.startswith('_')}
 ORG = tuple(float(v) for v in sys.argv[sys.argv.index('--origin') + 1].split(',')) if '--origin' in sys.argv else None
 HAND = set(sys.argv[sys.argv.index('--hand-solder') + 1].split(',')) if '--hand-solder' in sys.argv else set()
+BOARDS = int(sys.argv[sys.argv.index('--boards') + 1]) if '--boards' in sys.argv else 5
 def rot_offset(fp):
     hits = [k for k in ROT if fp.startswith(k)]
     return ROT[max(hits, key=len)] if hits else None
@@ -43,22 +49,43 @@ def expand(field):
 def refkey(s): m = re.fullmatch(r'([A-Z]+)(\d+)', s); return (m[1], int(m[2])) if m else (s, 0)
 
 lcsc_of, value_of, fp_of = {}, {}, {}
-skipped = []
+skipped, hand_rows = [], []
 for r in csv.DictReader(open(BOM)):
     refs = expand(r['Reference'])
     code = r['LCSC'].strip(); fp = r['Footprint'].split(':')[-1]
     for ref in refs:
-        if code in SKIP: skipped.append((ref, code or 'EMPTY', r['Value'])); continue
-        if ref in HAND: skipped.append((ref, 'HAND_SOLDER', f"{r['Value']} {fp} {code}")); continue
+        if code in SKIP:
+            skipped.append((ref, code or 'EMPTY', r['Value']))
+            if code == 'CONSIGNED': hand_rows.append((ref, r['Value'], fp, code))
+            continue
+        if ref in HAND: skipped.append((ref, 'HAND_SOLDER', f"{r['Value']} {fp} {code}")); hand_rows.append((ref, r['Value'], fp, code)); continue
         lcsc_of[ref] = code; value_of[ref] = r['Value']; fp_of[ref] = fp
 
 with open(os.path.join(OUT, 'FE_UFPR_4_0_BOM.csv'), 'w', newline='') as f:
     w = csv.writer(f); w.writerow(['Comment', 'Designator', 'Footprint', 'LCSC Part #'])
     groups = {}
-    for ref, code in lcsc_of.items(): groups.setdefault((value_of[ref], fp_of[ref], code), []).append(ref)
-    for (val, fp, code), refs in sorted(groups.items(), key=lambda kv: kv[1][0]):
-        w.writerow([val, ','.join(sorted(refs, key=refkey)), fp, code])
+    for ref, code in lcsc_of.items(): groups.setdefault((fp_of[ref], code), []).append(ref)
+    for (fp, code), refs in sorted(groups.items(), key=lambda kv: refkey(min(kv[1], key=refkey))):
+        vals = sorted({value_of[r] for r in refs}, key=len)
+        w.writerow([vals[0], ','.join(sorted(refs, key=refkey)), fp, code])
 
+# shopping list for everything the team solders: hand-solder refs + consigned connectors
+import math
+def spares(pfx, need):
+    if pfx in ('R', 'C', 'D', 'L', 'F', 'FB'): return need + max(5, math.ceil(need * 0.2))
+    if pfx == 'J': return need + 2
+    if pfx == 'U' and 'Converter' in fp_h: return need + 1
+    return need + 5
+hgroups = {}
+for ref, val, fp_h, code in hand_rows: hgroups.setdefault((fp_h, code if code not in SKIP else '', val if code in SKIP else ''), []).append((ref, val))
+with open(os.path.join(OUT, 'FE_UFPR_4_0_HANDSOLDER_BOM.csv'), 'w', newline='') as f:
+    w = csv.writer(f); w.writerow(['LCSC', 'Value / MPN', 'Footprint', 'Designators', 'Per board', f'For {BOARDS} boards', 'Suggested order qty', 'Why hand-soldered'])
+    for (fp_h, code, _), items in sorted(hgroups.items(), key=lambda kv: (kv[0][1] == '', refkey(min((r for r, _ in kv[1]), key=refkey)))):
+        refs = sorted({r for r, _ in items}, key=refkey); vals = sorted({v for _, v in items}, key=len)
+        need = len(refs) * BOARDS; pfx = refkey(refs[0])[0]
+        bottom = {'R2', 'R3', 'D17', 'C119', 'C25', 'C26', 'C27', 'C28', 'R118', 'R119', 'C113', 'C120'}
+        why = 'consigned connector (no LCSC line)' if not code else ('bottom side (Economic PCBA is single-side)' if set(refs) <= bottom else 'deselected at JLC (cost)')
+        w.writerow([code, vals[0] if code else ' / '.join(vals), fp_h, ','.join(refs), len(refs), need, spares(pfx, need) if code else need, why])
 n_cpl = 0; missing_rot = set()
 with open(os.path.join(OUT, 'FE_UFPR_4_0_CPL.csv'), 'w', newline='') as f:
     w = csv.writer(f); w.writerow(['Designator', 'Mid X', 'Mid Y', 'Layer', 'Rotation'])
