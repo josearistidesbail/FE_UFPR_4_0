@@ -1,13 +1,14 @@
 #!/bin/bash
 # S12: rebuild the JLCPCB order package into fab/ from the committed KiCad files.
-#   sh tools/fab/make_package.sh [boards]        (default 5)
+#   bash tools/fab/make_package.sh [assembled boards]   (default 2; the hand-solder BOM orders for assembled + 1 spare board)
 # Writes fab/gerbers/ (11 gerbers + Excellon PTH/NPTH + maps), fab/FE_UFPR_4_0_BOM.csv, fab/FE_UFPR_4_0_CPL.csv,
 # fab/jlc_verify.{json,md} (live JLCSearch stock/price/value check, ~1 min) and fab/FE_UFPR_4_0_gerbers.zip
 # (zip is git-ignored; upload the zip + BOM + CPL).  Intermediate kicad-cli exports go to a temp dir.
 # Refuses to run with the board or a sheet open in KiCad (lock files) so the exports match what is on disk.
 set -e
 cd "$(dirname "$0")/../.."
-BOARDS=${1:-5}
+BOARDS=${1:-2}
+SPARE_BOARDS=1
 # Hand-soldered by the team (dropped from the JLC BOM/CPL, listed in fab/FE_UFPR_4_0_HANDSOLDER_BOM.csv):
 #   D2 (2026-09-23): the 12 B.Cu parts - Economic PCBA is single-side;
 #   order of 2026-09-24 (user): J20-J23 headers, U4 URA2415YMD-6WR3, U12-U17 OPA2376 deselected at JLC for cost.
@@ -31,7 +32,7 @@ done
 for d in fab/gerbers/*; do [ -e "$TMP/gerb/$(basename "$d")" ] || { rm "$d"; echo "removed $(basename "$d")"; }; done
 
 # board corner = (127.95, 219.9) in KiCad page coordinates (Edge.Cuts bottom-left); the board has no aux origin
-python3 tools/fab/jlc_bomcpl.py "$TMP/bom.csv" "$TMP/pos.csv" fab --rotations tools/fab/jlc_rotations.json --origin 127.95,219.9 ${HAND:+--hand-solder $HAND} --boards "$BOARDS"
+python3 tools/fab/jlc_bomcpl.py "$TMP/bom.csv" "$TMP/pos.csv" fab --rotations tools/fab/jlc_rotations.json --origin 127.95,219.9 ${HAND:+--hand-solder $HAND} --boards "$BOARDS" --spare-boards "$SPARE_BOARDS"
 python3 tools/fab/jlc_verify.py "$TMP/bom.csv" --boards "$BOARDS" --out fab/jlc_verify.json --md fab/jlc_verify.md
 cp "$TMP/bom.csv" fab/kicad_bom.csv
 

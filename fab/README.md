@@ -10,14 +10,14 @@ refuses to run while KiCad has the board or a sheet open). Everything here is de
 | `FE_UFPR_4_0_CPL.csv` | CPL | Designator, Mid X, Mid Y, Layer, Rotation. Origin = board bottom-left corner, Y up. Rotations = KiCad + `tools/fab/jlc_rotations.json` offsets — **confirm on JLC's placement preview before paying** (`S12_FAB_PACKAGE.md` §3) |
 | `jlc_verify.md` / `.json` | — | live stock/price/Basic/value check of every LCSC line on the day the package was built |
 | `kicad_bom.csv` | — | raw `kicad-cli` BOM (includes NOFIT/CONSIGNED placeholders) — the input the two files above were made from |
-| **`FE_UFPR_4_0_HANDSOLDER_BOM.csv`** | — | **shopping list for everything the team solders** (bottom-side parts, the lines deselected at JLC, the five connectors): LCSC code where one exists, per-board / run / suggested order quantities with spares |
+| **`FE_UFPR_4_0_HANDSOLDER_BOM.csv`** | — | **shopping list for everything the team solders** (bottom-side parts, the lines deselected at JLC, the five connectors): LCSC code where one exists, per-board quantity, quantity for the 2 assembled boards, order quantity for 3 boards (`make_package.sh [assembled]`, +1 spare board) |
 | `jlc_order_2026-09-24.xlsx` | — | JLC's BOM-matching export of the order as placed (64 lines selected, $92.68 parts) |
 
 ## PCB options (JLC quote page)
 
 | Option | Value | From |
 |---|---|---|
-| Layers / size / qty | **4** / **146.0 × 130.0 mm** / 5 | Edge.Cuts |
+| Layers / size / qty | **4** / **146.0 × 130.0 mm** / 5 PCBs | Edge.Cuts |
 | Stackup | **JLC04161H-7628**, 1.6 mm, outer 1 oz, inner 0.5 oz | `S9_BOARD_SETUP.md` §3 (board file stackup) |
 | Surface finish | **HASL lead-free** (board file); ENIG optional | |
 | Min via | 0.6 / 0.3 mm (Default class), smallest drill 0.3 mm | `.kicad_pro` netclasses |
@@ -32,7 +32,7 @@ refuses to run while KiCad has the board or a sheet open). Everything here is de
 | Option | Value |
 |---|---|
 | Service | **Economic, single side (top)**; hand-soldered by the team: the 12 bottom parts (D2) and, deselected for cost on 2026-09-24, J20–J23 / U4 / U12–U17 (edit `HAND=` in `make_package.sh` to change) |
-| Qty | 5 |
+| Qty | **2 assembled** (of 5 PCBs) |
 | Tooling holes | let JLC add them (the board has no free edge strip reserved; check they land clear of J2/J5 overhangs in the preview) |
 | Confirm parts placement | **yes** — this is the rotation/polarity check |
 | Consigned parts | none from JLC's point of view (J1–J5 are on the team) |
