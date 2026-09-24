@@ -4,7 +4,7 @@
   kicad-cli sch export bom --fields 'Reference,Value,Footprint,LCSC,${QUANTITY}' --labels 'Reference,Value,Footprint,LCSC,Qty' \
       --group-by 'Value,Footprint,LCSC' -o SCRATCH/bom.csv FE_UFPR_4_0.kicad_sch
   kicad-cli pcb export pos --format csv --units mm --side both --use-drill-file-origin -o SCRATCH/pos.csv FE_UFPR_4_0.kicad_pcb
-  python3 tools/fab/jlc_bomcpl.py SCRATCH/bom.csv SCRATCH/pos.csv OUTDIR [--rotations tools/fab/jlc_rotations.json] [--origin X,Y] [--hand-solder R2,R3,...] [--boards 5]
+  python3 tools/fab/jlc_bomcpl.py SCRATCH/bom.csv SCRATCH/pos.csv OUTDIR [--rotations tools/fab/jlc_rotations.json] [--origin X,Y] [--hand-solder R2,R3,...] [--boards 2] [--spare-boards 1]
 
 Writes OUTDIR/FE_UFPR_4_0_BOM.csv (Comment, Designator, Footprint, LCSC Part #) and OUTDIR/FE_UFPR_4_0_CPL.csv
 (Designator, Mid X, Mid Y, Layer, Rotation).  Lines whose LCSC is NOFIT / CONSIGNED / empty are dropped from
@@ -18,8 +18,8 @@ PREFIXES (longest match wins); keys starting with `_` are comments.  Bottom-side
 (plus the table offset) - check D17 (the only polarised bottom part) in the preview.  `--hand-solder` drops the
 listed references from both files (Economic single-side PCBA: the 12 B.Cu parts, plus whatever was deselected at
 JLC) and prints them.  Those parts, together with the CONSIGNED connectors, go to OUTDIR/FE_UFPR_4_0_HANDSOLDER_BOM.csv:
-the shopping list for the team (LCSC code where one exists, MPN/value otherwise, per-board and run quantities, and a
-suggested order quantity with spares: passives/diodes +20 % (min +5), ICs +5, connectors/headers +2, modules +1).
+the shopping list for the team (LCSC code where one exists, MPN/value otherwise, per-board quantity, quantity for the
+`--boards` assembled, and the order quantity = enough for `--boards` + `--spare-boards` boards; default 2 + 1 = 3 boards).
 BOM lines are grouped by footprint + LCSC (not by value), so six LEDs whose values carry different rail names become
 ONE JLC line instead of six "Unconfirmed / multiple lines matched to the same part" warnings.
 """
@@ -30,7 +30,8 @@ ROT = json.load(open(sys.argv[sys.argv.index('--rotations') + 1])) if '--rotatio
 ROT = {k: v for k, v in ROT.items() if not k.startswith('_')}
 ORG = tuple(float(v) for v in sys.argv[sys.argv.index('--origin') + 1].split(',')) if '--origin' in sys.argv else None
 HAND = set(sys.argv[sys.argv.index('--hand-solder') + 1].split(',')) if '--hand-solder' in sys.argv else set()
-BOARDS = int(sys.argv[sys.argv.index('--boards') + 1]) if '--boards' in sys.argv else 5
+BOARDS = int(sys.argv[sys.argv.index('--boards') + 1]) if '--boards' in sys.argv else 2
+SPARE = int(sys.argv[sys.argv.index('--spare-boards') + 1]) if '--spare-boards' in sys.argv else 1
 def rot_offset(fp):
     hits = [k for k in ROT if fp.startswith(k)]
     return ROT[max(hits, key=len)] if hits else None
@@ -70,22 +71,16 @@ with open(os.path.join(OUT, 'FE_UFPR_4_0_BOM.csv'), 'w', newline='') as f:
         w.writerow([vals[0], ','.join(sorted(refs, key=refkey)), fp, code])
 
 # shopping list for everything the team solders: hand-solder refs + consigned connectors
-import math
-def spares(pfx, need):
-    if pfx in ('R', 'C', 'D', 'L', 'F', 'FB'): return need + max(5, math.ceil(need * 0.2))
-    if pfx == 'J': return need + 2
-    if pfx == 'U' and 'Converter' in fp_h: return need + 1
-    return need + 5
 hgroups = {}
 for ref, val, fp_h, code in hand_rows: hgroups.setdefault((fp_h, code if code not in SKIP else '', val if code in SKIP else ''), []).append((ref, val))
 with open(os.path.join(OUT, 'FE_UFPR_4_0_HANDSOLDER_BOM.csv'), 'w', newline='') as f:
-    w = csv.writer(f); w.writerow(['LCSC', 'Value / MPN', 'Footprint', 'Designators', 'Per board', f'For {BOARDS} boards', 'Suggested order qty', 'Why hand-soldered'])
+    w = csv.writer(f); w.writerow(['LCSC', 'Value / MPN', 'Footprint', 'Designators', 'Per board', f'For {BOARDS} boards', f'Order qty ({BOARDS + SPARE} boards)', 'Why hand-soldered'])
     for (fp_h, code, _), items in sorted(hgroups.items(), key=lambda kv: (kv[0][1] == '', refkey(min((r for r, _ in kv[1]), key=refkey)))):
         refs = sorted({r for r, _ in items}, key=refkey); vals = sorted({v for _, v in items}, key=len)
-        need = len(refs) * BOARDS; pfx = refkey(refs[0])[0]
+        need = len(refs) * BOARDS
         bottom = {'R2', 'R3', 'D17', 'C119', 'C25', 'C26', 'C27', 'C28', 'R118', 'R119', 'C113', 'C120'}
         why = 'consigned connector (no LCSC line)' if not code else ('bottom side (Economic PCBA is single-side)' if set(refs) <= bottom else 'deselected at JLC (cost)')
-        w.writerow([code, vals[0] if code else ' / '.join(vals), fp_h, ','.join(refs), len(refs), need, spares(pfx, need) if code else need, why])
+        w.writerow([code, vals[0] if code else ' / '.join(vals), fp_h, ','.join(refs), len(refs), need, len(refs) * (BOARDS + SPARE), why])
 n_cpl = 0; missing_rot = set()
 with open(os.path.join(OUT, 'FE_UFPR_4_0_CPL.csv'), 'w', newline='') as f:
     w = csv.writer(f); w.writerow(['Designator', 'Mid X', 'Mid Y', 'Layer', 'Rotation'])

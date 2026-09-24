@@ -1,5 +1,5 @@
 {
- "boards": 5,
+ "boards": 2,
  "date": "2026-09-23",
  "lines": [
   {
@@ -8,7 +8,7 @@
    "value": "100uF 50V",
    "footprint": "CP_Elec_8x10.5",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -26,7 +26,7 @@
    "value": "10uF 50V",
    "footprint": "C_1206_3216Metric",
    "qty": 10,
-   "need": 50,
+   "need": 20,
    "flags": [],
    "mfr": "CL31A106KBHNNNE",
    "package": "1206",
@@ -42,7 +42,7 @@
    "value": "100nF 50V",
    "footprint": "C_0603_1608Metric",
    "qty": 31,
-   "need": 155,
+   "need": 62,
    "flags": [],
    "mfr": "CC0603KRX7R9BB104",
    "package": "0603",
@@ -58,7 +58,7 @@
    "value": "1uF 50V",
    "footprint": "C_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "CL10A105KB8NNNC",
    "package": "0603",
@@ -74,7 +74,7 @@
    "value": "47nF 50V",
    "footprint": "C_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "CL10B473KB8NNNC",
    "package": "0603",
@@ -90,7 +90,7 @@
    "value": "10uF 25V",
    "footprint": "C_0805_2012Metric",
    "qty": 9,
-   "need": 45,
+   "need": 18,
    "flags": [],
    "mfr": "CL21A106KAYNNNE",
    "package": "0805",
@@ -106,7 +106,7 @@
    "value": "1uF 50V",
    "footprint": "C_0805_2012Metric",
    "qty": 11,
-   "need": 55,
+   "need": 22,
    "flags": [],
    "mfr": "CL21B105KBFNNNE",
    "package": "0805",
@@ -122,7 +122,7 @@
    "value": "1nF C0G",
    "footprint": "C_0603_1608Metric",
    "qty": 30,
-   "need": 150,
+   "need": 60,
    "flags": [
     "EXTENDED"
    ],
@@ -140,7 +140,7 @@
    "value": "22nF C0G",
    "footprint": "C_0805_2012Metric",
    "qty": 11,
-   "need": 55,
+   "need": 22,
    "flags": [
     "EXTENDED"
    ],
@@ -158,7 +158,7 @@
    "value": "2.2nF C0G",
    "footprint": "C_0603_1608Metric",
    "qty": 10,
-   "need": 50,
+   "need": 20,
    "flags": [
     "EXTENDED"
    ],
@@ -176,7 +176,7 @@
    "value": "4.7nF C0G",
    "footprint": "C_0603_1608Metric",
    "qty": 6,
-   "need": 30,
+   "need": 12,
    "flags": [
     "EXTENDED"
    ],
@@ -194,7 +194,7 @@
    "value": "SMCJ26A",
    "footprint": "D_SMC",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -212,7 +212,7 @@
    "value": "BZX84C15",
    "footprint": "SOT-23",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "BZX84C15",
    "package": "SOT-23",
@@ -228,7 +228,7 @@
    "value": "red +24V_PROT",
    "footprint": "LED_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "KT-0603R",
    "package": "0603",
@@ -244,7 +244,7 @@
    "value": "red +13V5_GATE",
    "footprint": "LED_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "KT-0603R",
    "package": "0603",
@@ -260,7 +260,7 @@
    "value": "red +5V",
    "footprint": "LED_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "KT-0603R",
    "package": "0603",
@@ -276,7 +276,7 @@
    "value": "red +3V3",
    "footprint": "LED_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "KT-0603R",
    "package": "0603",
@@ -292,7 +292,7 @@
    "value": "red +15V_ISO",
    "footprint": "LED_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "KT-0603R",
    "package": "0603",
@@ -308,7 +308,7 @@
    "value": "RED GATE_EN",
    "footprint": "LED_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "KT-0603R",
    "package": "0603",
@@ -324,7 +324,7 @@
    "value": "BAT54S",
    "footprint": "SOT-23",
    "qty": 3,
-   "need": 15,
+   "need": 6,
    "flags": [],
    "mfr": "BAT54S",
    "package": "SOT-23",
@@ -340,7 +340,7 @@
    "value": "SS34",
    "footprint": "D_SMA",
    "qty": 2,
-   "need": 10,
+   "need": 4,
    "flags": [],
    "mfr": "SS34",
    "package": "SMA(DO-214AC)",
@@ -356,7 +356,7 @@
    "value": "PSM712",
    "footprint": "SOT-23",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "PSM712-LF-T7",
    "package": "SOT-23",
@@ -372,7 +372,7 @@
    "value": "1N4148W",
    "footprint": "D_SOD-123",
    "qty": 2,
-   "need": 10,
+   "need": 4,
    "flags": [],
    "mfr": "1N4148W",
    "package": "SOD-123",
@@ -388,7 +388,7 @@
    "value": "SMAJ5.0A",
    "footprint": "D_SMA",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "SMAJ5.0A",
    "package": "SMA(DO-214AC)",
@@ -404,7 +404,7 @@
    "value": "5A 125V",
    "footprint": "Fuse_2410_6125Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -422,7 +422,7 @@
    "value": "3A 63V",
    "footprint": "Fuse_1206_3216Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -440,7 +440,7 @@
    "value": "0.2A 30V 1206L020",
    "footprint": "Fuse_1206_3216Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -458,7 +458,7 @@
    "value": "600R@100MHz",
    "footprint": "L_0805_2012Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "GZ2012D601TF",
    "package": "0805",
@@ -474,7 +474,7 @@
    "value": "Mini-Fit Jr 5566-02A",
    "footprint": "Molex_Mini-Fit_Jr_5566-02A_2x01_P4.20mm_Vertical",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -485,7 +485,7 @@
    "value": "DSUB-37_Socket",
    "footprint": "DSUB-37_Socket_Horizontal_P2.77x2.54mm_MountingHoles",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -496,7 +496,7 @@
    "value": "LEM DTM13-12PA-R005 key A",
    "footprint": "DEUTSCH_DTM13-12P-R005_Horizontal",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -507,7 +507,7 @@
    "value": "ENC DTM13-12PB-R005 key B",
    "footprint": "DEUTSCH_DTM13-12P-R005_Horizontal",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -518,7 +518,7 @@
    "value": "VEH DTM13-08PA-R004 key A",
    "footprint": "DEUTSCH_DTM13-08PA-R004_Horizontal",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -529,7 +529,7 @@
    "value": "LaunchPad J1+J3",
    "footprint": "PinHeader_2x10_P2.54mm_Vertical",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -547,7 +547,7 @@
    "value": "LaunchPad J4+J2",
    "footprint": "PinHeader_2x10_P2.54mm_Vertical",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -565,7 +565,7 @@
    "value": "LaunchPad J5+J7",
    "footprint": "PinHeader_2x10_P2.54mm_Vertical",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -583,7 +583,7 @@
    "value": "LaunchPad J8+J6",
    "footprint": "PinHeader_2x10_P2.54mm_Vertical",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -601,7 +601,7 @@
    "value": "ILOCK_SEL",
    "footprint": "SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -612,7 +612,7 @@
    "value": "SHLD_TIE",
    "footprint": "SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -623,7 +623,7 @@
    "value": "SRC SEL A",
    "footprint": "SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -634,7 +634,7 @@
    "value": "SRC SEL B",
    "footprint": "SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -645,7 +645,7 @@
    "value": "SRC SEL C",
    "footprint": "SolderJumper-3_P1.3mm_Open_Pad1.0x1.5mm_NumberLabels",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -656,7 +656,7 @@
    "value": "CAN TERM bridged=120R",
    "footprint": "SolderJumper-2_P1.3mm_Bridged_Pad1.0x1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -667,7 +667,7 @@
    "value": "22uH",
    "footprint": "L_Sunlord_SWPA8040S",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -685,7 +685,7 @@
    "value": "3.3uH",
    "footprint": "L_Changjiang_FNR5040S",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -703,7 +703,7 @@
    "value": "ACT45B-101-2P-TL003",
    "footprint": "L_CommonMode_TDK_ACT45B",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -721,7 +721,7 @@
    "value": "ISO_COM-GND",
    "footprint": "NetTie-2_SMD_Pad0.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -732,7 +732,7 @@
    "value": "PGND_MOD-GND star",
    "footprint": "NetTie-2_SMD_Pad0.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -743,7 +743,7 @@
    "value": "VBUS_RTN_TIE",
    "footprint": "NetTie-2_SMD_Pad0.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -754,7 +754,7 @@
    "value": "ISNS_RTN-GND",
    "footprint": "NetTie-2_SMD_Pad0.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -765,7 +765,7 @@
    "value": "SQD50P06-15L",
    "footprint": "TO-252-2",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -783,7 +783,7 @@
    "value": "100k",
    "footprint": "R_0603_1608Metric",
    "qty": 3,
-   "need": 15,
+   "need": 6,
    "flags": [],
    "mfr": "0603WAF1003T5E",
    "package": "0603",
@@ -799,7 +799,7 @@
    "value": "10k",
    "footprint": "R_0603_1608Metric",
    "qty": 16,
-   "need": 80,
+   "need": 32,
    "flags": [],
    "mfr": "0603WAF1002T5E",
    "package": "0603",
@@ -815,7 +815,7 @@
    "value": "150k",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "0603WAF1503T5E",
    "package": "0603",
@@ -831,7 +831,7 @@
    "value": "12k",
    "footprint": "R_0603_1608Metric",
    "qty": 2,
-   "need": 10,
+   "need": 4,
    "flags": [],
    "mfr": "0603WAF1202T5E",
    "package": "0603",
@@ -847,7 +847,7 @@
    "value": "33k",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "0603WAF3302T5E",
    "package": "0603",
@@ -863,7 +863,7 @@
    "value": "52.3k",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -881,7 +881,7 @@
    "value": "0R",
    "footprint": "R_0603_1608Metric",
    "qty": 3,
-   "need": 15,
+   "need": 6,
    "flags": [],
    "mfr": "0603WAF0000T5E",
    "package": "0603",
@@ -897,7 +897,7 @@
    "value": "4.7k",
    "footprint": "R_0603_1608Metric",
    "qty": 21,
-   "need": 105,
+   "need": 42,
    "flags": [],
    "mfr": "0603WAF4701T5E",
    "package": "0603",
@@ -913,7 +913,7 @@
    "value": "1.5k",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "0603WAF1501T5E",
    "package": "0603",
@@ -929,7 +929,7 @@
    "value": "680R",
    "footprint": "R_0603_1608Metric",
    "qty": 2,
-   "need": 10,
+   "need": 4,
    "flags": [],
    "mfr": "0603WAF6800T5E",
    "package": "0603",
@@ -945,7 +945,7 @@
    "value": "6.8k",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "0603WAF6801T5E",
    "package": "0603",
@@ -961,7 +961,7 @@
    "value": "100R",
    "footprint": "R_0603_1608Metric",
    "qty": 13,
-   "need": 65,
+   "need": 26,
    "flags": [],
    "mfr": "0603WAF1000T5E",
    "package": "0603",
@@ -977,7 +977,7 @@
    "value": "1k",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "0603WAF1001T5E",
    "package": "0603",
@@ -993,7 +993,7 @@
    "value": "1M",
    "footprint": "R_0603_1608Metric",
    "qty": 6,
-   "need": 30,
+   "need": 12,
    "flags": [],
    "mfr": "0603WAF1004T5E",
    "package": "0603",
@@ -1009,7 +1009,7 @@
    "value": "2.20k 0.1%",
    "footprint": "R_0603_1608Metric",
    "qty": 2,
-   "need": 10,
+   "need": 4,
    "flags": [
     "EXTENDED"
    ],
@@ -1027,7 +1027,7 @@
    "value": "1.50k 0.1%",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -1045,7 +1045,7 @@
    "value": "3.3k",
    "footprint": "R_0603_1608Metric",
    "qty": 3,
-   "need": 15,
+   "need": 6,
    "flags": [],
    "mfr": "0603WAF3301T5E",
    "package": "0603",
@@ -1061,7 +1061,7 @@
    "value": "20.0k 0.1%",
    "footprint": "R_0603_1608Metric",
    "qty": 6,
-   "need": 30,
+   "need": 12,
    "flags": [
     "EXTENDED"
    ],
@@ -1079,7 +1079,7 @@
    "value": "12.0k 0.1%",
    "footprint": "R_0603_1608Metric",
    "qty": 18,
-   "need": 90,
+   "need": 36,
    "flags": [
     "EXTENDED"
    ],
@@ -1097,7 +1097,7 @@
    "value": "47.0R 0.1%",
    "footprint": "R_1206_3216Metric",
    "qty": 6,
-   "need": 30,
+   "need": 12,
    "flags": [
     "EXTENDED"
    ],
@@ -1115,7 +1115,7 @@
    "value": "4.99k 0.1%",
    "footprint": "R_0603_1608Metric",
    "qty": 8,
-   "need": 40,
+   "need": 16,
    "flags": [
     "EXTENDED"
    ],
@@ -1133,7 +1133,7 @@
    "value": "3.00k 0.1%",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -1151,7 +1151,7 @@
    "value": "10.0k 0.1%",
    "footprint": "R_0603_1608Metric",
    "qty": 6,
-   "need": 30,
+   "need": 12,
    "flags": [
     "EXTENDED"
    ],
@@ -1169,7 +1169,7 @@
    "value": "120R",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "0603WAF1200T5E",
    "package": "0603",
@@ -1185,7 +1185,7 @@
    "value": "2.2k",
    "footprint": "R_0603_1608Metric",
    "qty": 6,
-   "need": 30,
+   "need": 12,
    "flags": [],
    "mfr": "0603WAF2201T5E",
    "package": "0603",
@@ -1201,7 +1201,7 @@
    "value": "+24V_PROT",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1212,7 +1212,7 @@
    "value": "+13V5_GATE",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1223,7 +1223,7 @@
    "value": "+5V",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1234,7 +1234,7 @@
    "value": "+3V3",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1245,7 +1245,7 @@
    "value": "+24V_MOD",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1256,7 +1256,7 @@
    "value": "+15V_ISO",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1267,7 +1267,7 @@
    "value": "-15V_ISO",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1278,7 +1278,7 @@
    "value": "ISO_COM",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1289,7 +1289,7 @@
    "value": "GND",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1300,7 +1300,7 @@
    "value": "TP_PWM_UH",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1311,7 +1311,7 @@
    "value": "TP_PWM_UL",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1322,7 +1322,7 @@
    "value": "TP_PWM_VH",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1333,7 +1333,7 @@
    "value": "TP_PWM_VL",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1344,7 +1344,7 @@
    "value": "TP_PWM_WH",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1355,7 +1355,7 @@
    "value": "TP_PWM_WL",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1366,7 +1366,7 @@
    "value": "TP_GATE_EN",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1377,7 +1377,7 @@
    "value": "TP_MOD15V_1",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1388,7 +1388,7 @@
    "value": "TP_MOD15V_2",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1399,7 +1399,7 @@
    "value": "TP_VBUS_RAW",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1410,7 +1410,7 @@
    "value": "TP_VBUS_RTN",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1421,7 +1421,7 @@
    "value": "TP_NTC_RAW",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1432,7 +1432,7 @@
    "value": "TP_FLT_OC_A",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1443,7 +1443,7 @@
    "value": "TP_FLT_OC_B",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1454,7 +1454,7 @@
    "value": "TP_FLT_OC_C",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1465,7 +1465,7 @@
    "value": "TP_FLT_OT",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1476,7 +1476,7 @@
    "value": "TP_FLT_OV",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1487,7 +1487,7 @@
    "value": "TP_FLT_OC_A_15V",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1498,7 +1498,7 @@
    "value": "ISNS_A_INT",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1509,7 +1509,7 @@
    "value": "ISNS_A_LEM",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1520,7 +1520,7 @@
    "value": "ISNS_B_INT",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1531,7 +1531,7 @@
    "value": "ISNS_B_LEM",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1542,7 +1542,7 @@
    "value": "ISNS_C_INT",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1553,7 +1553,7 @@
    "value": "ISNS_C_LEM",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1564,7 +1564,7 @@
    "value": "ISNS_VREF",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1575,7 +1575,7 @@
    "value": "ENC_SIN_RAW",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1586,7 +1586,7 @@
    "value": "ENC_COS_RAW",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1597,7 +1597,7 @@
    "value": "ENC_SIN_ADC",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1608,7 +1608,7 @@
    "value": "ENC_COS_ADC",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1619,7 +1619,7 @@
    "value": "ENC_VDD",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1630,7 +1630,7 @@
    "value": "+5V_LP",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1641,7 +1641,7 @@
    "value": "GND",
    "footprint": "TestPoint_THTPad_D1.5mm_Drill0.7mm",
    "qty": 2,
-   "need": 10,
+   "need": 4,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1652,7 +1652,7 @@
    "value": "ISR_PROBE_3V3",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1663,7 +1663,7 @@
    "value": "CAN_H",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1674,7 +1674,7 @@
    "value": "CAN_L",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1685,7 +1685,7 @@
    "value": "SW_MAIN_3V3",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1696,7 +1696,7 @@
    "value": "SW_START_3V3",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1707,7 +1707,7 @@
    "value": "MOT_TEMP_RAW",
    "footprint": "TestPoint_Pad_D1.5mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "PLACEHOLDER"
    ]
@@ -1718,7 +1718,7 @@
    "value": "LMR33630ADDAR",
    "footprint": "Texas_HSOP-8-1EP_3.9x4.9mm_P1.27mm_ThermalVias",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED",
     "PACKAGE_MISMATCH ESOP-8"
@@ -1737,7 +1737,7 @@
    "value": "TPS62933FDRLR",
    "footprint": "SOT-583-8",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -1755,7 +1755,7 @@
    "value": "AMS1117-3.3",
    "footprint": "SOT-223-3_TabPin2",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "AMS1117-3.3",
    "package": "SOT-223",
@@ -1771,7 +1771,7 @@
    "value": "URA2415YMD-6WR3",
    "footprint": "Converter_DCDC_Mornsun_URA-YMD-6WR3_THT",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -1789,7 +1789,7 @@
    "value": "UCC27524DR",
    "footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
    "qty": 3,
-   "need": 15,
+   "need": 6,
    "flags": [
     "EXTENDED"
    ],
@@ -1807,7 +1807,7 @@
    "value": "SN74LVC1G11DBVR",
    "footprint": "SOT-23-6",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [
     "EXTENDED"
    ],
@@ -1825,7 +1825,7 @@
    "value": "SN74LVC2G17DBVR",
    "footprint": "SOT-23-6",
    "qty": 4,
-   "need": 20,
+   "need": 8,
    "flags": [
     "EXTENDED"
    ],
@@ -1843,7 +1843,7 @@
    "value": "OPA2376",
    "footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
    "qty": 6,
-   "need": 30,
+   "need": 12,
    "flags": [
     "EXTENDED"
    ],
@@ -1861,7 +1861,7 @@
    "value": "SN65HVD230DR",
    "footprint": "SOIC-8_3.9x4.9mm_P1.27mm",
    "qty": 1,
-   "need": 5,
+   "need": 2,
    "flags": [],
    "mfr": "SN65HVD230DR",
    "package": "SOIC-8",
@@ -1877,7 +1877,7 @@
    "value": "LTV-817S-TA1-C",
    "footprint": "Optocoupler_LTV-817S_SMD-4P",
    "qty": 2,
-   "need": 10,
+   "need": 4,
    "flags": [],
    "mfr": "LTV-817S-TA1-C",
    "package": "SMD-4P",
