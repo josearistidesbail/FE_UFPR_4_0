@@ -31,8 +31,8 @@ for f in "$TMP"/gerb/*; do
 done
 for d in fab/gerbers/*; do [ -e "$TMP/gerb/$(basename "$d")" ] || { rm "$d"; echo "removed $(basename "$d")"; }; done
 
-# board corner = (127.95, 219.9) in KiCad page coordinates (Edge.Cuts bottom-left); the board has no aux origin
-python3 tools/fab/jlc_bomcpl.py "$TMP/bom.csv" "$TMP/pos.csv" fab --rotations tools/fab/jlc_rotations.json --origin 127.95,219.9 ${HAND:+--hand-solder $HAND} --boards "$BOARDS" --spare-boards "$SPARE_BOARDS"
+# board corner = (96.0, 219.9) in KiCad page coordinates (Edge.Cuts bottom-left, left edge moved from 127.95 on 2026-09-24 for the vertical DT15 headers); no aux origin
+python3 tools/fab/jlc_bomcpl.py "$TMP/bom.csv" "$TMP/pos.csv" fab --rotations tools/fab/jlc_rotations.json --origin 96.0,219.9 ${HAND:+--hand-solder $HAND} --boards "$BOARDS" --spare-boards "$SPARE_BOARDS"
 python3 tools/fab/jlc_verify.py "$TMP/bom.csv" --boards "$BOARDS" --out fab/jlc_verify.json --md fab/jlc_verify.md
 cp "$TMP/bom.csv" fab/kicad_bom.csv
 
