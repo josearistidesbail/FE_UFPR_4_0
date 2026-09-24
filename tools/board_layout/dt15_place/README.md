@@ -6,3 +6,5 @@ Order: `1_place.py` (outline −32 mm, zones, moves, 12 B.Cu screw-head keepouts
 → loop → `5_silk.py` (silk outline polygons, hidden refs, text moves) → `6_exchange.py` (re-import the three footprints from the library) → hide the
 LCSC/MPN/Manufacturer fields on F.Fab. Result: DRC 5 by-design silk warnings, 0 unconnected, 0 parity. Details in `DECISION_LOG.md` (2026-09-24).
 The absolute coordinates inside are for this board only; the scripts are not generic tools.
+
+`7_net_lengths.py OLD NEW` — per-net track length diff between two boards (read-only); the 2026-09-24 review of the longer traces used it (S12 `a077914` vs `87340d5`).
