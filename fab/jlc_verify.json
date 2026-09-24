@@ -1,6 +1,6 @@
 {
  "boards": 2,
- "date": "2026-09-23",
+ "date": "2026-09-24",
  "lines": [
   {
    "lcsc": "C2836439",
@@ -493,8 +493,8 @@
   {
    "lcsc": "CONSIGNED",
    "refs": "J3",
-   "value": "LEM DTM13-12PA-R005 key A",
-   "footprint": "DEUTSCH_DTM13-12P-R005_Horizontal",
+   "value": "LEM DT15-12PA key A",
+   "footprint": "DEUTSCH_DT15-12P_Vertical",
    "qty": 1,
    "need": 2,
    "flags": [
@@ -504,8 +504,8 @@
   {
    "lcsc": "CONSIGNED",
    "refs": "J4",
-   "value": "ENC DTM13-12PB-R005 key B",
-   "footprint": "DEUTSCH_DTM13-12P-R005_Horizontal",
+   "value": "ENC DT15-12PB key B",
+   "footprint": "DEUTSCH_DT15-12P_Vertical",
    "qty": 1,
    "need": 2,
    "flags": [
@@ -515,8 +515,8 @@
   {
    "lcsc": "CONSIGNED",
    "refs": "J5",
-   "value": "VEH DTM13-08PA-R004 key A",
-   "footprint": "DEUTSCH_DTM13-08PA-R004_Horizontal",
+   "value": "VEH DT15-08PD key D",
+   "footprint": "DEUTSCH_DT15-08P_Vertical",
    "qty": 1,
    "need": 2,
    "flags": [

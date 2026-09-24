@@ -1,6 +1,5 @@
 # fab/ — JLCPCB order package, FE_UFPR 4.0 (`v4.0-release`)
 
-> ⚠ **STALE since 2026-09-23:** J3/J4/J5 were swapped to vertical DT15 headers; the board was re-placed and re-routed on 2026-09-24 (178 × 130 mm, DRC clean) but this package was not rebuilt yet (KiCad held the board open). Do not order from these files; run `sh tools/fab/make_package.sh` with KiCad closed, then the CPL preview check (`OPEN_ITEMS.md`).
 
 Rebuilt from the committed KiCad files by `sh tools/fab/make_package.sh [boards]` (needs `kicad-cli` 10, `python3`, `curl`, `zip`;
 refuses to run while KiCad has the board or a sheet open). Everything here is derived — edit the design, not these files.
@@ -19,7 +18,7 @@ refuses to run while KiCad has the board or a sheet open). Everything here is de
 
 | Option | Value | From |
 |---|---|---|
-| Layers / size / qty | **4** / **146.0 × 130.0 mm** / 5 PCBs | Edge.Cuts |
+| Layers / size / qty | **4** / **178.0 × 130.0 mm** / 5 PCBs | Edge.Cuts |
 | Stackup | **JLC04161H-7628**, 1.6 mm, outer 1 oz, inner 0.5 oz | `S9_BOARD_SETUP.md` §3 (board file stackup) |
 | Surface finish | **HASL lead-free** (board file); ENIG optional | |
 | Min via | 0.6 / 0.3 mm (Default class), smallest drill 0.3 mm | `.kicad_pro` netclasses |
@@ -35,13 +34,13 @@ refuses to run while KiCad has the board or a sheet open). Everything here is de
 |---|---|
 | Service | **Economic, single side (top)**; hand-soldered by the team: the 12 bottom parts (D2) and, deselected for cost on 2026-09-24, J20–J23 / U4 / U12–U17 (edit `HAND=` in `make_package.sh` to change) |
 | Qty | **2 assembled** (of 5 PCBs) |
-| Tooling holes | let JLC add them (the board has no free edge strip reserved; check they land clear of J2/J5 overhangs in the preview) |
+| Tooling holes | let JLC add them (the board has no free edge strip reserved; check they land clear of the J2 overhang and the DT15 flanges in the preview) |
 | Confirm parts placement | **yes** — this is the rotation/polarity check |
 | Consigned parts | none from JLC's point of view (J1–J5 are on the team) |
 
 ## Not in the BOM — team supplies and solders
 
-J1 Molex Mini-Fit Jr 5566-02A · J2 SUB-D 37 socket right-angle (UNC 4-40 jackscrews) · J3 DTM13-12PA-R005 · J4 DTM13-12PB-R005 ·
-J5 DTM13-08PA-R004 · 12 bottom-side SMD (R2, R3, D17, C119, C25–C28, R118, R119, C113, C120) · 4× 2×10 headers J20–J23 · U4 URA2415YMD-6WR3 · 6× OPA2376AIDR U12–U17.
+J1 Molex Mini-Fit Jr 5566-02A · J2 SUB-D 37 socket right-angle (UNC 4-40 jackscrews) · J3 DT15-12PA · J4 DT15-12PB ·
+J5 DT15-08PD (vertical DEUTSCH headers + DT06 plugs, W12S/W8S wedgelocks, size-16 contacts — TE samples where available, 12× #4-20 Plastite screws) · 12 bottom-side SMD (R2, R3, D17, C119, C25–C28, R118, R119, C113, C120) · 4× 2×10 headers J20–J23 · U4 URA2415YMD-6WR3 · 6× OPA2376AIDR U12–U17.
 Codes and quantities: `FE_UFPR_4_0_HANDSOLDER_BOM.csv`. Solder jumper defaults after assembly: JP1 1-2, JP2 open, JP3/4/5 1-2, JP6 bridged
 (`S12_FAB_PACKAGE.md` §4).

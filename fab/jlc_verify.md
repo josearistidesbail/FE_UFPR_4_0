@@ -1,4 +1,4 @@
-# JLC re-verification 2026-09-23 — 2 boards
+# JLC re-verification 2026-09-24 — 2 boards
 
 | LCSC | Refs | Value | Pkg (KiCad) | Pkg (JLC) | Stock | Need | Price | Basic/Pref | Flags |
 |---|---|---|---|---|---|---|---|---|---|
@@ -37,9 +37,9 @@
 | `C95204` | R108,R110,R113,R115,R131,R132 | 10.0k 0.1% | R_0603_1608Metric | 0603 | 389486 | 12 | 0.0241 |  | EXTENDED |
 | `CONSIGNED` | J1 | Mini-Fit Jr 5566-02A | Molex_Mini-Fit_Jr_5566 |  |  | 2 |  |  | PLACEHOLDER |
 | `CONSIGNED` | J2 | DSUB-37_Socket | DSUB-37_Socket_Horizon |  |  | 2 |  |  | PLACEHOLDER |
-| `CONSIGNED` | J3 | LEM DTM13-12PA-R005 key A | DEUTSCH_DTM13-12P-R005 |  |  | 2 |  |  | PLACEHOLDER |
-| `CONSIGNED` | J4 | ENC DTM13-12PB-R005 key B | DEUTSCH_DTM13-12P-R005 |  |  | 2 |  |  | PLACEHOLDER |
-| `CONSIGNED` | J5 | VEH DTM13-08PA-R004 key A | DEUTSCH_DTM13-08PA-R00 |  |  | 2 |  |  | PLACEHOLDER |
+| `CONSIGNED` | J3 | LEM DT15-12PA key A | DEUTSCH_DT15-12P_Verti |  |  | 2 |  |  | PLACEHOLDER |
+| `CONSIGNED` | J4 | ENC DT15-12PB key B | DEUTSCH_DT15-12P_Verti |  |  | 2 |  |  | PLACEHOLDER |
+| `CONSIGNED` | J5 | VEH DT15-08PD key D | DEUTSCH_DT15-08P_Verti |  |  | 2 |  |  | PLACEHOLDER |
 | `NOFIT` | JP1 | ILOCK_SEL | SolderJumper-3_P1.3mm_ |  |  | 2 |  |  | PLACEHOLDER |
 | `NOFIT` | JP2 | SHLD_TIE | SolderJumper-2_P1.3mm_ |  |  | 2 |  |  | PLACEHOLDER |
 | `NOFIT` | JP3 | SRC SEL A | SolderJumper-3_P1.3mm_ |  |  | 2 |  |  | PLACEHOLDER |
