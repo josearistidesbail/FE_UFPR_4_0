@@ -903,7 +903,7 @@
 		)
 		(uuid "19a18d13-850b-4660-97df-5247a1d30af4")
 	)
-	(text "VBUS FRONT-END   DB37 pin 7, Kelvin return pin 11\nModule sensor: 6.4 / 6.5 / 6.6 V at 900 V, load max 5 mA.\nR57 2.20k 0.1% / R58 1.50k 0.1%  (Yageo RT0603B, 25 ppm, one family\n  so the ratio tracks over temperature).\n  gain 0.405405, Rth 892 R, module load 1.95 mA = 39 % of the limit.\n  3.000 V at the ADC = 1024.6 V of bus.  1000 V -> 2.928 V -> code 3998.\nR59 3.3k + C59 22nF C0G = anti-alias + charge bucket AT the ADC pin.\n  fc 1726 Hz;  S/H charge-share 2.8 codes;  DC error 2.6 codes.\n  The S/H sees the bucket, not the divider => 68 ns settling.\n  *** the 512-cycle ACQPS workaround can be dropped (~320 ns is ample) ***\nAll three documented 3.0 defects are fixed here:\n  (1) source impedance 34.5k -> 892 R + a bucket at the pin\n  (2) Kelvin return on its own DB37 pin, tied to GND at NT3 and nowhere\n      else - the -52 mV load-dependent offset came from sharing the\n      power return with 2.2 A of module aux current\n  (3) rescaled: VBUS_DIVIDER_RATIO 297.14 -> 341.538\nIf the sensor ever rails to 15 V the ADC clamp takes 0.63 mA (limit 2 mA)."
+	(text "VBUS FRONT-END   DB37 pin 7, Kelvin return pin 11\nModule sensor: 6.4 / 6.5 / 6.6 V at 900 V, load max 5 mA.\nR57 3.00k 0.1% / R58 2.20k 0.1%  (Yageo RT0603B, 25 ppm, one family\n  so the ratio tracks over temperature).\n  gain 0.423077, Rth 1269 R, module load 1.39 mA = 28 % of the limit.\n  3.000 V at the ADC = 981.8 V of bus.  900 V -> 2.750 V -> code 3755.\nR59 3.3k + C59 22nF C0G = anti-alias + charge bucket AT the ADC pin.\n  fc 1583 Hz;  S/H charge-share 2.8 codes;  DC error 2.8 codes.\n  The S/H sees the bucket, not the divider => 68 ns settling.\n  *** the 512-cycle ACQPS workaround can be dropped (~320 ns is ample) ***\nAll three documented 3.0 defects are fixed here:\n  (1) source impedance 34.5k -> 1269 R + a bucket at the pin\n  (2) Kelvin return on its own DB37 pin, tied to GND at NT3 and nowhere\n      else - the -52 mV load-dependent offset came from sharing the\n      power return with 2.2 A of module aux current\n  (3) rescaled: VBUS_DIVIDER_RATIO 297.14 -> 327.273\nIf the sensor ever rails to 15 V the ADC clamp takes 0.64 mA (limit 2 mA)."
 		(exclude_from_sim no)
 		(at 311.15 26.67 0)
 		(effects
@@ -958,7 +958,7 @@
 		)
 		(uuid "8c200ce8-0f3d-4969-ac42-66dc687bee07")
 	)
-	(text "FIRMWARE HANDOFF (hw_control_v2.h) - written by S5\n  MODULE_FAULT_ACTIVE_LOW   1 -> 0      fault = HIGH; receiver chain is non-inverting\n  Input X-BAR trip polarity must be inverted to match (OSHT1-3, GPIO25/27/26)\n  VBUS_DIVIDER_RATIO      297.14 -> 341.538   V(bus) per V(ADC)\n  VBUS_VOLTS_PER_CODE     3.0 * 341.538 / 4096 = 0.250150 V/code, full scale 1024.6 V\n  VBUS_OFFSET_CODE        11.4 -> re-measure; the old value was a divider artefact\n  NTC channel             ADCINC3 (ADC-C ch3), BoosterPack J3-24; suggest ADC-C SOC2\n  NTC_VOLTS_PER_CODE      3.0 / 0.281437 / 4096 = 0.002602 V(module)/code\n                          10 V = 82 C; the channel clips at 10.66 V of module output\n  Vbus ACQPS              the 512-cycle S/H workaround is no longer needed\n  Sensor tolerance 6.4/6.5/6.6 V at 900 V is +/-1.5 % => trim VBUS_DIVIDER_RATIO\n  on the bench against a meter before trusting absolute bus volts."
+	(text "FIRMWARE HANDOFF (hw_control_v2.h) - written by S5\n  MODULE_FAULT_ACTIVE_LOW   1 -> 0      fault = HIGH; receiver chain is non-inverting\n  Input X-BAR trip polarity must be inverted to match (OSHT1-3, GPIO25/27/26)\n  VBUS_DIVIDER_RATIO      297.14 -> 327.273   V(bus) per V(ADC)\n  VBUS_VOLTS_PER_CODE     3.0 * 327.273 / 4096 = 0.239702 V/code, full scale 981.8 V\n  VBUS_OFFSET_CODE        11.4 -> re-measure; the old value was a divider artefact\n  NTC channel             ADCINC3 (ADC-C ch3), BoosterPack J3-24; suggest ADC-C SOC2\n  NTC_VOLTS_PER_CODE      3.0 / 0.281437 / 4096 = 0.002602 V(module)/code\n                          10 V = 82 C; the channel clips at 10.66 V of module output\n  Vbus ACQPS              the 512-cycle S/H workaround is no longer needed\n  Sensor tolerance 6.4/6.5/6.6 V at 900 V is +/-1.5 % => trim VBUS_DIVIDER_RATIO\n  on the bench against a meter before trusting absolute bus volts."
 		(exclude_from_sim no)
 		(at 311.15 91.67 0)
 		(effects
@@ -7328,7 +7328,7 @@
 				)
 			)
 		)
-		(property "Value" "2.20k 0.1%"
+		(property "Value" "3.00k 0.1%"
 			(at 219.71 73.279 270)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7371,7 +7371,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C861295"
+		(property "LCSC" "C136963"
 			(at 219.71 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -7419,7 +7419,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1.50k 0.1%"
+		(property "Value" "2.20k 0.1%"
 			(at 231.902 81.915 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7463,7 +7463,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C705741"
+		(property "LCSC" "C861295"
 			(at 228.6 80.01 0)
 			(hide yes)
 			(show_name no)

@@ -56,7 +56,7 @@ re-export SVGs after any library edit, and never import a symbol whose definitio
 
 **Appended in S3 (28 → 43 symbols):** `LMR33640ADDA` + `LMR33630ADDA`, `TPS62933` + `TPS62933F`, `AP1117-15` + `AMS1117-3.3`, `Conn_01x02`, `MOSFET_P_GDS`, `D_TVS_Unidirectional`, `Converter_DCDC_URA-YMD_Dual`, `TPS54360DDA` (from the reverted detour, now unused), and power symbols `+24V_IN` `+24V_PROT` `+24V_MOD` `+13V5_GATE`.
 - `MOSFET_P_GDS` is KiCad's `IRF9540N` renamed — it is the P-channel symbol with **numeric 1=G / 2=D / 3=S** pins that map to TO-252. `Device:Q_PMOS` uses letter pin *numbers* and cannot map to a footprint.
-- `D_TVS_Unidirectional` is `D_Zener` renamed: KiCad ships only **bidirectional** TVS symbols (A1/A2 pins) and the SMCJ26A is unidirectional, so the zener glyph is both electrically correct and unambiguous about K/A polarity.
+- `D_TVS_Unidirectional` is `D_Zener` renamed: KiCad ships only **bidirectional** TVS symbols (A1/A2 pins) and the SMCJ26A is unidirectional, so the zener glyph is both electrically correct and unambiguous about K/A polarity. **2026-09-26:** D1 became the bidirectional SMCJ26CA and moved to `D_TVS` (same pin numbers and positions); `D_TVS_Unidirectional` is still used by D17 (SMAJ5.0A, `vehicle_io`).
 - `+12V` and `+24V` remain in the library but are now **unused** (superseded by `+13V5_GATE` / `+24V_IN`).
 
 `+15V_ISO` / `-15V_ISO` are KiCad's `+15V` / `-15V` renamed so the power symbol drives the isolated-rail net names used in the net convention below. All BOM-bearing symbols carry an empty hidden **`LCSC`** property so the field is always present in the symbol-fields table.

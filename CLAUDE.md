@@ -29,12 +29,12 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 ## Current phase
 
-**S12.6 BOARD RE-PLACED AND RE-ROUTED FOR THE VERTICAL DT15 HEADERS (2026-09-24, branch `dt15-vertical`):** the board grew 32 mm to the left
-(**178 × 130 mm**, left edge x = 96.0), J5 sits top-left, J4 beside it against the encoder front-end, J3 bottom-left beside U4; every satellite
-moved under its connector, 12 B.Cu rule areas keep copper/vias away from the #4-20 screw heads. **DRC 0 errors / 0 unconnected / parity 0, 5 by-design
-silk warnings (R24↔J2 ×3, J2 edge ×2); net membership = `golden.net`; ERC 0.** `fab/` rebuilt 2026-09-24 on the new
-origin (96.0,219.9); trace lengths reviewed (`DECISION_LOG.md`). Not done yet: JLC placement preview (CPL rotations), then tag. H1 moved to
-(101, 95); no hole in the new bottom-left corner yet (orientation/bracket still open). Harness side: DT06-12SB and DT06-08SD are not TE samples
+**S12.6 BOARD RE-PLACED AND RE-ROUTED FOR THE VERTICAL DT15 HEADERS (2026-09-24) + JLC FEE CUT (2026-09-26), branch `dt15-vertical`:** **178 × 130 mm**
+(left edge x = 96.0), J5 top-left, J4 beside the encoder front-end, J3 bottom-left beside U4; 12 B.Cu rule areas keep copper off the #4-20 screw heads.
+**DRC 0 errors / 0 unconnected / parity 0, 5 by-design silk warnings (R24↔J2 ×3, J2 edge ×2); netlist = `golden.net`; ERC 0.** Fee cut: JLC now places
+**14 Extended codes = $42.98** (was 27 / $82.89) — R10/R11 68k/13k, D1 SMCJ26CA, Vbus divider 3.00k/2.20k (`VBUS_DIVIDER_RATIO` 327.273), 14 more parts
+hand-soldered (`JLC_PARTS.md`); `fab/` rebuilt 2026-09-26. Not done yet: JLC placement preview (CPL rotations), then tag. No hole in the new bottom-left corner yet.
+Harness side: DT06-12SB and DT06-08SD are not TE samples
 (`OPEN_ITEMS.md`). ⚠ Local History disabled; never `pcbnew.SaveBoard` into the project dir (`TOOLING_NOTES.md`). DB37 MPN, H2, KTY class still open.
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
@@ -107,7 +107,7 @@ Never contradict these without logging a decision; the final board must answer `
 | Encoder SIN / COS | ADCINA2 / ADCINB2 | RM44AC, 1 sin/cos cycle per mech rev (**datasheet order code `01S`, S7**); ×10 pole pairs electrical. **S7: `RES_SINCOS_BIAS_CODE` 3072 → 2039, `RES_SINCOS_AMPL_CODE` 990 → 1745** |
 | Phase current A / B / C | **ADCINA5** / ADCINC4 / **ADCINB4** | **A↔C swapped 2026-09-22** for routing: A = J7-66 (J22.12), C = J7-68 (J22.16); firmware must swap its A/C channel defines (S12). S6 added channel C; J7-65…69 carry the whole block on five contiguous pins. KCL reconstruction optional |
 | Current offset refs | ADCINA4 (J7-69) / ADCINB5 (J7-65) | **S6: KEPT** — both read the buffered `ISNS_VREF` ≈1.4685 V through their own 100 Ω + 22 nF buckets. Same node on two converters ⇒ a free ADC-A vs ADC-B cross-check |
-| Vbus sense | ADCINC2 (J3-27) | module outputs 6.5 V @ 900 VDC. **S5: `VBUS_DIVIDER_RATIO` 297.14 → 341.538**, full scale 1024.6 V, 0.250150 V/code |
+| Vbus sense | ADCINC2 (J3-27) | module outputs 6.5 V @ 900 VDC. R57/R58 = **3.00k/2.20k 0.1 %** (2026-09-26; S5 had 2.20k/1.50k → 341.538): **`VBUS_DIVIDER_RATIO` 297.14 → 327.273**, full scale 981.8 V, 0.239702 V/code |
 | **Motor temperature** | **ADCINB3** (J3-25) | **chosen S9.5** — EMRAX 208 stator **KTY81-210** on J4 cavities 6/7. PTC: **hotter = HIGHER code**, opposite to the module NTC. Fault window rejects `<1400` / `>3100` → stop the motor (EMRAX requires it) |
 | **+3V3 rail monitor** | **ADCINA3** (J3-26) | **chosen S9.5** — 10.0k/10.0k 0.1 % divider; firmware cancels the excitation rail exactly, `R = 2200·V/(V_rail−V)`. Without it the LDO's ±2 % is ±10 K, larger than the sensor's own ±4.7 K |
 | NTC channel | **ADCINC3** (ADC-C ch3) | **chosen S5** — BoosterPack site-1 **J3-24**; suggest **ADC-C SOC2** (after the SOC1/Vbus EOC that fires the ISR). ADC-D is NOT on the headers. Divider rated for 10 V |
@@ -181,7 +181,8 @@ kept as two nets. Only temperature output is pin 29. Details: [`DB37_PINOUT.md`]
   Local JLC DB can't answer Basic/stock/price — use `https://jlcsearch.tscircuit.com/` via `curl`.
 - **C0G constraints:** no Basic C0G > 100 pF; ceiling ≈ 10 nF (0603) / 22 nF (0805). The board-wide C0G set
   is exactly four values (1 nF, 2.2 nF `C77033`, 4.7 nF, 22 nF 0805) — don't add a fifth without reason.
-- Consigned / hand-solder: DB37, Deutsch DT15 connectors (J3/J4/J5, vertical, TE samples where possible), LEM transducers, URA2415YMD-6WR3.
+- Consigned / hand-solder: DB37, Deutsch DT15 connectors (J3/J4/J5, vertical, TE samples where possible), LEM transducers, URA2415YMD-6WR3. The full
+  team-soldered list (bottom side + whole Extended lines deselected for the JLC feeder fee) is `HAND=` in `tools/fab/make_package.sh`.
 
 ## Design rules & conventions
 

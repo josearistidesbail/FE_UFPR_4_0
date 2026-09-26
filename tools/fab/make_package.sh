@@ -11,8 +11,11 @@ BOARDS=${1:-2}
 SPARE_BOARDS=1
 # Hand-soldered by the team (dropped from the JLC BOM/CPL, listed in fab/FE_UFPR_4_0_HANDSOLDER_BOM.csv):
 #   D2 (2026-09-23): the 12 B.Cu parts - Economic PCBA is single-side;
-#   order of 2026-09-24 (user): J20-J23 headers, U4 URA2415YMD-6WR3, U12-U17 OPA2376 deselected at JLC for cost.
+#   order of 2026-09-24 (user): J20-J23 headers, U4 URA2415YMD-6WR3, U12-U17 OPA2376 deselected at JLC for cost;
+#   2026-09-26 (user, feeder-fee cut): C1, F1, F2, F3, L3, U8, R57/R105 (3.00k 0.1%), R58/R129 (2.20k 0.1%), Q1, U5-U7 -
+#   each is a whole Extended LCSC line, so JLC places 14 Extended codes instead of 27 (JLC_PARTS.md).
 HAND=R2,R3,D17,C119,C25,C26,C27,C28,R118,R119,C113,C120,J20,J21,J22,J23,U4,U12,U13,U14,U15,U16,U17
+HAND=$HAND,C1,F1,F2,F3,L3,U8,R57,R105,R58,R129,Q1,U5,U6,U7
 for l in ~FE_UFPR_4_0.kicad_pcb.lck ~*.kicad_sch.lck; do [ -e "$l" ] && { echo "KiCad has $l open - save and close first"; exit 1; }; done
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 mkdir -p fab/gerbers "$TMP/gerb"
@@ -33,7 +36,7 @@ for d in fab/gerbers/*; do [ -e "$TMP/gerb/$(basename "$d")" ] || { rm "$d"; ech
 
 # board corner = (96.0, 219.9) in KiCad page coordinates (Edge.Cuts bottom-left, left edge moved from 127.95 on 2026-09-24 for the vertical DT15 headers); no aux origin
 python3 tools/fab/jlc_bomcpl.py "$TMP/bom.csv" "$TMP/pos.csv" fab --rotations tools/fab/jlc_rotations.json --origin 96.0,219.9 ${HAND:+--hand-solder $HAND} --boards "$BOARDS" --spare-boards "$SPARE_BOARDS"
-python3 tools/fab/jlc_verify.py "$TMP/bom.csv" --boards "$BOARDS" --out fab/jlc_verify.json --md fab/jlc_verify.md
+python3 tools/fab/jlc_verify.py "$TMP/bom.csv" --boards "$BOARDS" --out fab/jlc_verify.json --md fab/jlc_verify.md ${HAND:+--hand-solder $HAND}
 cp "$TMP/bom.csv" fab/kicad_bom.csv
 
 (cd fab/gerbers && rm -f ../FE_UFPR_4_0_gerbers.zip && zip -q ../FE_UFPR_4_0_gerbers.zip *.gbr *.drl *.gbrjob)

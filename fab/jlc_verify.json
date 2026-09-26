@@ -1,6 +1,6 @@
 {
  "boards": 2,
- "date": "2026-09-24",
+ "date": "2026-09-26",
  "lines": [
   {
    "lcsc": "C2836439",
@@ -10,7 +10,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "RVT100UF50V67RV0040",
    "package": "SMD,D8xL10.2mm",
@@ -189,22 +190,20 @@
    "descr": "4.7nF 50V C0G \u00b15% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
   },
   {
-   "lcsc": "C310042",
+   "lcsc": "C19077605",
    "refs": "D1",
-   "value": "SMCJ26A",
+   "value": "SMCJ26CA",
    "footprint": "D_SMC",
    "qty": 1,
    "need": 2,
-   "flags": [
-    "EXTENDED"
-   ],
-   "mfr": "SMCJ26A/TR13",
+   "flags": [],
+   "mfr": "SMCJ26CA",
    "package": "SMC(DO-214AB)",
-   "stock": 7293,
-   "price": 0.1444,
+   "stock": 67883,
+   "price": 0.1244,
    "basic": false,
-   "preferred": false,
-   "descr": "-65\u2103~+150\u2103 1.5kW 1uA 26V 28.9V 35.7A 42.1V TVS Unidirectional SMC(DO-214AB) ESD and Surge "
+   "preferred": true,
+   "descr": ""
   },
   {
    "lcsc": "C19077472",
@@ -389,7 +388,9 @@
    "footprint": "D_SMA",
    "qty": 1,
    "need": 2,
-   "flags": [],
+   "flags": [
+    "HAND_SOLDER"
+   ],
    "mfr": "SMAJ5.0A",
    "package": "SMA(DO-214AC)",
    "stock": 64985,
@@ -406,7 +407,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "0451005.MRL",
    "package": "2410",
@@ -424,7 +426,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "12H1300C",
    "package": "1206",
@@ -442,7 +445,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "1206L020/30NR",
    "package": "1206",
@@ -531,7 +535,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "PZ254V-12-20P",
    "package": "\u63d2\u4ef6,P=2.54mm",
@@ -549,7 +554,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "PZ254V-12-20P",
    "package": "\u63d2\u4ef6,P=2.54mm",
@@ -567,7 +573,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "PZ254V-12-20P",
    "package": "\u63d2\u4ef6,P=2.54mm",
@@ -585,7 +592,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "PZ254V-12-20P",
    "package": "\u63d2\u4ef6,P=2.54mm",
@@ -705,7 +713,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "ACT45B-101-2P-TL003",
    "package": "SMD-4P,4.5x3.2mm",
@@ -767,7 +776,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "SQD50P06-15L_GE3",
    "package": "TO-252",
@@ -795,11 +805,11 @@
   },
   {
    "lcsc": "C25804",
-   "refs": "R3,R11,R13,R24-R29,R47-R51,R120,R121",
+   "refs": "R3,R13,R24-R29,R47-R51,R120,R121",
    "value": "10k",
    "footprint": "R_0603_1608Metric",
-   "qty": 16,
-   "need": 32,
+   "qty": 15,
+   "need": 30,
    "flags": [],
    "mfr": "0603WAF1002T5E",
    "package": "0603",
@@ -858,22 +868,36 @@
    "descr": "-55\u2103~+155\u2103 100mW 33k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface M"
   },
   {
-   "lcsc": "C23198",
+   "lcsc": "C23231",
    "refs": "R10",
-   "value": "52.3k",
+   "value": "68k",
    "footprint": "R_0603_1608Metric",
    "qty": 1,
    "need": 2,
-   "flags": [
-    "EXTENDED"
-   ],
-   "mfr": "0603WAF5232T5E",
+   "flags": [],
+   "mfr": "0603WAF6802T5E",
    "package": "0603",
-   "stock": 50873,
-   "price": 0.0014,
-   "basic": false,
+   "stock": 428152,
+   "price": 0.0013,
+   "basic": true,
    "preferred": false,
-   "descr": "-55\u2103~+155\u2103 100mW 52.3k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface"
+   "descr": "-55\u2103~+155\u2103 100mW 68k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface M"
+  },
+  {
+   "lcsc": "C22797",
+   "refs": "R11",
+   "value": "13k",
+   "footprint": "R_0603_1608Metric",
+   "qty": 1,
+   "need": 2,
+   "flags": [],
+   "mfr": "0603WAF1302T5E",
+   "package": "0603",
+   "stock": 388035,
+   "price": 0.0014,
+   "basic": true,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 13k\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface M"
   },
   {
    "lcsc": "C21189",
@@ -1004,14 +1028,34 @@
    "descr": "-55\u2103~+155\u2103 100mW 1M\u03a9 75V Thick Film Resistor \u00b11% \u00b1100ppm/\u2103 0603 Chip Resistor - Surface Mo"
   },
   {
+   "lcsc": "C136963",
+   "refs": "R57,R105",
+   "value": "3.00k 0.1%",
+   "footprint": "R_0603_1608Metric",
+   "qty": 2,
+   "need": 4,
+   "flags": [
+    "EXTENDED",
+    "HAND_SOLDER"
+   ],
+   "mfr": "RT0603BRD073KL",
+   "package": "0603",
+   "stock": 30010,
+   "price": 0.0287,
+   "basic": false,
+   "preferred": false,
+   "descr": "-55\u2103~+155\u2103 100mW 3k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface Mo"
+  },
+  {
    "lcsc": "C861295",
-   "refs": "R57,R129",
+   "refs": "R58,R129",
    "value": "2.20k 0.1%",
    "footprint": "R_0603_1608Metric",
    "qty": 2,
    "need": 4,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "RT0603BRD072K2L",
    "package": "0603",
@@ -1020,24 +1064,6 @@
    "basic": false,
    "preferred": false,
    "descr": "-55\u2103~+155\u2103 100mW 2.2k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface "
-  },
-  {
-   "lcsc": "C705741",
-   "refs": "R58",
-   "value": "1.50k 0.1%",
-   "footprint": "R_0603_1608Metric",
-   "qty": 1,
-   "need": 2,
-   "flags": [
-    "EXTENDED"
-   ],
-   "mfr": "RT0603BRD071K5L",
-   "package": "0603",
-   "stock": 8319,
-   "price": 0.0318,
-   "basic": false,
-   "preferred": false,
-   "descr": "-55\u2103~+155\u2103 1.5k\u03a9 100mW 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface "
   },
   {
    "lcsc": "C22978",
@@ -1126,24 +1152,6 @@
    "basic": false,
    "preferred": false,
    "descr": "-55\u2103~+155\u2103 100mW 4.99k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface"
-  },
-  {
-   "lcsc": "C136963",
-   "refs": "R105",
-   "value": "3.00k 0.1%",
-   "footprint": "R_0603_1608Metric",
-   "qty": 1,
-   "need": 2,
-   "flags": [
-    "EXTENDED"
-   ],
-   "mfr": "RT0603BRD073KL",
-   "package": "0603",
-   "stock": 30010,
-   "price": 0.0287,
-   "basic": false,
-   "preferred": false,
-   "descr": "-55\u2103~+155\u2103 100mW 3k\u03a9 75V Thin Film Resistor \u00b10.1% \u00b125ppm/\u2103 0603 Chip Resistor - Surface Mo"
   },
   {
    "lcsc": "C95204",
@@ -1773,7 +1781,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "URA2415YMD-6WR3",
    "package": "DIP,25.4x25.4mm",
@@ -1791,7 +1800,8 @@
    "qty": 3,
    "need": 6,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "UCC27524DR",
    "package": "SOIC-8",
@@ -1809,7 +1819,8 @@
    "qty": 1,
    "need": 2,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "SN74LVC1G11DBVR",
    "package": "SOT-23-6",
@@ -1845,7 +1856,8 @@
    "qty": 6,
    "need": 12,
    "flags": [
-    "EXTENDED"
+    "EXTENDED",
+    "HAND_SOLDER"
    ],
    "mfr": "OPA2376AIDR",
    "package": "SOIC-8",

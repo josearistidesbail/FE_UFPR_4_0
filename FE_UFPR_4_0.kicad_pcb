@@ -39497,7 +39497,7 @@
 				)
 			)
 		)
-		(property "Value" "SMCJ26A"
+		(property "Value" "SMCJ26CA"
 			(at 0 4.2 0)
 			(layer "F.Fab")
 			(uuid "89d04196-6efe-4f91-ba70-c1e1c6725c99")
@@ -39521,7 +39521,7 @@
 				)
 			)
 		)
-		(property "Description" "Zener diode"
+		(property "Description" "Bidirectional transient-voltage-suppression diode"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -39534,7 +39534,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C310042"
+		(property "LCSC" "C19077605"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -44652,7 +44652,7 @@
 				)
 			)
 		)
-		(property "Value" "52.3k"
+		(property "Value" "68k"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "0fc134f4-b995-41d4-84fe-cb8b353c5670")
@@ -44697,7 +44697,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C23198"
+		(property "LCSC" "C23231"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -48007,7 +48007,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "13k"
 			(at 0 1.43 0)
 			(layer "F.Fab")
 			(uuid "4112d955-e117-4129-a4e4-d8c66d2b9a0f")
@@ -48052,7 +48052,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" "C22797"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -51268,7 +51268,7 @@
 				)
 			)
 		)
-		(property "Value" "2.20k 0.1%"
+		(property "Value" "3.00k 0.1%"
 			(at 0 1.43 90)
 			(layer "F.Fab")
 			(uuid "75b27b17-4c0f-43ff-bad0-e61e1b93d3b3")
@@ -51313,7 +51313,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C861295"
+		(property "LCSC" "C136963"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -60852,7 +60852,7 @@
 				)
 			)
 		)
-		(property "Value" "1.50k 0.1%"
+		(property "Value" "2.20k 0.1%"
 			(at 0 1.43 90)
 			(layer "F.Fab")
 			(uuid "21524065-f437-4e2d-b9f5-bc7c8e537b0f")
@@ -60897,7 +60897,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C705741"
+		(property "LCSC" "C861295"
 			(at 0 0 270)
 			(unlocked yes)
 			(layer "F.Fab")

@@ -1070,7 +1070,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "FE_UFPR_4_0:D_TVS_Unidirectional"
+		(symbol "FE_UFPR_4_0:D_TVS"
 			(pin_numbers
 				(hide yes)
 			)
@@ -1093,7 +1093,7 @@
 					)
 				)
 			)
-			(property "Value" "D_Zener"
+			(property "Value" "D_TVS"
 				(at 0 -2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1125,7 +1125,7 @@
 					)
 				)
 			)
-			(property "Description" "Zener diode"
+			(property "Description" "Bidirectional transient-voltage-suppression diode"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1147,7 +1147,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "diode"
+			(property "ki_keywords" "diode TVS thyrector"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1169,10 +1169,22 @@
 					)
 				)
 			)
-			(symbol "D_TVS_Unidirectional_0_1"
+			(symbol "D_TVS_0_1"
 				(polyline
 					(pts
-						(xy -1.27 -1.27) (xy -1.27 1.27) (xy -0.762 1.27)
+						(xy -2.54 1.27) (xy -2.54 -1.27) (xy 2.54 1.27) (xy 2.54 -1.27) (xy -2.54 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.508 1.27) (xy 0 1.27) (xy 0 -1.27) (xy -0.508 -1.27)
 					)
 					(stroke
 						(width 0.254)
@@ -1194,24 +1206,12 @@
 						(type none)
 					)
 				)
-				(polyline
-					(pts
-						(xy 1.27 -1.27) (xy 1.27 1.27) (xy -1.27 0) (xy 1.27 -1.27)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 			)
-			(symbol "D_TVS_Unidirectional_1_1"
+			(symbol "D_TVS_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 2.54)
-					(name "K"
+					(name "A1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1229,7 +1229,7 @@
 				(pin passive line
 					(at 3.81 0 180)
 					(length 2.54)
-					(name "A"
+					(name "A2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3637,7 +3637,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "Q1 REVERSE-POLARITY ORIENTATION (easy to get backwards):\nP-channel body diode conducts DRAIN -> SOURCE, therefore DRAIN = input side, SOURCE = load side.\nNormal polarity: body diode forward + gate pulled to GND by R1 => Vgs approx -24V => hard on.\nReverse polarity: Vgs approx 0 => off, body diode blocks.\nD2 (BZX84C15) IS MANDATORY - unclamped Vgs would be -24..-30V against the +/-20V Vgs limit.\n\nD1 TVS - THE CLAMP MUST STAY BELOW THE BUCK'S ABSOLUTE MAX (this is why it is an SMCJ, not an SMBJ):\nLMR33630 abs max VIN = 38 V. A 600W SMBJ26A clamps to 42.1 V at its rated 14.3 A surge - over the limit.\nSMCJ26A is the 1500W part: same 42.1 V clamp spec but at 35.6 A, so at a realistic surge it sits near\n30-34 V, safely under 38 V. Stand-off 26 V is above the 26 V max rail, so it does not leak in normal use.\nDo NOT substitute an SMBJ here, and do NOT raise the stand-off without re-checking the buck's abs max."
+	(text "Q1 REVERSE-POLARITY ORIENTATION (easy to get backwards):\nP-channel body diode conducts DRAIN -> SOURCE, therefore DRAIN = input side, SOURCE = load side.\nNormal polarity: body diode forward + gate pulled to GND by R1 => Vgs approx -24V => hard on.\nReverse polarity: Vgs approx 0 => off, body diode blocks.\nD2 (BZX84C15) IS MANDATORY - unclamped Vgs would be -24..-30V against the +/-20V Vgs limit.\n\nD1 TVS - THE CLAMP MUST STAY BELOW THE BUCK'S ABSOLUTE MAX (this is why it is an SMCJ, not an SMBJ):\nLMR33630 abs max VIN = 38 V. A 600W SMBJ26A clamps to 42.1 V at its rated 14.3 A surge - over the limit.\nSMCJ26CA (1500W, bidirectional - fine after Q1): same 42.1 V clamp but at 35.7 A, so a realistic surge sits near\n30-34 V, safely under 38 V. Stand-off 26 V is above the 26 V max rail, so it does not leak in normal use.\nDo NOT substitute an SMBJ here, and do NOT raise the stand-off without re-checking the buck's abs max."
 		(exclude_from_sim no)
 		(at 15.24 198 0)
 		(effects
@@ -3681,7 +3681,7 @@
 		)
 		(uuid "eee0a9d5-d5bf-4812-8224-a0ff6cf4efaf")
 	)
-	(text "S3 - POWER SUPPLIES     +24V_IN (18-26V) -> +13V5_GATE 13.500V -> +5V 4.984V -> +3V3    plus isolated +/-15V\nAll component values computed - see S3_POWER_DESIGN.md for every derivation, datasheet equation and JLC stock check."
+	(text "S3 - POWER SUPPLIES     +24V_IN (18-26V) -> +13V5_GATE 13.500V -> +5V 4.985V -> +3V3    plus isolated +/-15V\nAll component values computed - see S3_POWER_DESIGN.md for every derivation, datasheet equation and JLC stock check."
 		(exclude_from_sim no)
 		(at 15.24 16.51 0)
 		(effects
@@ -8162,7 +8162,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "52.3k"
+		(property "Value" "68k"
 			(at 304.292 76.835 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8206,7 +8206,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C23198"
+		(property "LCSC" "C23231"
 			(at 300.99 74.93 0)
 			(hide yes)
 			(show_name no)
@@ -10045,7 +10045,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "13k"
 			(at 290.322 84.455 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10089,7 +10089,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C25804"
+		(property "LCSC" "C22797"
 			(at 287.02 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -12908,7 +12908,7 @@
 		)
 	)
 	(symbol
-		(lib_id "FE_UFPR_4_0:D_TVS_Unidirectional")
+		(lib_id "FE_UFPR_4_0:D_TVS")
 		(at 91.44 44.45 270)
 		(unit 1)
 		(body_style 1)
@@ -12929,7 +12929,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SMCJ26A"
+		(property "Value" "SMCJ26CA"
 			(at 94.742 46.355 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12962,7 +12962,7 @@
 				)
 			)
 		)
-		(property "Description" "Zener diode"
+		(property "Description" "Bidirectional transient-voltage-suppression diode"
 			(at 91.44 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -12973,7 +12973,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C310042"
+		(property "LCSC" "C19077605"
 			(at 91.44 44.45 0)
 			(hide yes)
 			(show_name no)

@@ -2,7 +2,7 @@
 	(version "E")
 	(design
 		(source "/home/jose/Kicad/FE_UFPR_4_0/FE_UFPR_4_0.kicad_sch")
-		(date "2026-09-23T23:20:12")
+		(date "2026-09-26T12:44:49")
 		(tool "Eeschema 10.0.6")
 		(sheet
 			(number "1")
@@ -2012,28 +2012,28 @@
 		)
 		(comp
 			(ref "D1")
-			(value "SMCJ26A")
+			(value "SMCJ26CA")
 			(footprint "FE_UFPR_4_0:D_SMC")
-			(description "Zener diode")
+			(description "Bidirectional transient-voltage-suppression diode")
 			(fields
 				(field
-					(name "LCSC") "C310042")
+					(name "LCSC") "C19077605")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:D_SMC")
 				(field
 					(name "Datasheet")
 				)
 				(field
-					(name "Description") "Zener diode")
+					(name "Description") "Bidirectional transient-voltage-suppression diode")
 			)
 			(libsource
 				(lib "FE_UFPR_4_0")
-				(part "D_TVS_Unidirectional")
-				(description "Zener diode")
+				(part "D_TVS")
+				(description "Bidirectional transient-voltage-suppression diode")
 			)
 			(property
 				(name "LCSC")
-				(value "C310042")
+				(value "C19077605")
 			)
 			(property
 				(name "Sheetname")
@@ -2045,7 +2045,7 @@
 			)
 			(property
 				(name "ki_keywords")
-				(value "diode")
+				(value "diode TVS thyrector")
 			)
 			(property
 				(name "ki_fp_filters")
@@ -3335,12 +3335,12 @@
 		)
 		(comp
 			(ref "R10")
-			(value "52.3k")
+			(value "68k")
 			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C23198")
+					(name "LCSC") "C23231")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -3356,7 +3356,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C23198")
+				(value "C23231")
 			)
 			(property
 				(name "Sheetname")
@@ -3395,12 +3395,12 @@
 		)
 		(comp
 			(ref "R11")
-			(value "10k")
+			(value "13k")
 			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C25804")
+					(name "LCSC") "C22797")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -3416,7 +3416,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C25804")
+				(value "C22797")
 			)
 			(property
 				(name "Sheetname")
@@ -20864,12 +20864,12 @@
 		)
 		(comp
 			(ref "R57")
-			(value "2.20k 0.1%")
+			(value "3.00k 0.1%")
 			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C861295")
+					(name "LCSC") "C136963")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -20885,7 +20885,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C861295")
+				(value "C136963")
 			)
 			(property
 				(name "Sheetname")
@@ -20924,12 +20924,12 @@
 		)
 		(comp
 			(ref "R58")
-			(value "1.50k 0.1%")
+			(value "2.20k 0.1%")
 			(footprint "FE_UFPR_4_0:R_0603_1608Metric")
 			(description "Resistor")
 			(fields
 				(field
-					(name "LCSC") "C705741")
+					(name "LCSC") "C861295")
 				(field
 					(name "Footprint") "FE_UFPR_4_0:R_0603_1608Metric")
 				(field
@@ -20945,7 +20945,7 @@
 			)
 			(property
 				(name "LCSC")
-				(value "C705741")
+				(value "C861295")
 			)
 			(property
 				(name "Sheetname")
@@ -21780,7 +21780,7 @@
 				(names "/module_status/")
 				(tstamps "/a2165381-2d77-4319-9e8d-4618439f276e/")
 			)
-			(tstamps "4667ff5f-a588-41e5-aa07-de72ca7224eb" "45ed72fc-0d8a-4c30-99c7-ed2bb606bddb"
+			(tstamps "45ed72fc-0d8a-4c30-99c7-ed2bb606bddb" "4667ff5f-a588-41e5-aa07-de72ca7224eb"
 				"00dac94d-f3d3-4afb-b90f-fa62fc4cc1c2"
 			)
 			(units
@@ -21948,7 +21948,7 @@
 				(names "/module_status/")
 				(tstamps "/a2165381-2d77-4319-9e8d-4618439f276e/")
 			)
-			(tstamps "b0d6cf35-f94f-4cc5-96a6-582a9d44b038" "5f47088b-11db-4d64-b7d3-cca6beb0f904"
+			(tstamps "5f47088b-11db-4d64-b7d3-cca6beb0f904" "b0d6cf35-f94f-4cc5-96a6-582a9d44b038"
 				"12b63047-dfd8-4223-8819-a2d6a620d3f6"
 			)
 			(units
@@ -23797,6 +23797,46 @@
 		)
 		(libpart
 			(lib "FE_UFPR_4_0")
+			(part "D_TVS")
+			(description "Bidirectional transient-voltage-suppression diode")
+			(footprints
+				(fp "TO-???*")
+				(fp "*_Diode_*")
+				(fp "*SingleDiode*")
+				(fp "D_*")
+			)
+			(fields
+				(field
+					(name "Reference") "D")
+				(field
+					(name "Value") "D_TVS")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Bidirectional transient-voltage-suppression diode")
+				(field
+					(name "LCSC")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "A1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "A2")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "FE_UFPR_4_0")
 			(part "D_TVS_Dual_CAN")
 			(description "Dual bidirectional TVS for CAN, SOT-23 (pin 1/2 = lines, pin 3 = GND); KiCad NUP2105L symbol renamed")
 			(docs "https://www.onsemi.com/pub_link/Collateral/NUP2105L-D.PDF")
@@ -25394,7 +25434,7 @@
 			(node
 				(ref "D1")
 				(pin "1")
-				(pinfunction "K_1")
+				(pinfunction "A1_1")
 				(pintype "passive")
 			)
 			(node
@@ -29329,7 +29369,7 @@
 			(node
 				(ref "D1")
 				(pin "2")
-				(pinfunction "A_2")
+				(pinfunction "A2_2")
 				(pintype "passive")
 			)
 			(node
