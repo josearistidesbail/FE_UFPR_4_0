@@ -100,9 +100,9 @@ GPIO31, LaunchPad D9 — ✓ nothing on the board.
 
 ## 7. Vbus
 
-- Module sensor: 6.5 V at 900 V (6.4 / 6.5 / 6.6), load ≤ 5 mA → board divider **R57 2.20 kΩ / R58 1.50 kΩ (0.1 %)** to the Kelvin return `VBUS_RTN` (DB37-11, tied to GND at net-tie NT3 only) → 3.3 kΩ + 22 nF → ADCINC2.
-- **`VBUS_DIVIDER_RATIO 297.14 → 341.538`** (= 900/6.5 × 3.70/1.50). `VBUS_VOLTS_PER_CODE` = **0.250150 V/code**; full scale **1024.6 V** → the 415 V clipping caveat in `production_bringup.md` is **fixed**. `VBUS_OFFSET_CODE` → re-measure (the old 11.4 was the Control_V2 divider's).
-- Resolution 0.25 V/code is fine for control; the sensor floor below ~40 V (module behaviour) is unchanged — keep `vbus_ovr` for the 24 V bench until measured.
+- Module sensor: 6.5 V at 900 V (6.4 / 6.5 / 6.6), load ≤ 5 mA → board divider **R57 3.00 kΩ / R58 2.20 kΩ (0.1 %)** (re-picked 2026-09-26 to drop a JLC Extended line; was 2.20 k / 1.50 k) to the Kelvin return `VBUS_RTN` (DB37-11, tied to GND at net-tie NT3 only) → 3.3 kΩ + 22 nF → ADCINC2.
+- **`VBUS_DIVIDER_RATIO 297.14 → 327.273`** (= 900/6.5 × 5.20/2.20; the 341.538 of the 2.20 k/1.50 k revision is superseded). `VBUS_VOLTS_PER_CODE` = **0.239702 V/code**; full scale **981.8 V** → the 415 V clipping caveat in `production_bringup.md` is **fixed**. `VBUS_OFFSET_CODE` → re-measure (the old 11.4 was the Control_V2 divider's).
+- Resolution 0.24 V/code is fine for control; the sensor floor below ~40 V (module behaviour) is unchanged — keep `vbus_ovr` for the 24 V bench until measured.
 
 ## 8. Encoder (RM44AC, order code `01S`, 1 sin/cos cycle per mech rev)
 
@@ -155,7 +155,7 @@ Neither switch has a firmware define yet; suggested `SW_MAIN_GPIO 29U`, `SW_STAR
 #define ISENSE_V_PER_A_LEM      0.004886f               // 23.5 R burden x0.4158
 #define ISENSE_ZERO_CODE        2048                    // internal seed; LEM path seeds 2005
 // Vbus
-#define VBUS_DIVIDER_RATIO      341.538f                // was 297.14
+#define VBUS_DIVIDER_RATIO      327.273f                // was 297.14 (3.00k/2.20k divider, 2026-09-26)
 #define VBUS_OFFSET_CODE        0.0f                    // re-measure (was 11.4, Control_V2 divider)
 // encoder
 #define RES_SINCOS_BIAS_CODE    2039.0f                 // was 3072

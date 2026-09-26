@@ -1810,7 +1810,7 @@
 		)
 		(uuid "3a5f9db7-4128-4c74-a807-e45660e07fff")
 	)
-	(text "J4 = DEUTSCH DTM13-12PB-R005, 12-way right-angle, KEY B  (consigned / hand-solder)\n  1  ENC_VDD        7  n/c        Only 5 of 12 ways are used: the DTM13 board-mount\n  2  ENC_SIN_RAW    8  n/c        family exists ONLY in 8-way and 12-way (verified\n  3  GND            9  n/c        against TE's drawing repository), so 12-way is the\n  4  ENC_COS_RAW   10  SHIELD_ENC smallest Deutsch that can carry a 5-wire encoder.\n  5  n/c           11  n/c        GND on pin 3 sits BETWEEN the two signal contacts.\n  6  n/c           12  n/c\n  ** PIN NUMBERING IS EXTRAPOLATED, NOT VERIFIED. ** TE's 12-way drawing does not label the\n  cavities. The order above follows the 8-way drawing of the same family (bottom row L->R = 1..4,\n  top row R->L = 5..8). CONFIRM against the molded cavity numbers before crimping the harness."
+	(text "J4 = DEUTSCH DT15-12PB, 12-way VERTICAL flanged receptacle, KEY B  (consigned, not a TE sample)\n  1  ENC_VDD        7  n/c        Swapped 2026-09-23 from the right-angle DTM13-12PB-R005\n  2  ENC_SIN_RAW    8  n/c        with J3/J5. 12-way KEY B kept on purpose: it is the\n  3  GND            9  n/c        mechanical guard against the LEM +/-15 V harness (key A).\n  4  ENC_COS_RAW   10  SHIELD_ENC Plug DT06-12SB + W12S wedgelock, size-16 contacts (the\n  5  n/c           11  n/c        plug is not sampleable either). Only 5 of 12 ways used;\n  6  n/c           12  n/c        GND on pin 3 sits BETWEEN the two signal contacts.\n  Pin numbers = cavity numbers printed on TE drawing C-DT15-12PX sheet 1 (mating face:\n  pin 1 bottom-left, 1-6 up the left column, 7-12 down the right). No more extrapolation.\n  Mounting: 35.26 x 59.21 body, flange 15.5 mm up, 4x #4-20 Plastite screws from underneath."
 		(exclude_from_sim no)
 		(at 20.32 178 0)
 		(effects
@@ -7760,7 +7760,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "ENC DTM13-12PB-R005 key B"
+		(property "Value" "ENC DT15-12PB key B"
 			(at 35.56 119.38 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7771,7 +7771,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DTM13-12P-R005_Horizontal"
+		(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DT15-12P_Vertical"
 			(at 44.45 130.81 0)
 			(hide yes)
 			(show_name no)
@@ -7815,7 +7815,7 @@
 				)
 			)
 		)
-		(property "MPN" "DTM13-12PB-R005"
+		(property "MPN" "DT15-12PB"
 			(at 44.45 88.9 0)
 			(hide yes)
 			(show_name no)

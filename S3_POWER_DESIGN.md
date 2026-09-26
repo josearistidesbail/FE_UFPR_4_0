@@ -15,7 +15,7 @@ and are logged in `CLAUDE.md`.
 | 2 | **Gate-rail buck = LMR33630ADDAR** (the roadmap's original choice) | See §1 — an interim swap to a 60 V TPS54360B was **reverted** once the real LV rail max was confirmed as ≤26 V. |
 | 3 | **5 V buck = TPS62933F (FCCM)** | The 5 V rail feeds the analog front-ends. FCCM holds a fixed switching frequency at *any* load, incl. LaunchPad-unplugged. Independent of input voltage. See §5. |
 | 4 | **L1 = 22 µH per TI's ripple rule**; the gate rail is allowed to PFM at light load | It feeds only gate drivers and U2's input, and U2's FCCM loop rejects it. See §1. |
-| 5 | **TVS = SMCJ26A (1500 W), not SMBJ26A (600 W)** | The clamp must stay under the buck's 38 V absolute max at a realistic surge. See §3. |
+| 5 | **TVS = SMCJ26A (1500 W), not SMBJ26A (600 W)** — since 2026-09-26 the bidirectional **SMCJ26CA** (JLC Preferred), same grade | The clamp must stay under the buck's 38 V absolute max at a realistic surge. See §3. |
 | 6 | **±15 V = one 6 W isolated module** | Closes the S0 undersizing flag: 3× LA 100-P ≈ 4 W ≫ the 2 W A2415SDL. |
 | 7 | **Rail renamed `+12V_GATE` → `+13V5_GATE`** **[ARCH CHANGE]** | The net regulates to 13.5 V. |
 | 8 | **New global net `+24V_MOD`** **[ARCH CHANGE]** | The module-aux pass-through needs its own fused net to cross from `power` to `gate_drive`. |
@@ -85,13 +85,13 @@ Mini-Fit Jr (J1)  +24V_IN  18–26 V
    ├─ F1  5 A  2410 125 V ──┐
    │                        Q1 P-FET (SQD50P06-15L, drain=in, source=load)
    │                        │   gate: R1 100 k to GND, D2 BZX84C15 15 V Zener gate↔source
-   │                        ├─ D1 SMCJ26A TVS ─┬─ C1 100 µF/50 V elec ─┬─ +24V_PROT
+   │                        ├─ D1 SMCJ26CA TVS ┬─ C1 100 µF/50 V elec ─┬─ +24V_PROT
    │                                            └─ 2× 10 µF/50 V 1206  ─┘
    ├─►F2 3 A 1206 ──────────────────────────────────────────►  +24V_MOD → DB37 8/26 (S4)
    │
    ├─►U1 LMR33630A  400 kHz  22 µH  synchronous ────────────►  +13V5_GATE  13.500 V
    │        │
-   │        └─►U2 TPS62933F  1.2 MHz FCCM  3.3 µH ──────────►  +5V  4.984 V
+   │        └─►U2 TPS62933F  1.2 MHz FCCM  3.3 µH ──────────►  +5V  4.985 V
    │               │                                              └─ SS34 (S8, launchpad sheet)
    │               └─►U3 AMS1117-3.3 ──────────────────────►  +3V3  3.3 V
    │
@@ -118,7 +118,7 @@ Mini-Fit Jr (J1)  +24V_IN  18–26 V
 | F1 | 0451005.MRL 5 A 125 V 2410 | **C48467** | Ext | 47 295 | only in-stock 5 A SMD fuse with an adequate voltage rating |
 | F2 | 12H1300C 3 A 63 V 1206 | **C182445** | Ext | 43 246 | module-aux pass-through |
 | Q1 | SQD50P06-15L −60 V −50 A 15.5 mΩ TO-252 | **C3281500** | Ext | 7 471 | reverse polarity |
-| D1 | **SMCJ26A** TVS 1500 W, SMC | **C310042** | Ext | 7 293 | see below |
+| D1 | **SMCJ26CA** TVS 1500 W, SMC, bidirectional (2026-09-26; was SMCJ26A `C310042`, Ext) | **C19077605** | **Preferred** | 67 883 | see below |
 | D2 | BZX84C15 15 V Zener SOT-23 | **C19077472** | **Preferred** | 11 303 | clamps Q1 Vgs |
 | C1 | 100 µF 50 V elec D8×10.2 | **C2836439** | Ext | 42 082 | 146 mA ripple; damps harness LC |
 
@@ -136,6 +136,11 @@ At any realistic surge current the SMCJ sits far lower on its curve — around 3
 current that would push the SMBJ to its 42.1 V limit. Stand-off 26 V is at/above the confirmed 26 V
 rail maximum, so it does not leak in normal operation. **Do not substitute an SMBJ here, and do not
 raise the stand-off without re-checking the buck's absolute max.**
+
+**2026-09-26: D1 is the bidirectional SMCJ26CA** (hongjiacheng, `C19077605`, JLC **Preferred** = no feeder
+fee), datasheet-checked: 26 V stand-off, V_BR 28.9–31.9 V, V_C 42.1 V at 35.7 A, 1500 W — the same grade.
+Bidirectional costs nothing here: D1 sits **after** Q1, so reverse polarity never reaches it, and the
+positive-surge clamp is identical.
 
 **Fuse voltage rating matters too.** The two 1206 5 A alternatives are rated 32 V and unrated. A fuse
 must interrupt the arc at the applied voltage. That is why the 2410 part is used despite needing a
@@ -210,9 +215,9 @@ accepted per §1.
 | Item | Value | Derivation |
 |---|---|---|
 | f_sw | **1200 kHz** | **R_T pin tied to GND** — no resistor needed (datasheet Table 9-1) |
-| FB top | **52.3 kΩ** — **C23198**, 50 873 stock | TI Table 10-2 gives 52.5 k; 52.3 k is nearest E96 |
-| FB bottom | **10.0 kΩ** — C25804, Basic *(kit)* | |
-| **V_out** | **4.984 V** | `0.8 × (1 + 52.3 k / 10 k)` |
+| FB top | **68 kΩ** — **C23231**, Basic (2026-09-26; was 52.3 k `C23198`, Extended) | ratio 5.231 against TI Table 10-2's 52.5 k/10 k = 5.25; both halves Basic, no feed-forward cap on the FB node |
+| FB bottom | **13 kΩ** — **C22797**, Basic (was 10 k `C25804`) | |
+| **V_out** | **4.985 V** | `0.8 × (1 + 68 k / 13 k)` (4.984 V with 52.3 k / 10 k) |
 | L2 | **3.3 µH** FNR5040S3R3NT — **C167960**, 5 331 stock, 3.9 A/4.45 A, 31 mΩ, shielded 5×5 | TI Table 10-2 for 5 V @ 1.2 MHz |
 | C_in | 10 µF 50 V 1206 (C13585) + 100 nF (C14663) | Vin 13.57 V |
 | C_out | C16–C18 = 3× 10 µF 25 V 0805 (C15850) + C19 100 nF | TI: 20 µF typical, 10 µF minimum effective |
@@ -228,7 +233,7 @@ the minimum on-time.
 ## 5.1 +3V3 — AMS1117-3.3
 
 **U3 = AMS1117-3.3, LCSC C6186, JLC Basic**, 2 007 447 stock, SOT-223.
-Drop (4.984 − 3.3) × 0.15 A = **0.25 W**; SOT-223 θ_JA ≈ 62 °C/W → ≈15 °C rise → ≈85 °C junction
+Drop (4.985 − 3.3) × 0.15 A = **0.25 W**; SOT-223 θ_JA ≈ 62 °C/W → ≈15 °C rise → ≈85 °C junction
 at the 70 °C worst-case local ambient (ARCHITECTURE §7). Within the 125 °C limit. ✓
 Feeds CAN + fault logic only, so its mediocre HF PSRR is irrelevant — no analog hangs on 3V3.
 
@@ -279,7 +284,8 @@ Every value below was checked against **live JLC stock on 2026-08-29**.
 |---|---|---|---|---|
 | R 12 kΩ 0603 1 % | C22790 | **Basic** | 442 690 | R6 — U1 FB bottom |
 | R 150 kΩ 0603 1 % | C22807 | **Basic** | 414 154 | R5 — U1 FB top |
-| R 52.3 kΩ 0603 1 % | C23198 | Extended | 50 873 | R10 — U2 FB top |
+| R 68 kΩ 0603 1 % | C23231 | **Basic** | 890 983 | R10 — U2 FB top (2026-09-26; was 52.3 k C23198, Extended) |
+| R 13 kΩ 0603 1 % | C22797 | **Basic** | 380 477 | R11 — U2 FB bottom (2026-09-26; was 10 k C25804) |
 | C 47 nF 50 V X7R 0603 | C1622 | **Basic** | 757 584 | C13 — U2 soft-start |
 | C 100 µF 50 V elec D8×10.2 | C2836439 | Extended | 42 082 | C1 — input bulk |
 | L 22 µH SWPA8040S220MT 2.1/2.4 A, 69 mΩ | C15857 | Extended | 4 688 | L1 |
@@ -288,7 +294,7 @@ Every value below was checked against **live JLC stock on 2026-08-29**.
 | Fuse 3 A 63 V 1206 | C182445 | Extended | 43 246 | F2 |
 | LED red 0603 KT-0603R | C2286 | **Basic** | 8 154 450 | D4–D8, all five rails |
 | SQD50P06-15L P-FET −60 V 15.5 mΩ TO-252 | C3281500 | Extended | 7 471 | Q1 |
-| SMCJ26A TVS 1500 W SMC | C310042 | Extended | 7 293 | D1 |
+| SMCJ26CA TVS 1500 W SMC, bidirectional | C19077605 | **Preferred** | 67 883 | D1 (2026-09-26; was SMCJ26A C310042, Extended) |
 | BZX84C15 15 V Zener SOT-23 | C19077472 | **Preferred** | 11 303 | D2 |
 | SS34 40 V 3 A Schottky SMA | C8678 | **Basic** | 3 557 042 | LaunchPad feed — *placed in S8* |
 | LMR33630ADDAR | C841384 | Extended | 9 908 | U1 |
@@ -319,7 +325,8 @@ from **Basic, high-stock** parts instead.
 pins that map to TO-252; `Device:Q_PMOS` uses *letter* pin numbers and cannot map to a footprint),
 and `D_TVS_Unidirectional` (from `D_Zener` — KiCad ships only **bidirectional** TVS symbols with
 A1/A2 pins, and the SMCJ26A is unidirectional, so the zener glyph is both electrically correct and
-unambiguous about K/A polarity).
+unambiguous about K/A polarity). Since 2026-09-26 D1 is the bidirectional SMCJ26CA on the library's `D_TVS`
+(A1/A2); `D_TVS_Unidirectional` stays in use for D17 (SMAJ5.0A, `vehicle_io`).
 
 Footprints: `Texas_HSOP-8-1EP_3.9x4.9mm_P1.27mm_ThermalVias`, `SOT-583-8`, `SOT-223-3_TabPin2`,
 `TO-252-2`, `SOT-23`, `D_SMA`, `D_SMB`, `D_SMC`, `Fuse_1206_3216Metric`, `CP_Elec_8x10.5`,

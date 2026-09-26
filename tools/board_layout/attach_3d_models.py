@@ -14,6 +14,8 @@ P = '${KIPRJMOD}/3dmodels/'
 MODELS = {  # footprint name -> (model path, opacity)
     'DEUTSCH_DTM13-12P-R005_Horizontal': (P + 'DEUTSCH_DTM13-12P-R005_Horizontal.step', None),
     'DEUTSCH_DTM13-08PA-R004_Horizontal': (P + 'DEUTSCH_DTM13-08PA-R004_Horizontal.step', None),
+    'DEUTSCH_DT15-12P_Vertical': (P + 'DEUTSCH_DT15-12P_Vertical.step', None),
+    'DEUTSCH_DT15-08P_Vertical': (P + 'DEUTSCH_DT15-08P_Vertical.step', None),
     'Converter_DCDC_Mornsun_URA-YMD-6WR3_THT': (P + 'Converter_DCDC_Mornsun_URA-YMD-6WR3_THT.step', None),
     'L_CommonMode_TDK_ACT45B': (P + 'L_CommonMode_TDK_ACT45B.step', None),
     'Fuse_2410_6125Metric': (P + 'Fuse_2410_6125Metric.step', None),

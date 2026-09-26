@@ -14,6 +14,8 @@ Library additions are recorded **here** — never in `CLAUDE.md`. (Moved out of 
 | Connector | `DSUB-37_Socket` (generated) `Conn_02x10_Odd_Even` |
 | Utility | `TestPoint` `MountingHole` `NetTie_2` `SolderJumper_2_Open` `SolderJumper_3_Open` |
 
+**Appended 2026-09-23, S12.5 (47 → 49 footprints):** **`DEUTSCH_DT15-12P_Vertical`** (DT15-12PA/PB/PC/PD — one footprint, keys differ only in the moulding) and **`DEUTSCH_DT15-08P_Vertical`** (DT15-08PA/PB/PC/PD), hand-derived from TE drawings C-DT15-12PX rev D2 and C-DT15-08PX-XXXX rev A (`datasheets/TE-DT15-*_customer_drawing.pdf`; derivation in the `descr` strings and `DECISION_LOG.md`). The DTM13 footprints stay, now **unused**. No new symbols: `Conn_02x06_Counter_Clockwise` / `Conn_02x04_Counter_Clockwise` map 1:1 onto the DT cavity numbers printed on the drawings (the library symbol's default footprint for the 02x04 was moved to the DT15 8-way so the embedded copy matches). Both footprints render. 2026-09-24: silk outlines are single rounded-rectangle `fp_poly`s.
+
 **Appended in S8 (51 → 57 symbols):** `SN65HVD230` (KiCad `Interface_CAN_LIN`), `LTV-817S`
 (`Isolator`), `SolderJumper_2_Bridged` (`Jumper`), `D_TVS_Dual_CAN` (`Power_Protection:NUP2105L`
 renamed — same SOT-23 pinout as the PSM712: 1/2 lines, 3 GND), `Conn_02x04_Counter_Clockwise`
@@ -54,7 +56,7 @@ re-export SVGs after any library edit, and never import a symbol whose definitio
 
 **Appended in S3 (28 → 43 symbols):** `LMR33640ADDA` + `LMR33630ADDA`, `TPS62933` + `TPS62933F`, `AP1117-15` + `AMS1117-3.3`, `Conn_01x02`, `MOSFET_P_GDS`, `D_TVS_Unidirectional`, `Converter_DCDC_URA-YMD_Dual`, `TPS54360DDA` (from the reverted detour, now unused), and power symbols `+24V_IN` `+24V_PROT` `+24V_MOD` `+13V5_GATE`.
 - `MOSFET_P_GDS` is KiCad's `IRF9540N` renamed — it is the P-channel symbol with **numeric 1=G / 2=D / 3=S** pins that map to TO-252. `Device:Q_PMOS` uses letter pin *numbers* and cannot map to a footprint.
-- `D_TVS_Unidirectional` is `D_Zener` renamed: KiCad ships only **bidirectional** TVS symbols (A1/A2 pins) and the SMCJ26A is unidirectional, so the zener glyph is both electrically correct and unambiguous about K/A polarity.
+- `D_TVS_Unidirectional` is `D_Zener` renamed: KiCad ships only **bidirectional** TVS symbols (A1/A2 pins) and the SMCJ26A is unidirectional, so the zener glyph is both electrically correct and unambiguous about K/A polarity. **2026-09-26:** D1 became the bidirectional SMCJ26CA and moved to `D_TVS` (same pin numbers and positions); `D_TVS_Unidirectional` is still used by D17 (SMAJ5.0A, `vehicle_io`).
 - `+12V` and `+24V` remain in the library but are now **unused** (superseded by `+13V5_GATE` / `+24V_IN`).
 
 `+15V_ISO` / `-15V_ISO` are KiCad's `+15V` / `-15V` renamed so the power symbol drives the isolated-rail net names used in the net convention below. All BOM-bearing symbols carry an empty hidden **`LCSC`** property so the field is always present in the symbol-fields table.
@@ -85,6 +87,8 @@ from the footprint `descr` strings and the TE customer drawings, and attached by
 |---|---|---|
 | `DEUTSCH_DTM13-12P-R005_Horizontal` | `3dmodels/DEUTSCH_DTM13-12P-R005_Horizontal.step` | envelope from TE drawing rev NC: 41.02 × 38.10 × 24.28 mm, plug cavity, 12 pins. Not the vendor STEP |
 | `DEUTSCH_DTM13-08PA-R004_Horizontal` | `3dmodels/DEUTSCH_DTM13-08PA-R004_Horizontal.step` | TE drawing rev D: base block, **vertical 68.58 × 33.02 flange with the four slots, 4.4 mm below the board**, housing 32.64 × 20.22 |
+| `DEUTSCH_DT15-12P_Vertical` | `3dmodels/DEUTSCH_DT15-12P_Vertical.step` | TE drawing rev D2: 35.26 × 59.21 block to the flange face at 15.52, 22.25 × 49.3 shroud to 30.12, plug cavity, 12 pins Ø1.57, screw holes. `gen_3d_dt15.py`, not the vendor STEP |
+| `DEUTSCH_DT15-08P_Vertical` | `3dmodels/DEUTSCH_DT15-08P_Vertical.step` | TE drawing rev A: 35.26 × 55.12 block, 22.25 × 36.45 shroud, 8 pins — same generator |
 | `Converter_DCDC_Mornsun_URA-YMD-6WR3_THT` | `3dmodels/Converter_DCDC_Mornsun_URA-YMD-6WR3_THT.step` | 25.4 × 25.4 × 11.7 box + 5 pins |
 | `L_CommonMode_TDK_ACT45B` | `3dmodels/L_CommonMode_TDK_ACT45B.step` | 4.5 × 3.2 × 2.8 box + terminals |
 | `Fuse_2410_6125Metric` | `3dmodels/Fuse_2410_6125Metric.step` | 6.10 × 2.69 × 2.69 ceramic + end caps |

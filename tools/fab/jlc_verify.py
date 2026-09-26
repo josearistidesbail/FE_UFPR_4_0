@@ -4,11 +4,13 @@
 Usage:
   kicad-cli sch export bom --fields 'Reference,Value,Footprint,LCSC,${QUANTITY}' \
       --labels 'Reference,Value,Footprint,LCSC,Qty' --group-by 'Value,Footprint,LCSC' -o SCRATCH/bom.csv FE_UFPR_4_0.kicad_sch
-  python3 tools/fab/jlc_verify.py SCRATCH/bom.csv [--boards 5] [--out SCRATCH/jlc_verify.json] [--md SCRATCH/jlc_verify.md]
+  python3 tools/fab/jlc_verify.py SCRATCH/bom.csv [--boards 5] [--out SCRATCH/jlc_verify.json] [--md SCRATCH/jlc_verify.md] [--hand-solder R2,R3,...]
 
 Flags per line: NOT_FOUND, OUT_OF_STOCK, LOW_STOCK (< boards x qty x 3), EXTENDED (feeder fee),
 PACKAGE_MISMATCH (JLC package string vs the KiCad footprint size), VALUE_MISMATCH (R/C value vs JLC's description).  Placeholders (NOFIT, CONSIGNED) are
 listed, not queried.  JLCSearch is a snapshot mirror - treat stock as indicative (TOOLING_NOTES.md).
+HAND_SOLDER: every ref of the line is on --hand-solder (the make_package.sh HAND list), so JLC does not place it and
+its Extended code costs no feeder fee - the fee is counted over the Extended codes JLC actually places.
 """
 import csv, json, re, subprocess, sys, time
 
@@ -16,6 +18,7 @@ SRC = sys.argv[1]
 BOARDS = int(sys.argv[sys.argv.index('--boards') + 1]) if '--boards' in sys.argv else 5
 OUT = sys.argv[sys.argv.index('--out') + 1] if '--out' in sys.argv else None
 MD = sys.argv[sys.argv.index('--md') + 1] if '--md' in sys.argv else None
+HAND = set(sys.argv[sys.argv.index('--hand-solder') + 1].split(',')) if '--hand-solder' in sys.argv else set()
 API = 'https://jlcsearch.tscircuit.com/api/search?q={}&limit=5'
 
 def fetch(code):
@@ -54,6 +57,15 @@ def jlc_value(descr):
     if m: return ('F', float(m[1]) * _MULT[m[2]])
     return None
 
+def expand(field):
+    """kicad-cli writes ranges: 'C16-C18,R2' -> C16 C17 C18 R2 (same as jlc_bomcpl.py)"""
+    out = []
+    for tok in field.split(','):
+        tok = tok.strip(); m = re.fullmatch(r'([A-Z]+)(\d+)-([A-Z]+)(\d+)', tok)
+        if m and m[1] == m[3]: out += [f'{m[1]}{i}' for i in range(int(m[2]), int(m[4]) + 1)]
+        elif tok: out.append(tok)
+    return out
+
 def fp_size(footprint):
     m = re.search(r'_(0402|0603|0805|1206|1210|2010|2512|2410)_', footprint)
     if m: return m.group(1)
@@ -77,6 +89,7 @@ for r in rows:
     if not rec['stock']: rec['flags'].append('OUT_OF_STOCK')
     elif rec['stock'] < rec['need'] * 3: rec['flags'].append('LOW_STOCK')
     if not (rec['basic'] or rec['preferred']): rec['flags'].append('EXTENDED')
+    if HAND and set(expand(r['Reference'])) <= HAND: rec['flags'].append('HAND_SOLDER')
     sz = fp_size(rec['footprint']); pk = (rec['package'] or '')
     if sz and sz not in pk and not (sz == 'SOIC-8' and 'SOP-8' in pk) and not (sz == 'TO-252' and 'TO-252' in pk): rec['flags'].append(f'PACKAGE_MISMATCH {pk}')
     # value check: the BOM value against JLC's own description (this is what catches C22936 = 1 R sold as '1M')
@@ -87,15 +100,19 @@ for r in rows:
     res.append(rec)
 
 n_real = sum(1 for x in res if 'PLACEHOLDER' not in x['flags'])
-flagged = [x for x in res if x['flags'] and x['flags'] != ['EXTENDED'] and 'PLACEHOLDER' not in x['flags']]
+flagged = [x for x in res if not set(x['flags']) <= {'EXTENDED', 'HAND_SOLDER'} and 'PLACEHOLDER' not in x['flags']]
 ext = [x for x in res if 'EXTENDED' in x['flags']]
+# a code is charged once if JLC places at least one line of it
+ext_jlc = sorted({x['lcsc'] for x in ext if 'HAND_SOLDER' not in x['flags']})
+ext_hand = sorted({x['lcsc'] for x in ext} - set(ext_jlc))
+FEE = f'{len(ext_jlc)} Extended codes placed by JLC = feeder fee ${3.07 * len(ext_jlc):.2f}' + (f' ({len(ext_hand)} more Extended codes hand-soldered, no fee)' if ext_hand else '')
 cost = sum((x.get('price') or 0) * x['need'] for x in res if x.get('price'))
 print(f'{len(rows)} BOM lines, {n_real} real LCSC lines, {len(set(x["lcsc"] for x in res if "PLACEHOLDER" not in x["flags"]))} unique codes')
-print(f'flagged (not just EXTENDED): {len(flagged)}; plain-Extended lines: {len(ext)} (feeder fee ${3.07 * len(set(x["lcsc"] for x in ext)):.2f}); parts cost for {BOARDS} boards ${cost:.2f}')
+print(f'flagged (not just EXTENDED/HAND_SOLDER): {len(flagged)}; {FEE}; parts cost for {BOARDS} boards ${cost:.2f}')
 for x in flagged: print('  ', x['lcsc'], x['refs'][:40], x['value'], x['flags'], 'stock', x.get('stock'))
 if OUT: json.dump({'boards': BOARDS, 'date': time.strftime('%Y-%m-%d'), 'lines': res}, open(OUT, 'w'), indent=1)
 if MD:
     with open(MD, 'w') as f:
-        f.write(f'# JLC re-verification {time.strftime("%Y-%m-%d")} — {BOARDS} boards\n\n| LCSC | Refs | Value | Pkg (KiCad) | Pkg (JLC) | Stock | Need | Price | Basic/Pref | Flags |\n|---|---|---|---|---|---|---|---|---|---|\n')
+        f.write(f'# JLC re-verification {time.strftime("%Y-%m-%d")} — {BOARDS} boards\n\n**{FEE}.**\n\n| LCSC | Refs | Value | Pkg (KiCad) | Pkg (JLC) | Stock | Need | Price | Basic/Pref | Flags |\n|---|---|---|---|---|---|---|---|---|---|\n')
         for x in sorted(res, key=lambda x: (x['flags'] == [], x['lcsc'])):
             f.write(f"| `{x['lcsc']}` | {x['refs'][:30]} | {x['value']} | {x['footprint'][:22]} | {x.get('package','')} | {x.get('stock','')} | {x['need']} | {x.get('price','')} | {'B' if x.get('basic') else ''}{'P' if x.get('preferred') else ''} | {' '.join(x['flags'])} |\n")

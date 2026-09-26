@@ -14,7 +14,7 @@ table **p.3**). The DB37 pin map itself is frozen in [`CLAUDE.md`](CLAUDE.md) an
 |---|---|---|
 | 1 | **Fault pull-ups go to `+13V5_GATE`, 4.7 kΩ**, then a 10 k/4.7 k divider into a Schmitt | Noise margin at the *DB37 pin* is 2.45 V / 2.91 V. A 5 V pull-up would have left 0.5 V against module-GND shift across the harness. See §1.3. |
 | 2 | **Receiver = 3 × SN74LVC2G17 (dual non-inverting Schmitt)** | The hex non-inverting part (SN74LVC17A) **does not exist at JLC**. Non-inverting keeps GPIO polarity identical to the DB37 pin; `Ioff` makes a dead board-3V3 read as FAULT. See §1.4. |
-| 3 | **Vbus divider 2.20 k / 1.50 k, 0.1 % thin film** → full scale **1024.6 V** | `VBUS_DIVIDER_RATIO` 297.14 → **341.538**. Fixes all three documented 3.0 defects. See §2. |
+| 3 | **Vbus divider 2.20 k / 1.50 k, 0.1 % thin film** → full scale **1024.6 V** — **re-picked 2026-09-26: 3.00 k / 2.20 k → 981.8 V** | `VBUS_DIVIDER_RATIO` 297.14 → **341.538** → now **327.273**. Fixes all three documented 3.0 defects. See §2. |
 | 4 | **22 nF C0G charge bucket at each ADC pin**, fed through 3.3 kΩ | Kills the 512-cycle ACQPS workaround: the S/H now sees the bucket (68 ns settling) instead of a 34.5 kΩ divider. See §2.3. |
 | 5 | **NTC divider 12 k / 4.7 k**, rated for 10 V continuous | DB37 pin 29 is the **10 V** NTC2 channel, and it is the module's *only* temperature output. 93.8 % range use. See §3. |
 | 6 | **NTC ADC pin = ADCINC3** (BoosterPack site-1 **J3-24**), suggested **ADC-C SOC2** | Same header as Vbus (ADCINC2 = J3-27); converting after the SOC1 EOC that fires the ISR means the slow channel never delays the loop. See §3.2. |
@@ -171,22 +171,28 @@ is what makes a plain resistive divider legitimate.
 
 | # | 3.0 defect | v4.0 fix |
 |---|---|---|
-| 1 | 34.5 kΩ source impedance forced a 512-cycle S/H | 892 Ω Thevenin **plus a 22 nF bucket at the ADC pin** — the S/H sees the bucket, 68 ns settling |
+| 1 | 34.5 kΩ source impedance forced a 512-cycle S/H | 1269 Ω Thevenin (892 Ω before 2026-09-26) **plus a 22 nF bucket at the ADC pin** — the S/H sees the bucket, 68 ns settling |
 | 2 | sensor return shared the power path; **−52 mV load-dependent offset** measured | dedicated Kelvin return on **DB37 pin 11**, joined to GND at **NT3 and nowhere else** |
-| 3 | scale wrong / not recomputed | `VBUS_DIVIDER_RATIO` 297.14 → **341.538**, full scale 1024.6 V |
+| 3 | scale wrong / not recomputed | `VBUS_DIVIDER_RATIO` 297.14 → **327.273**, full scale 981.8 V (341.538 / 1024.6 V before 2026-09-26) |
 
 ### 2.2 Divider
 
 Module sensor: **6.4 / 6.5 / 6.6 V at 900 V**, load max 5 mA ⇒ 7.222 mV/V typical.
 
+> **Re-picked 2026-09-26 (JLC feeder-fee cut, `DECISION_LOG.md`): R57 = 3.00 k (`C136963`, the R105 line),
+> R58 = 2.20 k (`C861295`, the R129 line).** Both values were already on the BOM, same RT0603B family, so the
+> ratio-tracking argument below still holds and the 1.50 k line (`C705741`) is gone. Full scale drops to
+> 981.8 V (967 V at the 6.6 V/900 V sensor extreme) — ample for the ≤ 600 V FSAE bus. The tables below are
+> the current values; the 2.20 k / 1.50 k figures are kept in brackets.
+
 | | |
 |---|---|
-| R57 | **2.20 kΩ 0.1 %**, Yageo RT0603BRD072K2L, LCSC **C861295**, 38 458 in stock |
-| R58 | **1.50 kΩ 0.1 %**, Yageo RT0603BRD071K5L, LCSC **C705741**, 33 446 in stock |
-| Gain | 1500 / 3700 = **0.405405** |
-| Thevenin | **892 Ω** |
-| Module load at 1000 V | **1.95 mA** = 39 % of the 5 mA limit |
-| Full scale (3.000 V at the ADC) | **1024.6 V** |
+| R57 | **3.00 kΩ 0.1 %**, Yageo RT0603BRD073KL, LCSC **C136963** [was 2.20 k `C861295`] |
+| R58 | **2.20 kΩ 0.1 %**, Yageo RT0603BRD072K2L, LCSC **C861295** [was 1.50 k `C705741`] |
+| Gain | 2200 / 5200 = **0.423077** [0.405405] |
+| Thevenin | **1269 Ω** [892 Ω] |
+| Module load at 1000 V | **1.39 mA** = 28 % of the 5 mA limit [1.95 mA] |
+| Full scale (3.000 V at the ADC) | **981.8 V** [1024.6 V] |
 
 Both resistors are the **same Yageo RT0603B family** (thin film, 25 ppm/°C). That matters more
 than the absolute tolerance: the divider is ratiometric, so same-family parts track each other
@@ -202,12 +208,12 @@ Transfer:
 
 | Bus | Sensor | ADC | Code |
 |---|---|---|---|
-| 100 V | 0.722 V | 0.293 V | 400 |
-| 400 V | 2.889 V | 1.171 V | 1599 |
-| 800 V | 5.778 V | 2.342 V | 3198 |
-| 900 V | 6.500 V | 2.635 V | 3598 |
-| 1000 V | 7.222 V | 2.928 V | 3998 |
-| 1024.6 V | 7.400 V | 3.000 V | 4096 |
+| 100 V | 0.722 V | 0.306 V | 417 |
+| 400 V | 2.889 V | 1.222 V | 1669 |
+| 600 V | 4.333 V | 1.833 V | 2503 |
+| 800 V | 5.778 V | 2.444 V | 3337 |
+| 900 V | 6.500 V | 2.750 V | 3755 |
+| 981.8 V | 7.091 V | 3.000 V | 4096 (saturates above) |
 
 ### 2.3 Anti-alias and the charge bucket
 
@@ -216,17 +222,17 @@ ADC pin**.
 
 | | |
 |---|---|
-| Corner | **1726 Hz** (R_th + R_s = 4192 Ω) |
-| τ | 92.2 µs = 1.08 τ per 100 µs sample period |
+| Corner | **1583 Hz** (R_th + R_s = 4569 Ω) [1726 Hz, 4192 Ω] |
+| τ | 100.5 µs ≈ 1 τ per 100 µs sample period [92.2 µs] |
 | S/H charge sharing | C_h/(C_h+C_b) = 0.068 % = **2.8 codes** worst case, deterministic |
-| DC error from average S/H current | 1.9 mV = **2.6 codes** |
+| DC error from average S/H current | 2.1 mV = **2.8 codes** [1.9 mV, 2.6 codes] |
 | Settling seen by the S/H | (R_on 500 Ω)(C_h 15 pF)·ln(2·4096) = **68 ns** |
 
 **The 512-cycle ACQPS workaround can be retired.** ~320 ns of acquisition is already generous.
 
-If the module's sensor output ever rails to 15 V, the divider node reaches 6.08 V and the ADC
-clamp takes **0.63 mA** through R59 — inside the F28379D's ±2 mA per-pin clamp limit. R57
-dissipates 36 mW in that condition (0603, 36 %).
+If the module's sensor output ever rails to 15 V, the divider node reaches 6.35 V open-circuit and the ADC
+clamp takes **0.64 mA** through R59 — inside the F28379D's ±2 mA per-pin clamp limit. R57
+dissipates ≈30 mW in that condition (0603, 30 %). [2.20 k/1.50 k: 6.08 V, 0.63 mA, 36 mW]
 
 ### 2.4 Kelvin return
 
@@ -310,7 +316,7 @@ must land on ADC-A/B/C. From SPRUI77 Tables 1–4 the BoosterPack analog pins ar
 | Fault caps 1 nF C0G (connector side / Schmitt side) | C44–C48 / C49–C53 |
 | Schmitt receivers | U9, U10, U11 |
 | Decoupling 100 nF / bulk 1 µF | C54–C56 / C57 |
-| Vbus | R57 2.20 k 0.1 %, R58 1.50 k 0.1 %, R59 3.3 k, C58 1 nF, C59 22 nF, **NT3** |
+| Vbus | R57 3.00 k 0.1 %, R58 2.20 k 0.1 % (2026-09-26), R59 3.3 k, C58 1 nF, C59 22 nF, **NT3** |
 | NTC | R60 12 k, R61 4.7 k, R62 3.3 k, C60 1 nF, C61 22 nF |
 | Test points | TP19–TP29 |
 
@@ -361,8 +367,8 @@ matches `*GATE_EN*` and is now `Gate` class. Harmless — it just gets wider cop
 |---|---|---|---|
 | `MODULE_FAULT_ACTIVE_LOW` | `1` | **`0`** | fault = HIGH; the receiver chain is non-inverting |
 | Input X-BAR trip polarity | active-low | **invert** | OSHT1–3 on GPIO25/27/26 must follow the flag |
-| `VBUS_DIVIDER_RATIO` | `297.14f` | **`341.538f`** | V(bus) per V(ADC) |
-| `VBUS_VOLTS_PER_CODE` | derived | **0.250150 V/code** | full scale 1024.6 V |
+| `VBUS_DIVIDER_RATIO` | `297.14f` | **`327.273f`** (341.538 before 2026-09-26) | V(bus) per V(ADC) |
+| `VBUS_VOLTS_PER_CODE` | derived | **0.239702 V/code** | full scale 981.8 V |
 | `VBUS_OFFSET_CODE` | `11.4f` | **re-measure** | the old value was an artefact of the old divider |
 | NTC channel | none | **ADCINC3**, ADC-C ch3, J3-24 | suggest ADC-C **SOC2** |
 | `NTC_VOLTS_PER_CODE` | — | **0.002602 V(module)/code** | 10 V = 82 °C; clips at 10.66 V |

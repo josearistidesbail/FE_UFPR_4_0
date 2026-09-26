@@ -44,7 +44,7 @@ All are the Uniroyal `0603WAF…T5E` series (one manufacturer across the kit ⇒
 |---|---|---|---|
 | 12 k | C22790 | **Basic** | U1 FB divider bottom |
 | 150 k | C22807 | **Basic** | U1 FB divider top (13.500 V) |
-| 52.3 k | C23198 | Extended | U2 FB divider top (4.984 V) |
+| ~~52.3 k~~ | ~~C23198~~ | Extended | U2 FB divider top — **retired 2026-09-26** → 68 k `C23231` / 13 k `C22797`, both Basic, 4.985 V |
 
 *(5.6 k C23189, 49.9 k C23184, 75 k C23242, 200 k C25811 and 620 k C23219 were vetted for the
 reverted TPS54360B design and are no longer used — all Basic/high-stock, kept here as pre-vetted
@@ -82,6 +82,17 @@ Price ≈ $0.85–1.46 / 1000, stock 0.5 M–37 M on every line. **0.1 % gain/di
 | 47 nF | 0603 | X7R | 50 | **C1622** | **Basic** | U2 soft-start |
 | 100 µF | D8×10.2 elec | — | 50 | C2836439 | Extended | 24 V input bulk / harness LC damping |
 
+### Parts appended 2026-09-26 (feeder-fee cut — see "Feeder-fee reduction" below)
+
+| Part | LCSC | JLC | Stock | Notes |
+|---|---|---|---|---|
+| **68 kΩ 0603 1 %** 0603WAF6802T5E | C23231 | **Basic** | 890 983 | R10, U2 FB top |
+| **13 kΩ 0603 1 %** 0603WAF1302T5E | C22797 | **Basic** | 380 477 | R11, U2 FB bottom → 0.8 × (1 + 68/13) = 4.985 V |
+| **SMCJ26CA** TVS 1500 W, bidirectional, SMC (hongjiacheng) | C19077605 | **Preferred** | 67 883 | D1. Datasheet: 26 V stand-off, V_BR 28.9–31.9 V, V_C 42.1 V @ 35.7 A — the SMCJ26A grade |
+| **2.2 nF 0805 C0G 50 V** Samsung CL21C222JBFNNNE | C28260 | **Basic** | 214 163 | **not placed** — the only Basic C0G ≥ 1 nF; option for the ten 2.2 nF (needs 0805 footprints) |
+
+Retired: `C23198` (52.3 k), `C310042` (SMCJ26A), `C705741` (1.50 k 0.1 %).
+
 ### Parts appended in S4
 
 | Part | LCSC | JLC | Stock | Notes |
@@ -108,7 +119,7 @@ Price ≈ $0.85–1.46 / 1000, stock 0.5 M–37 M on every line. **0.1 % gain/di
 | **SMAJ5.0A** TVS, SMA | C2925443 | **Preferred** | 64 985 | D17 on `+5V_VEH` |
 | **1206L020/30NR** polyfuse 0.2 A hold / 0.46 A trip, 30 V | C7542932 | Ext | 141 752 | F3 on `+5V_VEH` |
 | **120 Ω 0603 1 %** 0603WAF1200T5E | C22787 | **Basic** | 1.34 M | R122 CAN termination (new kit line) |
-| **DEUTSCH DTM13-08PA-R004** 8-way, key A | — | **CONSIGNED** | — | J5 vehicle connector — a **vertical-flange** part, see the S8 doc |
+| ~~**DEUTSCH DTM13-08PA-R004** 8-way, key A~~ → **DT15-08PD** (vertical, key D, TE sample) | — | **CONSIGNED** | — | J5 vehicle connector — swapped 2026-09-23, `DECISION_LOG.md`; plug DT06-08SD not sampleable |
 
 Everything else S8 places comes from the existing kit: SS34 `C8678` (the LaunchPad 5 V feed
 resolved in S3, placed on `launchpad`, and a second one as the `+5V_VEH` back-feed block), 10 µF/0805
@@ -131,7 +142,7 @@ live.** Other low-stock lines under the pessimistic source: `C5369735` 362, `C52
 | **3.00 kΩ 0603 0.1 %** Yageo RT0603BRD073KL | C136963 | Ext | 116 222 | R105 — reference-chain top |
 | **BAT54S** dual series Schottky, SOT-23 | C7420333 | **Preferred** | 314 690 | D10/D11 — ADC clamp to +3V3/GND |
 | **Ferrite 600 Ω @100 MHz** GZ2012D601TF, 0805 | C1017 | **Basic** | 369 732 | FB1 — encoder supply. **Must be a ferrite, not a resistor**: the reference chain hangs off the same node, so only a near-zero DCR keeps the bias cancellation exact |
-| **DEUTSCH DTM13-12PA-R005** (key A) / **-12PB-R005** (key B) | — | **CONSIGNED** | — | J3 (LEM) / J4 (encoder) |
+| ~~**DEUTSCH DTM13-12PA-R005** (key A) / **-12PB-R005** (key B)~~ → **DT15-12PA** (sample) / **DT15-12PB** (not sampleable) | — | **CONSIGNED** | — | J3 (LEM) / J4 (encoder) — vertical DT15 since 2026-09-23; plugs DT06-12SA (sample) / DT06-12SB (buy), W12S, size-16 contacts |
 
 ⚠ **Fourth time: pick the value from live stock, not the E96 table.** 3.01 kΩ 0.1 % (C705772) has
 **1 175** in stock and 3.09 kΩ (C861371) **2 980**; the E24 value **3.00 kΩ** has 116 222.
@@ -171,8 +182,8 @@ standing "standardise C0G values" item.
 | Part | LCSC | JLC | Stock | Notes |
 |---|---|---|---|---|
 | **SN74LVC2G17DBVR** dual non-inverting Schmitt buffer, SOT-23-6 | C10429 | Ext | 107 122 | U9–U11 fault receivers. V_CC 1.65–5.5 V; inputs accept 5.5 V; **Ioff** (partial power down) — the property that makes a dead board-3V3 read as FAULT |
-| **2.20 kΩ 0603 0.1 %** Yageo RT0603BRD072K2L | C861295 | Ext | 38 458 | R57, Vbus divider top |
-| **1.50 kΩ 0603 0.1 %** Yageo RT0603BRD071K5L | C705741 | Ext | 33 446 | R58, Vbus divider bottom — same RT0603B family as R57 so the *ratio* tracks over temperature |
+| **2.20 kΩ 0603 0.1 %** Yageo RT0603BRD072K2L | C861295 | Ext | 38 458 | R57, Vbus divider top → **since 2026-09-26 R58 (bottom) + R129**; R57 is 3.00 k `C136963` |
+| ~~**1.50 kΩ 0603 0.1 %** Yageo RT0603BRD071K5L~~ | ~~C705741~~ | Ext | 33 446 | R58, Vbus divider bottom — **retired 2026-09-26** (divider re-picked to 3.00 k / 2.20 k, same family) |
 
 ⚠ **There is no hex non-inverting Schmitt at JLC.** `SN74LVC17A` returns **zero** results, which
 is why the design is 3 × dual instead of 1 × hex. The hex *inverting* parts do exist
@@ -202,7 +213,7 @@ Everything else S4 places comes from the S1/S3 kit: 100 Ω `C22775`, 10 kΩ `C25
 | Part | LCSC | JLC | Notes |
 |---|---|---|---|
 | SQD50P06-15L P-FET, −60 V, 15.5 mΩ, TO-252 | C3281500 | Ext | reverse polarity |
-| **SMCJ26A** TVS 1500 W, SMC | C310042 | Ext | 26 V standoff; 42.1 V clamp at 35.6 A ⇒ ~30–34 V at realistic surge, under the buck's 38 V abs max |
+| ~~**SMCJ26A** TVS 1500 W, SMC~~ → **SMCJ26CA `C19077605` Preferred (2026-09-26)** | C310042 | Ext | 26 V standoff; 42.1 V clamp at 35.6 A ⇒ ~30–34 V at realistic surge, under the buck's 38 V abs max |
 | BZX84C15 15 V Zener, SOT-23 | C19077472 | **Preferred** | Q1 Vgs clamp |
 | SS34 40 V 3 A Schottky, SMA | C8678 | **Basic** | LaunchPad 5 V feed (placed in S8) |
 | Fuse 5 A 125 V 2410 | C48467 | Ext | F1 — only in-stock 5 A with adequate V rating |
@@ -294,22 +305,49 @@ Economic PCBA accepts **2–50 pcs** (Standard: 2–80 000). The bare-board mini
 5 boards** costs ≈ $172 + bare PCB instead of ≈ $272 and leaves 3 bare boards for rework and for the
 consigned-connector work. Recommended for the first article.
 
-### Feeder-fee reduction: audited, nothing cuttable — **do not re-attempt**
+### Feeder-fee reduction — re-audited 2026-09-26: 27 → 14 codes ($82.89 → $42.98)
 
-$92.10 is 87 % of the one-time assembly cost, and all 30 lines are justified:
+The 2026-09-17 audit said "nothing cuttable — do not re-attempt". A live re-audit (JLCSearch + local DB,
+2026-09-26) showed that was wrong in four ways it had not considered: a **Preferred part in the same
+footprint**, a **Basic pair** for a divider whose single E96 value is Extended, **consolidating a 0.1 %
+divider onto values already on the BOM**, and **hand-soldering a whole Extended line** (the fee is per code
+JLC places — a code costs nothing once none of its refs is on the JLC BOM).
 
-| Group | Lines | Why it must stay Extended |
+| Change | Codes | Fee |
 |---|---|---|
-| Thin-film 0.1 % `RT0603BRD07…` (12 k ×18, 4.99 k ×8, 20 k ×6, 10 k ×6, 2.2 k ×2, 3 k, 1.5 k) + 47 R 0.1 % 1206 ×6 | 8 | Bought for **TCR tracking, not accuracy.** Encoder sheet note: a 1 % ratio drift = **~6° electrical**, *"never substitute a mixed-family divider here."* S5 §2.2: a thick-film Vbus pair drifts **0.6 % differentially over 60 °C = 6 V of bus error**, which matters to a UV/OV trip. The 47 R are in the current-sense difference-amp networks, where the target table demands matching. |
-| C0G (1 nF ×30, 2.2 nF ×10, 4.7 nF ×6, 22 nF ×6) | 4 | No JLC Basic C0G exists above 100 pF (S1 hard constraint). |
-| ICs (`SN74LVC2G17` ×12, `OPA2376` ×6, `UCC27524` ×3, `LMR33630`, `TPS62933`, `SN74LVC1G11`, `SQD50P06`) | 7 | No Basic equivalents; each is function-specific. |
-| Through-hole and specialty (2×10 headers ×4, `URA2415YMD-6WR3`, fuse `0451005`, PTC `1206L020`, TVS `SMCJ26A`, 100 µF elec, 22 µH `SWPA8040S`, 3.3 µH `FNR5040`, `ACT45B` CAN choke, 52.3 k 1 %) | 11 | **No through-hole part can ever be Basic** — JLC's Basic catalogue *is* the pre-loaded SMT feeder set. Checked: not one 2×10 2.54 mm header and not one 100 µF 50 V electrolytic in the catalogue is Basic. |
+| R10/R11 52.3 k / 10 k → 68 k `C23231` / 13 k `C22797`, both Basic (+5V 4.984 → 4.985 V) | −1 | −$3.07 |
+| D1 SMCJ26A `C310042` → SMCJ26CA `C19077605`, Preferred, same SMC footprint and grade (bidirectional is harmless after Q1) | −1 | −$3.07 |
+| Vbus R57/R58 2.20 k / 1.50 k → 3.00 k / 2.20 k = the R105 and R129 lines, same RT0603B family; `VBUS_DIVIDER_RATIO` 327.273 | −1 | −$3.07 |
+| Hand-solder C1, F1, F2, F3, L3, U8, R57+R105, R58+R129 (`HAND=` in `tools/fab/make_package.sh`) | −8 | −$24.56 |
+| Hand-solder Q1 (TO-252 tab on the +24 V pour) and U5–U7 (SOIC-8) | −2 | −$6.14 |
+| **Total** | **27 → 14** | **$82.89 → $42.98** |
 
-Substitutions were actually made for R57/R58 (Vbus → `C4190`/`C22843`) and R105 (encoder chain → `C4211`)
-and then **reverted** when the sheet notes and S5 §2.2 were read; both sheets verified byte-identical
-afterwards. The only remaining lever on assembly cost is **order quantity**, and on board cost the outline
-area — 100 × 100 mm is unreachable (sum of all 374 courtyards = 11 213 mm² > 10 000 mm², and the five fixed
-connectors plus the LaunchPad header block alone are 8381 mm²).
+`jlc_verify.py --hand-solder` (passed by `make_package.sh`) now counts the fee over the codes JLC actually
+places; before 2026-09-26 it also counted the hand-soldered Extended lines (it printed 30 codes, not 27).
+The 2026-09-17 attempt that swapped R57/R58/R105 to *thick-film* Basic parts was rightly reverted (TCR
+tracking); the 2026-09-26 re-pick stays inside the thin-film RT0603B family.
+
+**What is left (14 codes) and why:**
+
+| Group | Codes | Why it stays |
+|---|---|---|
+| 0.1 % thin film: 12.0 k ×18, 4.99 k ×8, 20.0 k ×6, 10.0 k ×6, 47 R 1206 ×6 | 5 | No Basic/Preferred 0.1 % resistor exists in any package. 1 % thick film breaks the gain-matching and SIN/COS-match targets |
+| C0G: 1 nF ×28, 2.2 nF ×10, 4.7 nF ×6, 22 nF 0805 ×11 | 4 | No Basic/Preferred C0G ≥ 1 nF in 0402–1206 except 2.2 nF **0805** `C28260` |
+| SN74LVC2G17 ×4, LMR33630 (exposed pad), TPS62933F (SOT-583, 0.5 mm pitch) | 3 | 0 Basic/Preferred; the bucks' Basic/Preferred alternatives (TPS5430 `C9864`, TPS54331 `C9865`, XL1509 `C61063`/`C74192`) need a power re-layout |
+| L1 SWPA8040S, L2 FNR5040S | 2 | 0 Basic/Preferred in those families; terminations under the body (hot air) |
+
+**Open options, not taken (user, 2026-09-26):**
+- The ten 2.2 nF 0603 → `C28260` (0805, Basic): −$3.07, and drops the lowest-stock line (`C77033`, 2 265) —
+  needs ten 0603→0805 footprint swaps and a local re-route.
+- Hand-solder 74LVC2G17, 47 R 1206, 4.7 nF and 22 nF (−$12.28), then the 10.0 k / 20.0 k / 4.99 k lines
+  (−$9.21): floor ≈ $18 with JLC assembly. Risk: unmarked 0603 values swapped inside matched networks.
+- The fee is per order, not per board — assembling more boards in one order amortises it.
+
+**Searched, nothing Basic/Preferred (2026-09-26):** P-FET ≥ 40 V in TO-252, 2410/1206 fuses, 1206 PTCs,
+100 µF 50 V electrolytics, SWPA/FNR inductors, ACT45B, UCC27524, 74LVC1G11, OPA2376. Cheaper *Extended*
+clones exist (e.g. `C19829674` SN74LVC2G17 $0.059 against $0.33) — cents, not the fee. The largest Basic C0G
+in 0603 is now 330 pF (`C1664`). JLC's BOM-matching xlsx shows Preferred parts as "Extended" in its Lib Type
+column — read the cart's feeder-fee line, not that column.
 
 ### Low-stock watch list (2026-09-17)
 
@@ -337,6 +375,8 @@ the quicker route for per-part Basic/stock/price.
 ### S12 re-verification (2026-09-23, after the `C22936` → `C22935` fix; `fab/jlc_verify.md` is the live copy)
 
 71 real LCSC lines / 63 codes, 0 NOT_FOUND / OUT_OF_STOCK / LOW_STOCK / VALUE_MISMATCH; 1 PACKAGE_MISMATCH (U1: JLC "ESOP-8" = HSOP-8, naming only). 37 Basic/Preferred, 33 Extended lines = 30 codes × $3.07 = **$92.10** feeder fees; parts **$140.62 / 5 boards**. U4 stock **304**. Rebuild with `sh tools/fab/make_package.sh` on order day.
+
+**2026-09-26 rebuild (after the fee cut):** 71 real lines / 63 codes, the same single PACKAGE_MISMATCH (U1); **14 Extended codes placed by JLC = $42.98**, 13 more Extended codes hand-soldered; parts $56.20 / 2 boards at unit price. `fab/jlc_verify.md` is the live copy.
 
 | LCSC | Refs | Value | Pkg (KiCad) | Pkg (JLC) | Stock | Need | Price | Basic/Pref | Flags |
 |---|---|---|---|---|---|---|---|---|---|

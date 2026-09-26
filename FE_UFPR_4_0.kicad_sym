@@ -11914,7 +11914,7 @@
 				)
 			)
 		)
-		(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DTM13-08PA-R004_Horizontal"
+		(property "Footprint" "FE_UFPR_4_0:DEUTSCH_DT15-08P_Vertical"
 			(at 0 0 0)
 			(show_name no)
 			(do_not_autoplace no)

@@ -52,7 +52,7 @@ jumper table §5.2, pinout tables 1–4, PCB layout §6.3), 3.0 as-built board f
   │      loads: **3× UCC27524** gate drivers (S4 — the TC4468 is out of stock at JLC),
   │             PrimeSTACK PWM inputs, (option) fault pull-up rail. Measured budget **≈10 mA**
   │      │
-  │      └─►Buck 2 **TPS62933F, FCCM** (S3): +13V5_GATE → **+5V = 4.984 V** (1.2 MHz, 3.3 µH)
+  │      └─►Buck 2 **TPS62933F, FCCM** (S3): +13V5_GATE → **+5V = 4.985 V** (1.2 MHz, 3.3 µH)
   │             loads: LaunchPad (via series Schottky), op-amp rail (ferrite/RC → clean 5 V),
   │                    encoder supply (filtered branch, S7), +3V3 LDO input
   │             │
@@ -81,7 +81,7 @@ It does **not** matter on the gate rail, which feeds only the gate drivers and U
 FCCM loop rejects it — so the gate rail **keeps the LMR33630A**, at 400 kHz with L1 = 22 µH per TI's
 ripple rule (PWM above ≈0.35 A, PFM below). What did have to change is the **TVS**: SMBJ33A breaks
 down at 36.7–40.6 V, straddling the LMR33630's **38 V absolute max**, so it becomes the 1500 W
-**SMCJ26A**, which reaches the same 42.1 V clamp only at 35.6 A and so sits near 30–34 V at a
+**SMCJ26A** (bidirectional **SMCJ26CA** since 2026-09-26, same grade), which reaches the same 42.1 V clamp only at 35.6 A and so sits near 30–34 V at a
 realistic surge. Full derivation in [`S3_POWER_DESIGN.md`](S3_POWER_DESIGN.md).
 
 ## 2. Power budget (S2 estimates — S3 replaces with computed numbers)
@@ -238,7 +238,7 @@ dominant, layout-critical cargo); module-side raw signals export from there.
 | `FLT_OC_A_15V` `FLT_OC_B_15V` `FLT_OC_C_15V` `FLT_OT_15V` `FLT_OV_15V` | gate_drive (DB37 2/22/5/6/16) → module_status | open-collector, ≤15 V, ≤15 mA sink; **FAULT = HIGH (S4, datasheet p.2)** |
 | `FLT_OC_A_3V3` `FLT_OC_B_3V3` `FLT_OC_C_3V3` `FLT_OT_3V3` `FLT_OV_3V3` | module_status → launchpad | GPIO25/27/26, GPIO64, GPIO52. **S5:** SN74LVC2G17 Schmitt outputs, non-inverting ⇒ `MODULE_FAULT_ACTIVE_LOW` = 0 |
 | `VBUS_SNS_RAW` + `VBUS_RTN` | gate_drive (DB37 7 + Kelvin pin) → module_status | 6.5 V @ 900 V, Kelvin pair |
-| `VBUS_ADC` | module_status → launchpad | ADCINC2 (**J3-27**). **S5:** 2.20 k/1.50 k 0.1 %, full scale **1024.6 V**, `VBUS_DIVIDER_RATIO` = 341.538 |
+| `VBUS_ADC` | module_status → launchpad | ADCINC2 (**J3-27**). **3.00 k/2.20 k 0.1 %** (2026-09-26; S5 had 2.20 k/1.50 k → 341.538), full scale **981.8 V**, `VBUS_DIVIDER_RATIO` = 327.273 |
 | `NTC_1_RAW` | gate_drive (**DB37 29 only**) → module_status | the module's single temperature output; **0–10 V**, divider must be rated for it (S5) |
 | `NTC_1_ADC` | module_status → launchpad | **S5: ADCINC3 (ADC-C ch3), J3-24**, suggest ADC-C SOC2. 12 k/4.7 k, 10 V → 2.814 V |
 | `PGND_MOD` | gate_drive (DB37 10/28) → power (**NT2 star**) | module aux return, ≤2.2 A, dedicated copper — global net, no sheet pins |
