@@ -29,13 +29,13 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 ## Current phase
 
-**S12.6 BOARD RE-PLACED AND RE-ROUTED FOR THE VERTICAL DT15 HEADERS (2026-09-24) + JLC FEE CUT (2026-09-26), branch `dt15-vertical`:** **178 × 130 mm**
-(left edge x = 96.0), J5 top-left, J4 beside the encoder front-end, J3 bottom-left beside U4; 12 B.Cu rule areas keep copper off the #4-20 screw heads.
-**DRC 0 errors / 0 unconnected / parity 0, 5 by-design silk warnings (R24↔J2 ×3, J2 edge ×2); netlist = `golden.net`; ERC 0.** Fee cut: JLC now places
-**14 Extended codes = $42.98** (was 27 / $82.89) — R10/R11 68k/13k, D1 SMCJ26CA, Vbus divider 3.00k/2.20k (`VBUS_DIVIDER_RATIO` 327.273), 14 more parts
-hand-soldered (`JLC_PARTS.md`); `fab/` rebuilt 2026-09-26. Not done yet: JLC placement preview (CPL rotations), then tag. No hole in the new bottom-left corner yet.
-Harness side: DT06-12SB and DT06-08SD are not TE samples
-(`OPEN_ITEMS.md`). ⚠ Local History disabled; never `pcbnew.SaveBoard` into the project dir (`TOOLING_NOTES.md`). DB37 MPN, H2, KTY class still open.
+**S12.6 BOARDS BUILT, BRING-UP A PASSED (2026-11-03), branch `dt15-vertical`:** 178 × 130 mm, JLC economic PCBA (14 Extended codes) + 42
+hand-soldered parts per board (`fab/FE_UFPR_4_0_hand_assembly_tracker.html`). Board 1: all rails OK, 0.096 A idle at 24 V; LaunchPad boots.
+**Three design defects found, reworked/worked around on the built boards, rev 4.1 fixes in `OPEN_ITEMS.md`:** D12 drawn backwards (rotate 180°);
+the LaunchPad has no 5 V → 3.3 V regulator, so the board must feed its 3V3 pin (bench: LaunchPad JP1+JP2 in; rework wire U3 tab → J20.1);
+F1→Q1 drain link is a 0.25 mm track (wire strap). Polarity audit 2026-11-03: D12 the only wrong part. **Next:** apply `S12_FIRMWARE_HANDOFF.md` §13
+in the firmware repo, then bring-up B–E (`S12_FAB_PACKAGE.md` §5), DB37 unplugged until C passes. ⚠ Never `pcbnew.SaveBoard` into the project dir.
+DB37 MPN, H2, KTY class still open.
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
 ## Roadmap, documents, session rhythm
