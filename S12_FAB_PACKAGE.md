@@ -77,7 +77,7 @@ After the preview: write the confirmed offsets into `jlc_rotations.json`, re-run
   |---|---|---|---|
   | JP1 | `ILOCK_SEL` (3-pad) | **bridge 1-2** | gate enable requires the cockpit main switch; 2-3 = bench bypass to +3V3. **Never open: U8's C input would float** |
   | JP2 | `SHLD_TIE` | **open** | DB37 shield to GND through 1 nF ‖ 1 MΩ only; bridge = hard tie |
-  | JP3 / JP4 / JP5 | `SRC SEL A/B/C` (3-pad) | **bridge 1-2** = internal module sensor | 2-3 = LEM path. **Never open: the ADC input floats.** Firmware constant must follow (`S12_FIRMWARE_HANDOFF.md` §6) |
+  | JP3 / JP4 / JP5 | `SRC SEL A/B/C` (3-pad) | **bridge 1-2** = internal module sensor | 2-3 = LEM path. ⚠ **Bench 2026-11-03: the module's outputs idle at 0 V and the internal path clips — use 2-3 until the rework in `OPEN_ITEMS.md`.** **Never open: the ADC input floats.** Firmware constant must follow (`S12_FIRMWARE_HANDOFF.md` §6) |
   | JP6 | `CAN TERM` | **bridged** (footprint is the bridged variant) | 120 Ω on the bus; cut if the bus is terminated elsewhere |
 
 - **Mounting:** H1–H4 Ø4.3 mm for M4 ISO 7380 button heads; **no Ø9 washer at H2** (Q1's tab pad is 0.1 mm from a washer's edge). Orientation (vertical vs horizontal) is a bracket question, not a PCB one.
@@ -95,7 +95,7 @@ After the preview: write the confirmed offsets into `jlc_rotations.json`, re-run
 
 **D. Fault receivers:** DB37 unplugged → TP24–TP28 all **HIGH** (pulled up = fault) and firmware shows all five module faults with `MODULE_FAULT_ACTIVE_LOW 0`. Plug the aux-powered module (no DC link) → all LOW. Force one (brown the aux below 18 V → OV/pin 16 flag) → TP28 HIGH, state → FAULT (step 9 of the firmware sequence later checks the HW trip path).
 
-**E. Analog, module aux-powered, no DC link, motor still:** TP36 `ISNS_VREF` = 1.4685 ± 0.005 V; TP30/32/34 `ISNS_x_INT` ≈ 1.50 V (bench item #3: record the exact value — it *is* the module bias × 0.6); TP31/33/35 `ISNS_x_LEM` = TP36 with the LEM board plugged and no current; ADC codes ≈ 2048 / 2005. TP19 `VBUS` vs TP21 `RTN` ≈ 0 with no link, then a bench DC link (24–48 V): note the sensor floor and set `VBUS_OFFSET_CODE`. TP22 `NTC` ≈ module NTC at room temp (10 V = 82 °C — expect well below). TP53 `MOT_TEMP_RAW` ≈ 1.57 V with a KTY81-210 at 25 °C (2000 Ω); ADCINA3 = 1.65 V. TP38/TP39 `ENC_*_RAW` and TP40/TP41 `ENC_*_ADC`: bias 1.49 V, amplitude 1.28 V, SIN/COS within 1 %, while turning the shaft by hand.
+**E. Analog, module aux-powered, no DC link, motor still:** TP36 `ISNS_VREF` = 1.4685 ± 0.005 V; TP30/32/34 `ISNS_x_INT` ≈ 1.50 V (bench item #3: record the exact value — it *is* the module bias × 0.6; **board 1: 0 V, the module bias is 0 V** — `OPEN_ITEMS.md`); TP31/33/35 `ISNS_x_LEM` = TP36 with the LEM board plugged and no current; ADC codes ≈ 2048 / 2005. TP19 `VBUS` vs TP21 `RTN` ≈ 0 with no link, then a bench DC link (24–48 V): note the sensor floor and set `VBUS_OFFSET_CODE`. TP22 `NTC` ≈ module NTC at room temp (10 V = 82 °C — expect well below). TP53 `MOT_TEMP_RAW` ≈ 1.57 V with a KTY81-210 at 25 °C (2000 Ω); ADCINA3 = 1.65 V. TP38/TP39 `ENC_*_RAW` and TP40/TP41 `ENC_*_ADC`: bias 1.49 V, amplitude 1.28 V, SIN/COS within 1 %, while turning the shaft by hand.
 
 **F. Then `production_bringup.md` "Ordered sequence" 1–10 at low DC-link voltage**, `BENCH_NO_POWER_STAGE 0` before step 5, HV only after all pass. The bench items in `S12_FIRMWARE_HANDOFF.md` §14 get answered along the way.
 

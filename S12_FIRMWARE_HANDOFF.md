@@ -49,7 +49,7 @@ Legend: ✓ = unchanged from what the firmware has today · **CHANGE** = the fir
 | OT | 64 | J6-54 | **HIGH** | Y | N (software) | 6 |
 | DCOV | 52 | J5-48 | **HIGH** | Y | N (software) | 16 |
 
-- **CHANGE: `MODULE_FAULT_ACTIVE_LOW 1 → 0`** and invert the Input X-BAR polarity. Datasheet p.2: outputs are open collector, "logic low = no fault", so **fault = released = HIGH**. The board pulls each line up with 4.7 kΩ to `+13V5_GATE`, divides 10 k / 4.7 k and buffers through an SN74LVC2G17 Schmitt (U9–U11) → a clean 3.3 V logic level, same sense: **HIGH = fault**.
+- **CHANGE: `MODULE_FAULT_ACTIVE_LOW 1 → 0`**, and invert the five fault pads in the GPIO input stage (GPxINV, SysConfig `PULLUP_INVERT`; firmware `MODULE_FAULT_PAD_INVERT`): the F2837xD Input X-BAR has **no** polarity control and the trip-zone inputs are active-LOW (corrected 2026-11-03; this line used to say "invert the Input X-BAR polarity"). ⚠ SysConfig's `Board_init()` arms OSHT before `GPIO_init()` applies the inversion, so a healthy module latches a spurious OST at every boot: clear it once the pads are final (bring-up D). Datasheet p.2: outputs are open collector, "logic low = no fault", so **fault = released = HIGH**. The board pulls each line up with 4.7 kΩ to `+13V5_GATE`, divides 10 k / 4.7 k and buffers through an SN74LVC2G17 Schmitt (U9–U11) → a clean 3.3 V logic level, same sense: **HIGH = fault**.
 - No internal MCU pull-up needed (the Schmitt output drives the pin). Harmless if left enabled.
 - **Fail-safe:** DB37 unplugged or module unpowered → all five read HIGH = fault. This is what `BENCH_NO_POWER_STAGE 1` is for on a bare control board.
 - ⚠ The module asserts **all three OC pins on any leg's overcurrent** — the three bits do **not** identify the phase. Treat OC_A|OC_B|OC_C as one "module OC" event in diagnostics.
@@ -84,7 +84,7 @@ GPIO31, LaunchPad D9 — ✓ nothing on the board.
 
 | | Internal (PrimeSTACK sensors, DB37 30/31/32) | External LEM LA 100-P (remote board, J3) |
 |---|---|---|
-| Sensor | module: 4.7/4.9/5.0 V at 300 A_RMS, bias **assumed 2.5 V** (datasheet gives no bias/polarity) | closed-loop, 1 : 2000, ±150 A peak range |
+| Sensor | module: 4.7/4.9/5.0 V at 300 A_RMS, bias **assumed 2.5 V** (datasheet gives no bias/polarity) — ⚠ **bench 2026-11-03: 0 V at zero current; this path clips negative currents as built — use the LEM path until the rework in `OPEN_ITEMS.md`** | closed-loop, 1 : 2000, ±150 A peak range |
 | Board stage | U12–U14 ch 1: differential ×0.600 (20.0 k / 12.0 k 0.1 %), reference GND | U12–U14 ch 2: burden 47.0 Ω ‖ 47.0 Ω = **23.5 Ω** (0.1 %, on this board), differential ×0.4158 (12.0 k / 4.99 k 0.1 %), reference `ISNS_VREF` |
 | **Sensitivity at the ADC** | **4.800 mV/A** if the module is 8.00 mV/A (4.9 V at 300 A *instantaneous*); **3.396 mV/A** if it is 5.66 mV/A (4.9 V at 424 A_pk) — **bench** | **4.886 mV/A** (fixed by the burden; +1.8 % vs internal) |
 | `LEM_V_PER_A` | **0.004800** (re-derive after bench item #3) | **0.004886** |
@@ -96,7 +96,7 @@ GPIO31, LaunchPad D9 — ✓ nothing on the board.
 - Firmware structure: **one constant per source**, chosen at boot from a build/param flag that mirrors the jumper positions (the board cannot report them). Moving a jumper without a CALIBRATE leaves a ~31 mV (≈ 6 A) zero error — the bias points differ by design.
 - `ISENSE_ZERO_CODE` stays a placeholder (`adc_calibrate_offsets()` captures the true zero); pre-cal seed 2048 (internal) / 2005 (LEM).
 - **Resolve the 0.0075 vs 78.6 mV/A contradiction in `hw_control_v2.h`**: both belong to the bench Control_V2 board; neither applies here. Replace with the two values above.
-- Sensor faults: LEM unplugged → LEM stages read the bias (no rail-stuck output); internal sensor unpowered → 0 V → reads −312 A: a plausibility check on |I| at gate-off catches a missing DB37.
+- Sensor faults: LEM unplugged → LEM stages read the bias (no rail-stuck output); internal sensor unpowered → 0 V → reads −312 A: a plausibility check on |I| at gate-off catches a missing DB37 (⚠ 0 V is also the powered module's zero on board 1 — see the table).
 
 ## 7. Vbus
 
@@ -161,7 +161,7 @@ Neither switch has a firmware define yet; suggested `SW_MAIN_GPIO 29U`, `SW_STAR
 #define RES_SINCOS_BIAS_CODE    2039.0f                 // was 3072
 #define RES_SINCOS_AMPL_CODE    1745.0f                 // was 990
 // faults
-#define MODULE_FAULT_ACTIVE_LOW 0U                      // was 1U  -- and invert the Input X-BAR polarity in SysConfig
+#define MODULE_FAULT_ACTIVE_LOW 0U                      // was 1U  -- plus GPxINV on GPIO25/27/26/64/52 (the Input X-BAR has no polarity bit)
 // new channels / pins
 #define ADC_BASE_NTC            ADCC_BASE   /* ADCINC3 */   #define NTC_DIVIDER_RATIO   3.553f
 #define ADC_BASE_MOT_TEMP       ADCB_BASE   /* ADCINB3 */   #define MOT_TEMP_R_TOP      2200.0f
@@ -174,7 +174,7 @@ Neither switch has a firmware define yet; suggested `SW_MAIN_GPIO 29U`, `SW_STAR
 
 ## 14. Things only the bench can settle (in the order the bring-up sheet hits them)
 
-1. Internal sensor bias (assumed 2.5 V → 1.500 V at the ADC) and sensitivity (8.00 vs 5.66 mV/A) — DC current through one phase with a clamp-meter reference. If 5.66: one resistor per channel (R65/R76/R88) restores full range; until then the firmware constant carries it.
+1. Internal sensor bias (assumed 2.5 V → 1.500 V at the ADC) and sensitivity (8.00 vs 5.66 mV/A) — DC current through one phase with a clamp-meter reference. If 5.66: one resistor per channel (R65/R76/R88) restores full range; until then the firmware constant carries it. **Bench 2026-11-03: bias = 0 V, not 2.5 V** (`OPEN_ITEMS.md`); scale, sign and bipolar-vs-one-sided still open — scope DB37 30–32 against the LEMs in step F.
 2. Sign of each current channel (both sources).
 3. `VBUS_OFFSET_CODE` and the sensor's low-voltage floor.
 4. Encoder amplitude at the connector (decides whether the S7 §9.1 gain bump is worth fitting).

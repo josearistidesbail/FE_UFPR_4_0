@@ -29,13 +29,13 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 ## Current phase
 
-**S12.6 BOARDS BUILT, BRING-UP A PASSED (2026-11-03), branch `dt15-vertical`:** 178 × 130 mm, JLC economic PCBA (14 Extended codes) + 42
-hand-soldered parts per board (`fab/FE_UFPR_4_0_hand_assembly_tracker.html`). Board 1: all rails OK, 0.096 A idle at 24 V; LaunchPad boots.
-**Three design defects found, reworked/worked around on the built boards, rev 4.1 fixes in `OPEN_ITEMS.md`:** D12 drawn backwards (rotate 180°);
-the LaunchPad has no 5 V → 3.3 V regulator, so the board must feed its 3V3 pin (bench: LaunchPad JP1+JP2 in; rework wire U3 tab → J20.1);
-F1→Q1 drain link is a 0.25 mm track (wire strap). Polarity audit 2026-11-03: D12 the only wrong part. **Next:** apply `S12_FIRMWARE_HANDOFF.md` §13
-in the firmware repo, then bring-up B–E (`S12_FAB_PACKAGE.md` §5), DB37 unplugged until C passes. ⚠ Never `pcbnew.SaveBoard` into the project dir.
-DB37 MPN, H2, KTY class still open.
+**S12.6 BRING-UP, board 1 (2026-11-03), branch `dt15-vertical`:** 178 × 130 mm, JLC economic PCBA + 42 hand-soldered parts
+(`fab/FE_UFPR_4_0_hand_assembly_tracker.html`). **A–C passed, D passed for OC A/B, E partial** (`VERIFIED_FACTS.md` § Bench, board 1).
+Design defects, reworked on board 1, rev 4.1 fixes in `OPEN_ITEMS.md`: D12 drawn backwards; the board must feed the LaunchPad's 3V3 (wire U3 tab
+→ J20.1, LaunchPad JP1–JP3 out); F1→Q1 0.25 mm drain link. **The module's current outputs read 0 V at zero current (S6 assumed 2.5 V): the
+internal path clips as built, so run on the LEMs (JP3–JP5 2-3); rework later.** Hand-soldered IC GND joints failed twice (U6, U16): continuity-check
+them. Firmware §13 is applied (firmware repo). **Next:** LEM swap, Vbus with a DC link, encoder by hand, then bring-up F at low voltage.
+⚠ Never `pcbnew.SaveBoard` into the project dir. DB37 MPN, H2, KTY class still open.
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
 ## Roadmap, documents, session rhythm
@@ -101,7 +101,7 @@ Never contradict these without logging a decision; the final board must answer `
 | PWM W high / low | GPIO10 / GPIO11 (EPWM6A/B) | |
 | Gate-driver master EN | GPIO66 (out) | **active-HIGH, confirmed S4** — board-local (U8 input A); the module has no enable pin |
 | Gate-driver aux EN | GPIO131 (out) | **active-HIGH, confirmed S4** — board-local (U8 input B). On 3.0 it was the AND gate's *VCC*, not a logic input |
-| OC fault A / B / C | GPIO25 / GPIO27 / GPIO26 (in, pull-up) | X-BAR INPUT1/2/3 → hardware trip OSHT1–3; trip action = active short (TZA LOW / TZB HIGH). **S5: `MODULE_FAULT_ACTIVE_LOW` → 0 and X-BAR polarity inverted.** ⚠ OC asserts **all three** pins whatever the leg — these bits do NOT identify the phase |
+| OC fault A / B / C | GPIO25 / GPIO27 / GPIO26 (in, pull-up) | X-BAR INPUT1/2/3 → hardware trip OSHT1–3; trip action = active short (TZA LOW / TZB HIGH). **S5: `MODULE_FAULT_ACTIVE_LOW` → 0; fault pads inverted in the GPIO stage (GPxINV) — the Input X-BAR has no polarity bit.** ⚠ OC asserts **all three** pins whatever the leg — these bits do NOT identify the phase |
 | Over-temperature fault | GPIO64 (in, pull-up) | software read only |
 | DC-link OV fault | GPIO52 (in, pull-up) | software read only |
 | Encoder SIN / COS | ADCINA2 / ADCINB2 | RM44AC, 1 sin/cos cycle per mech rev (**datasheet order code `01S`, S7**); ×10 pole pairs electrical. **S7: `RES_SINCOS_BIAS_CODE` 3072 → 2039, `RES_SINCOS_AMPL_CODE` 990 → 1745** |

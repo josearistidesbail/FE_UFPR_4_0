@@ -35,7 +35,7 @@ under any flange suffix tried (probed slowly after a 222-request burst earned a 
 DB37 pin functions for all 37 pins incl. TOP/BOT within each half-bridge; **fault = HIGH**
 ("open collector, logic low = no fault", max 15 mA); every analog output rated **load max 5 mA**;
 digital input network **10 kΩ to GND + 1 nF to GND**, HIGH = on; **one** temperature pin (29);
-pins 9/27 are a **15 V/50 mA supply output**, not sensors; pin 1 is **true earth/shield**;
+pins 9/27 are a **15 V/50 mA supply output**, not sensors (bench 2026-11-03: 0 V with the module powered; unused on the board); pin 1 is **true earth/shield**;
 the module has **no enable input pin**, so both firmware enables are board-local.
 
 **Verified in S5 from the same datasheet (p.6 error table, p.3 optional-components table):**
@@ -48,7 +48,7 @@ The p.3 options table shows **only the "Inverter Section" voltage / current / te
 fitted** (Unit 1 and Unit 3 columns empty), independently confirming S4's single-temperature-pin finding.
 
 **Assumed — MUST bench-verify before the dependent session (see REDESIGN_PLAN.md bench-day checklist):**
-- ~~Fault output polarity~~ — **resolved S4 on paper: fault = HIGH.** Bench now only confirms it.
+- ~~Fault output polarity~~ — **resolved S4 on paper: fault = HIGH.** **Bench-confirmed 2026-11-03** (bring-up B/D, board 1).
 - ~~Enable active levels for GPIO66/GPIO131~~ — **resolved S4: board-local, we define them ACTIVE-HIGH.**
 - ~~NTC output level~~ — **no longer blocks S5**: the divider is rated for the full 0–10 V the datasheet specifies. The bench measurement now only calibrates the curve, needed before the OT trip threshold is set.
 - Internal current-sensor **bias AND sensitivity** — ~~blocks S6~~ **no longer blocks: S6 is designed to be
@@ -57,6 +57,17 @@ fitted** (Unit 1 and Unit 3 columns empty), independently confirming S4's single
   separate bench figure of 78.6 mV/A belongs to the bench clamp+amp board, not the module. The datasheet's
   "4.9 V @ 300 A_RMS" admits two readings (8.00 or 5.66 mV/A); S6 sets the gain for the **higher** one so
   neither reading clips. Bench now only reclaims ADC range (one resistor per channel). Polarity never
-  blocked anything — `PHASE_ID_DEFAULT_EN` re-detects each channel's sign at every ALIGN
+  blocked anything — `PHASE_ID_DEFAULT_EN` re-detects each channel's sign at every ALIGN.
+  ⚠ **Bench 2026-11-03: the outputs read 0 V at zero current with the module powered** — the 2.5 V bias
+  assumption is wrong and the internal path clips negative currents (§ Bench, board 1; rework in `OPEN_ITEMS.md`)
 - ~~RM44AC differential vs single-ended, supply V/I, true output levels at the connector~~ — **resolved S7 from the datasheet** (`datasheets/RLS-RM44_RM58-RM4458D01_01.pdf`): **single-ended** VA/VB, **2.2 ±0.2 Vpp**, offset **3/5·Vdd ±5 mV**, **720 Ω** internal series impedance, 5 V ±5 % / 13 mA, LiYCY 4×0.20 mm² shielded. Bench now only confirms. ⚠ **The installed encoder's actual amplitude is still unknown** and cannot be back-calculated from 3.0's bench figures (2.25 V / 1.45 Vpp) because 3.0's channel A was reworked off-board — the two numbers imply two different gains. S7 is designed to span the whole 2.0–2.4 Vpp datasheet range so it does not matter.
-- LaunchPad no-back-feed with the S2 jumper config; GPIO131 header continuity → downgraded to *verification* of documented behavior (S2 finding above), no longer design inputs
+- ~~LaunchPad no-back-feed with the S2 jumper config; GPIO131 header continuity~~ — **bench 2026-11-03:** GPIO66/GPIO131 verified by bring-up B; the back-feed test found D12 drawn backwards and that the LaunchPad has no 5 V → 3.3 V regulator (both in `OPEN_ITEMS.md`, reworked on board 1)
+
+## Bench, board 1 (2026-11-03, bring-up per `S12_FAB_PACKAGE.md` §5)
+
+- **A (power) — pass** after rework: all rails OK, 0.096 A idle at 24 V. D12 rotated; LaunchPad 3.3 V fed by the U3 → J20.1 wire, LaunchPad JP1–JP3 out (USB isolated).
+- **B (gate enable) — pass:** boots to IDLE; `module_fault` 0x1F with the DB37 unplugged (fail-safe HIGH); GATE_EN only with GPIO66 AND GPIO131 AND the main switch, and pulling the switch drops it in hardware. Fault found: U6 pin 3 (GND) open.
+- **C (PWM) — pass:** all six module inputs LOW at every enable (firmware all-LOW off state); open loop at 0.3 / 10 Hz: levels, complementary pairs, 1500 ns dead band and 120° phasing correct. Enable-edge scope capture skipped.
+- **D (trip path) — pass for OC A/B:** shorting plug; OC A → OSHT1 only, OC B → OSHT2 only, MCU pins in the active-short pattern while GATE_EN stays LOW; OT/DCOV open → software fault. Two firmware bugs fixed (firmware `308a542`). Protection-armed boot with the real module: `module_fault` 0x00, `tz_trip` 0. SysConfig arms OSHT before the pad inversion, so every boot latches a spurious OST; the firmware clears it, and it cannot reach the module (GATE_EN LOW until RUN).
+- **E (analog) — partial:** encoder receiver 1.41 V on both channels, encoder unplugged (design 1.50 V; ratiometric to `ENC_VDD`, channels matched); LEM paths = `ISNS_VREF` ≈ 1.47 V; Vbus floor 0.12 V at DB37 pin 7 (≈ 66 codes, no link); module NTC 0.62 V at room temperature; module aux ≈ 0.47 A at 24 V (0.57 A total). **Module current outputs 0 V at zero current** (internal-sensor entry above). Module 15 V outputs (pins 9/27) 0 V. Faults found: U16 GND joint, U16/U17 bridges and flux, a U13 joint.
+- The XDS100 dropped off USB twice while LaunchPad JP1/JP2 were in (USB ground tied to the board); isolated since.
