@@ -29,13 +29,13 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 ## Current phase
 
-**S12.6 BOARD RE-PLACED AND RE-ROUTED FOR THE VERTICAL DT15 HEADERS (2026-09-24) + JLC FEE CUT (2026-09-26), branch `dt15-vertical`:** **178 × 130 mm**
-(left edge x = 96.0), J5 top-left, J4 beside the encoder front-end, J3 bottom-left beside U4; 12 B.Cu rule areas keep copper off the #4-20 screw heads.
-**DRC 0 errors / 0 unconnected / parity 0, 5 by-design silk warnings (R24↔J2 ×3, J2 edge ×2); netlist = `golden.net`; ERC 0.** Fee cut: JLC now places
-**14 Extended codes = $42.98** (was 27 / $82.89) — R10/R11 68k/13k, D1 SMCJ26CA, Vbus divider 3.00k/2.20k (`VBUS_DIVIDER_RATIO` 327.273), 14 more parts
-hand-soldered (`JLC_PARTS.md`); `fab/` rebuilt 2026-09-26. Not done yet: JLC placement preview (CPL rotations), then tag. No hole in the new bottom-left corner yet.
-Harness side: DT06-12SB and DT06-08SD are not TE samples
-(`OPEN_ITEMS.md`). ⚠ Local History disabled; never `pcbnew.SaveBoard` into the project dir (`TOOLING_NOTES.md`). DB37 MPN, H2, KTY class still open.
+**S12.6 BRING-UP, board 1 (2026-11-05), branch `dt15-vertical`:** A–C passed, D for OC A/B, E done on the LEMs, **F started: ALIGN +
+closed-loop current at a 31 V link** (`VERIFIED_FACTS.md` § Bench, board 1). Reworked on board 1, rev 4.1 fixes in `OPEN_ITEMS.md`: D12 backwards; the
+board must feed the LaunchPad's 3V3 (U3 tab → J20.1 wire, JP1–JP3 out); F1→Q1 0.25 mm link; module current outputs idle at 0 V (internal path clips:
+run on the LEMs, JP3–JP5 2-3). Hand-soldered joints failed four times (U6, U16, U13, U17 pin 6): continuity-check every pin. **ADC: one ≈ 1.6 MHz
+interference on every input, lead suspect the LaunchPad's U12 boost; handled in firmware, kill test deferred by the user.** **Next:** Vbus reads ~4×
+low (meter, then `vbuscal` ≥ 40 V); OC C / OT / OV, start input, D17; then F at higher voltage. Plug the encoder only unpowered.
+⚠ Never `pcbnew.SaveBoard` into the project dir. DB37 MPN, H2, KTY class still open.
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
 ## Roadmap, documents, session rhythm
@@ -84,12 +84,12 @@ decisions to `DECISION_LOG.md` → capture in KiCad (MCP) → JLC-vet every new 
 
 ## Firmware cross-reference (AUTHORITATIVE)
 
-Never contradict these without logging a decision; the final board must answer `control_v2_pinmap.md` line by line (S12 firmware-handoff doc).
+Never contradict these without logging a decision; the board answers `control_v2_pinmap.md` line by line in `S12_FIRMWARE_HANDOFF.md`.
 
 - `/home/jose/foc-f28379d-fsae/foc_f28379d/config/hw/hw_control_v2.h` — pin map + scaling constants
-- `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/control_v2_pinmap.md` — fill-in handoff format
+- `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/FE_UFPR_4_0_handoff.md` — the firmware's answer for this board (the Control_V2 form `control_v2_pinmap.md` moved to `docs/archive/` on 2026-11-05)
 - `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/infineon.md` — PrimeSTACK electrical interface. ⚠ Its "Digital Outputs: LOW (Fault Active)" line is **wrong** and its own error-table note is right; the real datasheet in `datasheets/` settles it — **fault = HIGH** (S4)
-- `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/production_bringup.md` — bring-up order + hardware caveats
+- `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/production_bringup.md` — bring-up order + calibration table (rewritten for 4.0)
 - `/home/jose/foc-f28379d-fsae/CLAUDE.md` — engineering logbook (bench-measured constants, root-cause analyses)
 
 ### Pin map (F28379D 337ZWT on LAUNCHXL-F28379D, BoosterPack sites 1+2)
@@ -101,11 +101,11 @@ Never contradict these without logging a decision; the final board must answer `
 | PWM W high / low | GPIO10 / GPIO11 (EPWM6A/B) | |
 | Gate-driver master EN | GPIO66 (out) | **active-HIGH, confirmed S4** — board-local (U8 input A); the module has no enable pin |
 | Gate-driver aux EN | GPIO131 (out) | **active-HIGH, confirmed S4** — board-local (U8 input B). On 3.0 it was the AND gate's *VCC*, not a logic input |
-| OC fault A / B / C | GPIO25 / GPIO27 / GPIO26 (in, pull-up) | X-BAR INPUT1/2/3 → hardware trip OSHT1–3; trip action = active short (TZA LOW / TZB HIGH). **S5: `MODULE_FAULT_ACTIVE_LOW` → 0 and X-BAR polarity inverted.** ⚠ OC asserts **all three** pins whatever the leg — these bits do NOT identify the phase |
+| OC fault A / B / C | GPIO25 / GPIO27 / GPIO26 (in, pull-up) | X-BAR INPUT1/2/3 → hardware trip OSHT1–3; trip action = active short (TZA LOW / TZB HIGH). **S5: `MODULE_FAULT_ACTIVE_LOW` → 0; fault pads inverted in the GPIO stage (GPxINV) — the Input X-BAR has no polarity bit.** ⚠ OC asserts **all three** pins whatever the leg — these bits do NOT identify the phase |
 | Over-temperature fault | GPIO64 (in, pull-up) | software read only |
 | DC-link OV fault | GPIO52 (in, pull-up) | software read only |
 | Encoder SIN / COS | ADCINA2 / ADCINB2 | RM44AC, 1 sin/cos cycle per mech rev (**datasheet order code `01S`, S7**); ×10 pole pairs electrical. **S7: `RES_SINCOS_BIAS_CODE` 3072 → 2039, `RES_SINCOS_AMPL_CODE` 990 → 1745** |
-| Phase current A / B / C | **ADCINA5** / ADCINC4 / **ADCINB4** | **A↔C swapped 2026-09-22** for routing: A = J7-66 (J22.12), C = J7-68 (J22.16); firmware must swap its A/C channel defines (S12). S6 added channel C; J7-65…69 carry the whole block on five contiguous pins. KCL reconstruction optional |
+| Phase current A / B / C | **ADCINA5** / ADCINC4 / **ADCINB4** | **A↔C swapped 2026-09-22** for routing: A = J7-66 (J22.12), C = J7-68 (J22.16); firmware swapped its A/C defines (S12), bench-confirmed 2026-11-05. **Keep Iu/Iv/Iw in one SOC slot** (shared ADC interference). S6 added channel C; J7-65…69 carry the whole block on five contiguous pins. KCL reconstruction optional |
 | Current offset refs | ADCINA4 (J7-69) / ADCINB5 (J7-65) | **S6: KEPT** — both read the buffered `ISNS_VREF` ≈1.4685 V through their own 100 Ω + 22 nF buckets. Same node on two converters ⇒ a free ADC-A vs ADC-B cross-check |
 | Vbus sense | ADCINC2 (J3-27) | module outputs 6.5 V @ 900 VDC. R57/R58 = **3.00k/2.20k 0.1 %** (2026-09-26; S5 had 2.20k/1.50k → 341.538): **`VBUS_DIVIDER_RATIO` 297.14 → 327.273**, full scale 981.8 V, 0.239702 V/code |
 | **Motor temperature** | **ADCINB3** (J3-25) | **chosen S9.5** — EMRAX 208 stator **KTY81-210** on J4 cavities 6/7. PTC: **hotter = HIGHER code**, opposite to the module NTC. Fault window rejects `<1400` / `>3100` → stop the motor (EMRAX requires it) |

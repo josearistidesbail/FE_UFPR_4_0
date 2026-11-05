@@ -104,6 +104,9 @@ low side is the node the difference amp must Kelvin-sense — S11 rule 2.
 
 ## 3. The module's internal sensor — what the datasheet does *not* say
 
+> ⚠ **Bench 2026-11-03 (board 1): the module's outputs read 0 V at zero current, not 2.5 V.** The internal
+> stage below (bottom of the + divider at GND) therefore clips negative currents. Rework and rev 4.1 fix: `OPEN_ITEMS.md`.
+
 PrimeSTACK datasheet p.2 gives exactly one line for the internal current sensors:
 
 > Analog current sensor output, inverter section — **load max 5 mA, @ 300 A_RMS: 4.7 / 4.9 / 5.0 V**

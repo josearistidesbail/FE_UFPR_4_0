@@ -772,7 +772,7 @@
       "netlist": "",
       "plot": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "FE_UFPR_4_0.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""

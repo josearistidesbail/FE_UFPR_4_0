@@ -1,0 +1,11 @@
+Item,Refdes / where,TE part number,Description,Qty per board,TE sample available,TE stock,Checked,Notes
+1,J3 header (LEM),DT15-12PA,"Header, 12-way, straight, key A",1,Yes,In stock,2026-10-01,
+2,J4 header (encoder),DT15-12PB,"Header, 12-way, black, straight, key B",1,No,In stock,2026-10-01,Not sampleable - buy or re-key
+3,J5 header (vehicle),DT15-08PD,"Header, 8-way, brown, straight, key D",1,Yes,In stock,2026-10-01,
+4,J3 plug,DT06-12SA,"Plug, 12-way, grey, key A",1,Yes,In stock,2026-10-01,
+5,J4 plug,DT06-12SB,"Plug, 12-way, black, key B",1,No,In stock,2026-10-01,Not sampleable - buy or re-key
+6,J5 plug,DT06-08SD,"Plug, 8-way, brown, key D",1,No,In stock,2026-10-01,Not sampleable - buy or re-key
+7,J3 + J4 plugs,W12S,"Wedgelock, 12-way plug",2,Yes,In stock,2026-10-01,
+8,J5 plug,W8S,"Wedgelock, 8-way plug",1,Yes,In stock,2026-10-01,
+9,All plugs,0462-201-16141,"Socket contact, solid, size 16, 16-20 AWG, nickel",32,Yes,In stock,2026-10-01,"32 = every cavity populated (12+12+8); add crimp spares. Stamped alternative 1062-16-0122 (14-18 AWG) is sampleable but out of stock"
+10,Unused plug cavities,114017-ZZ,"Sealing plug, size 12/16, white",as needed,Yes,In stock,2026-10-01,One per unused cavity; each replaces one contact
