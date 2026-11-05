@@ -29,12 +29,12 @@ On 2026-09-17 that history was moved out verbatim. **Rules:**
 
 ## Current phase
 
-**S12.6 BRING-UP, board 1 (2026-11-03), branch `dt15-vertical`:** 178 × 130 mm, JLC economic PCBA + 42 hand-soldered parts
-(`fab/FE_UFPR_4_0_hand_assembly_tracker.html`). **A–C passed, D passed for OC A/B, E partial** (`VERIFIED_FACTS.md` § Bench, board 1).
-Design defects, reworked on board 1, rev 4.1 fixes in `OPEN_ITEMS.md`: D12 drawn backwards; the board must feed the LaunchPad's 3V3 (wire U3 tab
-→ J20.1, LaunchPad JP1–JP3 out); F1→Q1 0.25 mm drain link. **The module's current outputs read 0 V at zero current (S6 assumed 2.5 V): the
-internal path clips as built, so run on the LEMs (JP3–JP5 2-3); rework later.** Hand-soldered IC GND joints failed twice (U6, U16): continuity-check
-them. Firmware §13 is applied (firmware repo). **Next:** LEM swap, Vbus with a DC link, encoder by hand, then bring-up F at low voltage.
+**S12.6 BRING-UP, board 1 (2026-11-05), branch `dt15-vertical`:** A–C passed, D for OC A/B, E done on the LEMs, **F started: ALIGN +
+closed-loop current at a 31 V link** (`VERIFIED_FACTS.md` § Bench, board 1). Reworked on board 1, rev 4.1 fixes in `OPEN_ITEMS.md`: D12 backwards; the
+board must feed the LaunchPad's 3V3 (U3 tab → J20.1 wire, JP1–JP3 out); F1→Q1 0.25 mm link; module current outputs idle at 0 V (internal path clips:
+run on the LEMs, JP3–JP5 2-3). Hand-soldered joints failed four times (U6, U16, U13, U17 pin 6): continuity-check every pin. **ADC: one ≈ 1.6 MHz
+interference on every input, lead suspect the LaunchPad's U12 boost; handled in firmware, kill test deferred by the user.** **Next:** Vbus reads ~4×
+low (meter, then `vbuscal` ≥ 40 V); OC C / OT / OV, start input, D17; then F at higher voltage. Plug the encoder only unpowered.
 ⚠ Never `pcbnew.SaveBoard` into the project dir. DB37 MPN, H2, KTY class still open.
 *(Replace this paragraph — don't extend it — when a session's exit criteria pass. Keep it ≤ 8 lines.)*
 
@@ -84,12 +84,12 @@ decisions to `DECISION_LOG.md` → capture in KiCad (MCP) → JLC-vet every new 
 
 ## Firmware cross-reference (AUTHORITATIVE)
 
-Never contradict these without logging a decision; the final board must answer `control_v2_pinmap.md` line by line (S12 firmware-handoff doc).
+Never contradict these without logging a decision; the board answers `control_v2_pinmap.md` line by line in `S12_FIRMWARE_HANDOFF.md`.
 
 - `/home/jose/foc-f28379d-fsae/foc_f28379d/config/hw/hw_control_v2.h` — pin map + scaling constants
-- `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/control_v2_pinmap.md` — fill-in handoff format
+- `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/FE_UFPR_4_0_handoff.md` — the firmware's answer for this board (the Control_V2 form `control_v2_pinmap.md` moved to `docs/archive/` on 2026-11-05)
 - `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/infineon.md` — PrimeSTACK electrical interface. ⚠ Its "Digital Outputs: LOW (Fault Active)" line is **wrong** and its own error-table note is right; the real datasheet in `datasheets/` settles it — **fault = HIGH** (S4)
-- `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/production_bringup.md` — bring-up order + hardware caveats
+- `/home/jose/foc-f28379d-fsae/foc_f28379d/docs/production_bringup.md` — bring-up order + calibration table (rewritten for 4.0)
 - `/home/jose/foc-f28379d-fsae/CLAUDE.md` — engineering logbook (bench-measured constants, root-cause analyses)
 
 ### Pin map (F28379D 337ZWT on LAUNCHXL-F28379D, BoosterPack sites 1+2)
@@ -105,7 +105,7 @@ Never contradict these without logging a decision; the final board must answer `
 | Over-temperature fault | GPIO64 (in, pull-up) | software read only |
 | DC-link OV fault | GPIO52 (in, pull-up) | software read only |
 | Encoder SIN / COS | ADCINA2 / ADCINB2 | RM44AC, 1 sin/cos cycle per mech rev (**datasheet order code `01S`, S7**); ×10 pole pairs electrical. **S7: `RES_SINCOS_BIAS_CODE` 3072 → 2039, `RES_SINCOS_AMPL_CODE` 990 → 1745** |
-| Phase current A / B / C | **ADCINA5** / ADCINC4 / **ADCINB4** | **A↔C swapped 2026-09-22** for routing: A = J7-66 (J22.12), C = J7-68 (J22.16); firmware must swap its A/C channel defines (S12). S6 added channel C; J7-65…69 carry the whole block on five contiguous pins. KCL reconstruction optional |
+| Phase current A / B / C | **ADCINA5** / ADCINC4 / **ADCINB4** | **A↔C swapped 2026-09-22** for routing: A = J7-66 (J22.12), C = J7-68 (J22.16); firmware swapped its A/C defines (S12), bench-confirmed 2026-11-05. **Keep Iu/Iv/Iw in one SOC slot** (shared ADC interference). S6 added channel C; J7-65…69 carry the whole block on five contiguous pins. KCL reconstruction optional |
 | Current offset refs | ADCINA4 (J7-69) / ADCINB5 (J7-65) | **S6: KEPT** — both read the buffered `ISNS_VREF` ≈1.4685 V through their own 100 Ω + 22 nF buckets. Same node on two converters ⇒ a free ADC-A vs ADC-B cross-check |
 | Vbus sense | ADCINC2 (J3-27) | module outputs 6.5 V @ 900 VDC. R57/R58 = **3.00k/2.20k 0.1 %** (2026-09-26; S5 had 2.20k/1.50k → 341.538): **`VBUS_DIVIDER_RATIO` 297.14 → 327.273**, full scale 981.8 V, 0.239702 V/code |
 | **Motor temperature** | **ADCINB3** (J3-25) | **chosen S9.5** — EMRAX 208 stator **KTY81-210** on J4 cavities 6/7. PTC: **hotter = HIGHER code**, opposite to the module NTC. Fault window rejects `<1400` / `>3100` → stop the motor (EMRAX requires it) |

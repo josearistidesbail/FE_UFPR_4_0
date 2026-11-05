@@ -75498,6 +75498,17 @@
 		(layer "Edge.Cuts")
 		(uuid "c14885d4-cb7e-46ad-9856-359daa458ff4")
 	)
+	(gr_text "PWM 15V"
+		(at 238.7 199.9 0)
+		(layer "F.SilkS")
+		(uuid "d3708d24-f4fd-4899-84a2-cd5dd0ea01ba")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
 	(gr_text "by José Aristides Bail\n"
 		(at 138.4 176.8 0)
 		(layer "F.SilkS")
@@ -75509,17 +75520,6 @@
 				(bold yes)
 			)
 			(justify left bottom)
-		)
-	)
-	(gr_text "PWM 15V"
-		(at 238.7 199.9 0)
-		(layer "F.SilkS")
-		(uuid "d3708d24-f4fd-4899-84a2-cd5dd0ea01ba")
-		(effects
-			(font
-				(size 1 1)
-				(thickness 0.15)
-			)
 		)
 	)
 	(gr_text "MOTOR CONTROLLER 4.0"

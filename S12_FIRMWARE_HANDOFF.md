@@ -1,7 +1,7 @@
 # FE_UFPR 4.0 → firmware handoff (answers `control_v2_pinmap.md` line by line)
 
 Board: **FE_UFPR_4_0**, schematic freeze `v4.0-schematic-freeze`, release tag `v4.0-release` (S12, 2026-09-23).
-Target files on the firmware side: `docs/control_v2_pinmap.md` (this file answers it), `config/hw/hw_control_v2.h`
+Target files on the firmware side: `docs/control_v2_pinmap.md` (this file answers it; archived 2026-11-05 to `docs/archive/`, the firmware's own answer is `docs/FE_UFPR_4_0_handoff.md`), `config/hw/hw_control_v2.h`
 (§13 lists every define that changes), `board_control_v2.syscfg` (pinmux — the GPIO numbers below are unchanged
 from Control_V2 except where marked **NEW**).
 
@@ -77,7 +77,7 @@ GPIO31, LaunchPad D9 — ✓ nothing on the board.
 
 - **`ISENSE_NUM_CHANNELS 2 → 3`.** All three phases are instrumented; KCL reconstruction becomes optional (keep it as a cross-check).
 - **A↔C swap (2026-09-22):** the routing put phase A on J7-66 (ADCINA5) and phase C on J7-68 (ADCINB4). The old `ADC_BASE_IU ADCB_BASE / ADC_CH_ADCIN4` now measures **phase C**. §13 has the define changes.
-- Suggested SOC allocation: ADC-A: SOC0 = SIN, SOC1 = Iu (A5), SOC2 = REF_A (A4), SOC3 = 3V3 monitor (A3, slow). ADC-B: SOC0 = Iw (B4), SOC1 = COS, SOC2 = REF_B (B5), SOC3 = motor temp (B3, slow). ADC-C: SOC0 = Iv, SOC1 = Vbus (EOC → ISR, unchanged), SOC2 = NTC (C3, slow). The three slow channels can be sampled at a divided rate.
+- ~~Suggested SOC allocation: ADC-A: SOC0 = SIN, SOC1 = Iu (A5), SOC2 = REF_A (A4), SOC3 = 3V3 monitor (A3, slow). ADC-B: SOC0 = Iw (B4), SOC1 = COS, SOC2 = REF_B (B5), SOC3 = motor temp (B3, slow). ADC-C: SOC0 = Iv, SOC1 = Vbus (EOC → ISR, unchanged), SOC2 = NTC (C3, slow). The three slow channels can be sampled at a divided rate.~~ **Superseded on the bench (2026-11-05):** every ADC input carries one shared ≈ 1.6 MHz interference (`VERIFIED_FACTS.md` § Bench, board 1), which the three-sensor Clarke cancels only if Iu, Iv and Iw convert at the same instant. So ADC-A is SOC0 = **Iu (A5)**, SOC1 = SIN (firmware `5432839`): the currents share SOC0, SIN/COS share SOC1. All SOCs use the same 15-cycle window, so the three ADCs convert in lockstep (`f8e06ef`; the 512-cycle Vbus window was a Control_V2 workaround, and the 22 nF bucket makes it unnecessary). **Keep the three currents in one slot.**
 - The two offset refs read the **same node** through two converters: their difference is a live ADC-A vs ADC-B gain/offset cross-check (should be 0 ± a few codes after `adc_calibrate_offsets`).
 
 ## 6. Current-sense scaling — two sources, selected per phase by solder jumper (JP3/JP4/JP5: 1-2 = internal, factory default; 2-3 = LEM)
@@ -89,9 +89,9 @@ GPIO31, LaunchPad D9 — ✓ nothing on the board.
 | **Sensitivity at the ADC** | **4.800 mV/A** if the module is 8.00 mV/A (4.9 V at 300 A *instantaneous*); **3.396 mV/A** if it is 5.66 mV/A (4.9 V at 424 A_pk) — **bench** | **4.886 mV/A** (fixed by the burden; +1.8 % vs internal) |
 | `LEM_V_PER_A` | **0.004800** (re-derive after bench item #3) | **0.004886** |
 | `ISENSE_AMPS_PER_CODE` | 0.1526 A/code | 0.1499 A/code |
-| Zero-current bias | 0.600 × 2.5 V = **1.500 V ≈ 2048 codes** | **1.4685 V ≈ 2005 codes** (12.0 k / 4.99 k from +5 V, buffered by U15) |
-| Full scale | **±312 A** (ADC-limited at 4.8 mV/A; ±441 A if 5.66) → SW OC trip at 260 A fires before saturation | **±150 A** (sensor-limited: 0.736…2.201 V) → the SW OC trip is **inert** on this path by decision (S6: LEM is a validation instrument; the module HW OC covers it) |
-| Sign (positive current into the motor) | **bench** — DB37 pins 30/31/32 polarity not in the datasheet | **bench** — depends on LEM arrow vs cable direction |
+| Zero-current bias | 0.600 × 2.5 V = **1.500 V ≈ 2048 codes** | **1.4685 V ≈ 2005 codes** (12.0 k / 4.99 k from +5 V, buffered by U15); bench 1.462 V, **1996 codes** (+5 V ≈ 0.4 % low) |
+| Full scale | **±312 A** (ADC-limited at 4.8 mV/A; ±441 A if 5.66) → SW OC trip at 260 A fires before saturation | **±150 A** (sensor-limited: 0.736…2.201 V) → ~~the SW OC trip is **inert** on this path by decision (S6: LEM is a validation instrument)~~ **superseded 2026-11-04: the LEMs are now the control sensor, so the trip is live** — param `oc_trip_a`, boots at 40 A, capped at 130 A on the LEM path (`ISENSE_OC_TRIP_MAX_A`; firmware `b3c431e`). The module HW OC still backs it up |
+| Sign (positive current into the motor) | **bench** — DB37 pins 30/31/32 polarity not in the datasheet | **bench 2026-11-05:** phase ID map A → U, B → V, C → W, no inversion (the LEM loop test confirmed scale and pinning) |
 
 - Firmware structure: **one constant per source**, chosen at boot from a build/param flag that mirrors the jumper positions (the board cannot report them). Moving a jumper without a CALIBRATE leaves a ~31 mV (≈ 6 A) zero error — the bias points differ by design.
 - `ISENSE_ZERO_CODE` stays a placeholder (`adc_calibrate_offsets()` captures the true zero); pre-cal seed 2048 (internal) / 2005 (LEM).
@@ -103,11 +103,13 @@ GPIO31, LaunchPad D9 — ✓ nothing on the board.
 - Module sensor: 6.5 V at 900 V (6.4 / 6.5 / 6.6), load ≤ 5 mA → board divider **R57 3.00 kΩ / R58 2.20 kΩ (0.1 %)** (re-picked 2026-09-26 to drop a JLC Extended line; was 2.20 k / 1.50 k) to the Kelvin return `VBUS_RTN` (DB37-11, tied to GND at net-tie NT3 only) → 3.3 kΩ + 22 nF → ADCINC2.
 - **`VBUS_DIVIDER_RATIO 297.14 → 327.273`** (= 900/6.5 × 5.20/2.20; the 341.538 of the 2.20 k/1.50 k revision is superseded). `VBUS_VOLTS_PER_CODE` = **0.239702 V/code**; full scale **981.8 V** → the 415 V clipping caveat in `production_bringup.md` is **fixed**. `VBUS_OFFSET_CODE` → re-measure (the old 11.4 was the Control_V2 divider's).
 - Resolution 0.24 V/code is fine for control; the sensor floor below ~40 V (module behaviour) is unchanged — keep `vbus_ovr` for the 24 V bench until measured.
+- **Bench 2026-11-05:** 46–48 codes with the link off, 77 at 31 V: about 4× low, most likely the module sensor's low-end non-linearity (same signature on Control_V2). Calibrate from metered points ≥ 40 V (`vbuscal`); `OPEN_ITEMS.md` has the check that tells the module from the divider.
 
 ## 8. Encoder (RM44AC, order code `01S`, 1 sin/cos cycle per mech rev)
 
 - Board receiver: differential ×1.20 (10.0 k / 12.0 k 0.1 %) against a 3.00 k / 4.99 k / 12.0 k reference chain, matched 2.2 nF C0G on both channels, BAT54S clamps, 100 Ω + 22 nF at the pin. SIN and COS are drawn identically.
 - **`RES_SINCOS_BIAS_CODE 3072 → 2039`** (1.4934 V) · **`RES_SINCOS_AMPL_CODE 990 → 1745`** (1.2782 V at the nominal 2.2 Vpp source, including the sensor's 720 Ω output impedance). Worst-case source (2.4 Vpp) spans 0.099…2.888 V: **no clipping** — `production_bringup.md` caveat 1 is fixed. `MAG_LOW/MAG_HIGH` windows can stay; the ALIGN cal sweep re-measures min/max anyway.
+- **Bench 2026-11-05:** bias 2045 / 2047 codes, amplitude ≈ 1580–1585 codes (the installed encoder gives ≈ 2.0 Vpp); the firmware baked these as `RES_SINCOS_*`.
 - Electrical poles 1 ✓, already demodulated sin/cos ✓ (no excitation). The lag from the matched RC (≈ 2.2 kHz) is a pure angle delay, identical on both channels.
 - Encoder supply `ENC_VDD` = +5 V through FB1, own test point (TP44).
 
@@ -175,7 +177,7 @@ Neither switch has a firmware define yet; suggested `SW_MAIN_GPIO 29U`, `SW_STAR
 ## 14. Things only the bench can settle (in the order the bring-up sheet hits them)
 
 1. Internal sensor bias (assumed 2.5 V → 1.500 V at the ADC) and sensitivity (8.00 vs 5.66 mV/A) — DC current through one phase with a clamp-meter reference. If 5.66: one resistor per channel (R65/R76/R88) restores full range; until then the firmware constant carries it. **Bench 2026-11-03: bias = 0 V, not 2.5 V** (`OPEN_ITEMS.md`); scale, sign and bipolar-vs-one-sided still open — scope DB37 30–32 against the LEMs in step F.
-2. Sign of each current channel (both sources).
-3. `VBUS_OFFSET_CODE` and the sensor's low-voltage floor.
-4. Encoder amplitude at the connector (decides whether the S7 §9.1 gain bump is worth fitting).
+2. ~~Sign of each current channel~~ — LEM path: **done 2026-11-05** (phase ID, no inversion). Internal path: open.
+3. `VBUS_OFFSET_CODE` and the sensor's low-voltage floor — **open**: the reading is about 4× low at 31 V (§7).
+4. ~~Encoder amplitude at the connector~~ — **done 2026-11-05: ≈ 2.0 Vpp**; the S7 §9.1 gain bump isn't worth fitting (`OPEN_ITEMS.md` Resolved).
 5. KTY81-210 reading vs a thermometer at room temperature (sanity of `MOT_TEMP_R_TOP` + the rail cancellation).
